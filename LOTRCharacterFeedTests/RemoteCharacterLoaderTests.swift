@@ -81,13 +81,12 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         client.complete(with: error)
         
         XCTAssertEqual(expectedError, RemoteCharacterLoader.Error.connectivity)
-        
     }
     
     func test_load_deliversErrorOnNon200HTTPClientResponse() {
         let url = anyURL()
         let (sut, client) = makeSUT(url: url)
-        
+        let data = Data()
         let samples = [100, 199, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
@@ -95,10 +94,24 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             sut.load { receivedError in
                 expectedError = receivedError
             }
-            client.complete(withStatusCode: code, data: Data(), at: index)
+            client.complete(withStatusCode: code, data: data, at: index)
             XCTAssertEqual(expectedError, RemoteCharacterLoader.Error.invalidData)
         }
     }
+    
+    func test_load_deliversErrorOn200HTTPClientResponseWithInvalidJSON() {
+        let url = anyURL()
+        let (sut, client) = makeSUT(url: url)
+        let invalidData = Data("invalid data".utf8)
+        
+        var expectedError: RemoteCharacterLoader.Error?
+        sut.load { receivedError in
+            expectedError = receivedError
+        }
+        client.complete(withStatusCode: 200, data: invalidData, at: 0)
+        XCTAssertEqual(expectedError, RemoteCharacterLoader.Error.invalidData)
+    }
+    
     
     // MARK: - Helpers
     
