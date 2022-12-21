@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CharacterLoader {
+public protocol CharacterLoader {
     
     typealias Result = Swift.Result<[CharacterItem], Error>
     
