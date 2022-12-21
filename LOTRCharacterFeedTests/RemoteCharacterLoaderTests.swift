@@ -33,23 +33,27 @@ final class RemoteCharacterLoader {
 final class RemoteCharacterLoaderTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromURL() {
-        let url = URL(string: "http://any-url.com")!
-        
-        let client = HTTPClient()
-        let _ = RemoteCharacterLoader(url: url, client: client)
+        let (_, client) = makeSUT()
         
         XCTAssertEqual(client.requestedURLs.count, 0)
     }
     
     func test_load_requestsDataFromURL() {
-        let url = URL(string: "http://any-url.com")!
-        
-        let client = HTTPClient()
-        let sut = RemoteCharacterLoader(url: url, client: client)
+        let (sut, client) = makeSUT()
         
         sut.load()
         
         XCTAssertEqual(client.requestedURLs.count, 1)
+    }
+    
+    // MARK: - Helpers
+    
+    func makeSUT(url: URL = URL(string: "http://any-url.com")!) -> (sut: RemoteCharacterLoader, client: HTTPClient) {
+        
+        let client = HTTPClient()
+        let sut = RemoteCharacterLoader(url: url, client: client)
+        
+        return (sut, client)
     }
 
 }
