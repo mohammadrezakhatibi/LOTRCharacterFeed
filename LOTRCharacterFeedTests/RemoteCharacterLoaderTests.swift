@@ -59,5 +59,9 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             requestedURLs.append(url)
         }
     }
+    
+    private func anyURL() -> URL {
+        return URL(string: "http://any-url.com")!
+    }
 
 }
