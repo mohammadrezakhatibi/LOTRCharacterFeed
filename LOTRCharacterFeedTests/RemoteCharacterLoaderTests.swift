@@ -7,12 +7,8 @@
 
 import XCTest
 
-class HTTPClient {
-    private(set) var requestedURLs: [URL] = []
-    
-    func get(from url: URL) {
-        requestedURLs.append(url)
-    }
+protocol HTTPClient {
+    func get(from url: URL)
 }
 
 final class RemoteCharacterLoader {
@@ -48,12 +44,20 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    func makeSUT(url: URL = URL(string: "http://any-url.com")!) -> (sut: RemoteCharacterLoader, client: HTTPClient) {
+    private func makeSUT(url: URL = URL(string: "http://any-url.com")!) -> (sut: RemoteCharacterLoader, client: HTTPClientSpy) {
         
-        let client = HTTPClient()
+        let client = HTTPClientSpy()
         let sut = RemoteCharacterLoader(url: url, client: client)
         
         return (sut, client)
+    }
+    
+    private class HTTPClientSpy: HTTPClient {
+        private(set) var requestedURLs: [URL] = []
+        
+        func get(from url: URL) {
+            requestedURLs.append(url)
+        }
     }
 
 }
