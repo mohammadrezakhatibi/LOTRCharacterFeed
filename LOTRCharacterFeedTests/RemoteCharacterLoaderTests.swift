@@ -35,11 +35,12 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     }
     
     func test_load_requestsDataFromURL() {
-        let (sut, client) = makeSUT()
+        let url = anyURL()
+        let (sut, client) = makeSUT(url: url)
         
         sut.load()
         
-        XCTAssertEqual(client.requestedURLs.count, 1)
+        XCTAssertEqual(client.requestedURLs, [url])
     }
     
     // MARK: - Helpers
