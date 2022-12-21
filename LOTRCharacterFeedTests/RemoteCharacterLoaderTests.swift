@@ -8,7 +8,8 @@
 import XCTest
 
 protocol HTTPClient {
-    func get(from url: URL, completion: @escaping (Error) -> Void)
+    typealias Result = Error
+    func get(from url: URL, completion: @escaping (Result) -> Void)
 }
 
 final class RemoteCharacterLoader {
@@ -70,6 +71,23 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         
     }
     
+    func test_load_deliversErrorOnNon200HTTPClientResponse() {
+        let url = anyURL()
+        let (sut, client) = makeSUT(url: url)
+        
+        let error = NSError(domain: "an error", code: 0)
+        
+        var expectedError: Error?
+        sut.load { receivedError in
+            expectedError = receivedError
+        }
+        
+        client.complete(with: error)
+        
+        XCTAssertEqual(expectedError as NSError?, error)
+        
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(url: URL = URL(string: "http://any-url.com")!) -> (sut: RemoteCharacterLoader, client: HTTPClientSpy) {
@@ -81,12 +99,12 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     }
     
     private class HTTPClientSpy: HTTPClient {
-        private var completions = [(url: URL, completion: (Error) -> Void)]()
+        private var completions = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
         var requestedURLs: [URL] {
             return completions.map { $0.url }
         }
         
-        func get(from url: URL, completion: @escaping (Error) -> Void) {
+        func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
             completions.append((url, completion))
         }
         
