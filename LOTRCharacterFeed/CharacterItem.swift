@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CharacterItem {
+public struct CharacterItem: Codable, Equatable {
     var _id: String
     var height: String
     var race: String
