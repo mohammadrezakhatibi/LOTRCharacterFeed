@@ -28,7 +28,8 @@ final class RemoteCharacterLoader {
         self.client = client
     }
     
-    func load(completion: @escaping (Error) -> Void) {
+    typealias Result = Error
+    func load(completion: @escaping (Result) -> Void) {
         client.get(from: url) { result in
             switch result {
                 case .failure:
@@ -71,16 +72,9 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         let url = anyURL()
         let (sut, client) = makeSUT(url: url)
         
-        let error = NSError(domain: "an error", code: 0)
-        
-        var expectedError: RemoteCharacterLoader.Error?
-        sut.load { receivedError in
-            expectedError = receivedError
-        }
-        
-        client.complete(with: error)
-        
-        XCTAssertEqual(expectedError, RemoteCharacterLoader.Error.connectivity)
+        expect(sut, toCompleteWith: .connectivity, when: {
+            client.complete(with: NSError(domain: "", code: 0))
+        })
     }
     
     func test_load_deliversErrorOnNon200HTTPClientResponse() {
@@ -90,12 +84,9 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         let samples = [100, 199, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            var expectedError: RemoteCharacterLoader.Error?
-            sut.load { receivedError in
-                expectedError = receivedError
-            }
-            client.complete(withStatusCode: code, data: data, at: index)
-            XCTAssertEqual(expectedError, RemoteCharacterLoader.Error.invalidData)
+            expect(sut, toCompleteWith: .invalidData, when: {
+                client.complete(withStatusCode: code, data: data, at: index)
+            })
         }
     }
     
@@ -104,12 +95,9 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         let (sut, client) = makeSUT(url: url)
         let invalidData = Data("invalid data".utf8)
         
-        var expectedError: RemoteCharacterLoader.Error?
-        sut.load { receivedError in
-            expectedError = receivedError
-        }
-        client.complete(withStatusCode: 200, data: invalidData, at: 0)
-        XCTAssertEqual(expectedError, RemoteCharacterLoader.Error.invalidData)
+        expect(sut, toCompleteWith: .invalidData, when: {
+            client.complete(withStatusCode: 200, data: invalidData, at: 0)
+        })
     }
     
     
@@ -121,6 +109,18 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         let sut = RemoteCharacterLoader(url: url, client: client)
         
         return (sut, client)
+    }
+    
+    func expect(_ sut: RemoteCharacterLoader, toCompleteWith result: RemoteCharacterLoader.Result, when action: () -> Void) {
+    
+        var expectedResult: RemoteCharacterLoader.Result?
+        sut.load { receivedError in
+            expectedResult = receivedError
+        }
+        
+        action()
+        
+        XCTAssertEqual(expectedResult, result)
     }
     
     private class HTTPClientSpy: HTTPClient {
