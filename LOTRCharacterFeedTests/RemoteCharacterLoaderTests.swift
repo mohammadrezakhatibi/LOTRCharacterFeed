@@ -8,7 +8,7 @@
 import XCTest
 
 protocol HTTPClient {
-    func get(from url: URL)
+    func get(from url: URL, completion: @escaping (Error) -> Void)
 }
 
 final class RemoteCharacterLoader {
@@ -21,8 +21,8 @@ final class RemoteCharacterLoader {
         self.client = client
     }
     
-    func load() {
-        client.get(from: url)
+    func load(completion: @escaping (Error) -> Void) {
+        client.get(from: url, completion: completion)
     }
 }
 
@@ -38,7 +38,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         let url = anyURL()
         let (sut, client) = makeSUT(url: url)
         
-        sut.load()
+        sut.load { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
@@ -47,10 +47,27 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         let url = anyURL()
         let (sut, client) = makeSUT(url: url)
         
-        sut.load()
-        sut.load()
+        sut.load { _ in }
+        sut.load { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url, url])
+    }
+    
+    func test_load_deliversErrorOnHTTPClientError() {
+        let url = anyURL()
+        let (sut, client) = makeSUT(url: url)
+        
+        let error = NSError(domain: "an error", code: 0)
+        
+        var expectedError: Error?
+        sut.load { receivedError in
+            expectedError = receivedError
+        }
+        
+        client.complete(with: error)
+        
+        XCTAssertEqual(expectedError as NSError?, error)
+        
     }
     
     // MARK: - Helpers
@@ -64,10 +81,17 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     }
     
     private class HTTPClientSpy: HTTPClient {
-        private(set) var requestedURLs: [URL] = []
+        private var completions = [(url: URL, completion: (Error) -> Void)]()
+        var requestedURLs: [URL] {
+            return completions.map { $0.url }
+        }
         
-        func get(from url: URL) {
-            requestedURLs.append(url)
+        func get(from url: URL, completion: @escaping (Error) -> Void) {
+            completions.append((url, completion))
+        }
+        
+        func complete(with error: Error, at index: Int = 0) {
+            completions[index].completion(error)
         }
     }
     
