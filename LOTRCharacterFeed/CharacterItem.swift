@@ -18,5 +18,19 @@ public struct CharacterItem: Codable, Equatable {
     var realm: String
     var hair: String
     var name: String
-    var wikiURL: String
+    var wikiUrl: String
+    
+    public init(_id: String, height: String, race: String, gender: String, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiUrl: String) {
+        self._id = _id
+        self.height = height
+        self.race = race
+        self.gender = gender
+        self.birth = birth
+        self.spouse = spouse
+        self.death = death
+        self.realm = realm
+        self.hair = hair
+        self.name = name
+        self.wikiUrl = wikiUrl
+    }
 }

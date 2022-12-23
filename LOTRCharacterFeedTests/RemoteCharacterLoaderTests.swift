@@ -29,7 +29,7 @@ final class RemoteCharacterLoader {
         self.client = client
     }
     
-    private struct CharacterItemResponse: Codable {
+    private struct Root: Codable {
         var items: [CharacterItem]
     }
     
@@ -41,12 +41,12 @@ final class RemoteCharacterLoader {
                 case .failure:
                     completion(.failure(RemoteCharacterLoader.Error.connectivity))
                 case let .success((data, response)):
-                    guard response.statusCode == 200, let _ = try? JSONDecoder().decode(CharacterItemResponse.self, from: data) else {
+                    guard response.statusCode == 200, let root = try? JSONDecoder().decode(Root.self, from: data) else {
                         
                         return completion(.failure(RemoteCharacterLoader.Error.invalidData))
                     }
                     
-                    completion(.success([]))
+                    completion(.success(root.items))
                     
             }
         }
@@ -118,6 +118,46 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         let data = try! JSONSerialization.data(withJSONObject: emptyJSON)
         
         expect(sut, toCompleteWith: .success([]), when: {
+            client.complete(withStatusCode: 200, data: data)
+        })
+    }
+    
+    func test_load_deliversItemsOn200HTTPClientResponseWithValidJSON() {
+        let (sut, client) = makeSUT()
+        let item = [
+            "_id": "5cd99d4bde30eff6ebccfbe6",
+            "height": "198cm (6'6\")",
+            "race": "Human",
+            "gender": "Male",
+            "birth": "March 1 ,2931",
+            "spouse": "Arwen",
+            "death": "FO 120",
+            "realm": "Reunited Kingdom,Arnor,Gondor",
+            "hair": "Dark",
+            "name": "Aragorn II Elessar",
+            "wikiUrl": "http://lotr.wikia.com//wiki/Aragorn_II_Elessar"
+        ]
+        
+        let json = [
+            "items": [item]
+        ]
+        
+        let items = CharacterItem(
+            _id: "5cd99d4bde30eff6ebccfbe6",
+            height: "198cm (6'6\")",
+            race: "Human",
+            gender: "Male",
+            birth: "March 1 ,2931",
+            spouse: "Arwen",
+            death: "FO 120",
+            realm: "Reunited Kingdom,Arnor,Gondor",
+            hair: "Dark",
+            name: "Aragorn II Elessar",
+            wikiUrl: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")
+        
+        let data = try! JSONSerialization.data(withJSONObject: json)
+        
+        expect(sut, toCompleteWith: .success([items]), when: {
             client.complete(withStatusCode: 200, data: data)
         })
     }
