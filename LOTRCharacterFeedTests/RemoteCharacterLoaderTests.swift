@@ -48,13 +48,23 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         let url = anyURL()
         let (sut, client) = makeSUT(url: url)
         let data = Data()
-        let samples = [100, 199, 300, 400, 500]
+        let samples = [100, 199, 300, 399, 401, 500]
         
         samples.enumerated().forEach { index, code in
             expect(sut, toCompleteWith: failure(.invalidData), when: {
                 client.complete(withStatusCode: code, data: data, at: index)
             })
         }
+    }
+    
+    func test_load_deliversUnAuthorizedErrorOn400HTTPClientResponse() {
+        let url = anyURL()
+        let (sut, client) = makeSUT(url: url)
+        let data = Data()
+        
+        expect(sut, toCompleteWith: failure(.unauthorized), when: {
+            client.complete(withStatusCode: 400, data: data)
+        })
     }
     
     func test_load_deliversErrorOn200HTTPClientResponseWithInvalidJSON() {

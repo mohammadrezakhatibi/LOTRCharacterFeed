@@ -15,6 +15,7 @@ public final class RemoteCharacterLoader {
     public enum Error: Swift.Error {
         case invalidData
         case connectivity
+        case unauthorized
     }
     
     public init(url: URL, client: HTTPClient) {
@@ -40,8 +41,8 @@ public final class RemoteCharacterLoader {
         do {
             let items = try CharacterItemMapper.map(data, response: response)
             return .success(items.toModel())
-        } catch {
-            return .failure(RemoteCharacterLoader.Error.invalidData)
+        } catch(let error) {
+            return .failure(error)
         }
     }
 }
