@@ -15,6 +15,7 @@
 		E4F04B1F29565B2100F49C68 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B1E29565B2100F49C68 /* HTTPClient.swift */; };
 		E4F04B2129565B4F00F49C68 /* RemoteCharacterItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */; };
 		E4F04B2329565B7B00F49C68 /* CharacterItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B2229565B7B00F49C68 /* CharacterItemMapper.swift */; };
+		E4F04B2729565C6000F49C68 /* HTTPURLResponse+StatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B2629565C6000F49C68 /* HTTPURLResponse+StatusCode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		E4F04B1E29565B2100F49C68 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCharacterItem.swift; sourceTree = "<group>"; };
 		E4F04B2229565B7B00F49C68 /* CharacterItemMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterItemMapper.swift; sourceTree = "<group>"; };
+		E4F04B2629565C6000F49C68 /* HTTPURLResponse+StatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+StatusCode.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,12 +81,8 @@
 		E4583B9F29532D8F007A7D7F /* LOTRCharacterFeed */ = {
 			isa = PBXGroup;
 			children = (
-				E4583BB72953390C007A7D7F /* CharacterLoader.swift */,
-				E4F04B2229565B7B00F49C68 /* CharacterItemMapper.swift */,
-				E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */,
-				E4F04B1E29565B2100F49C68 /* HTTPClient.swift */,
-				E4583BB929533996007A7D7F /* CharacterItem.swift */,
-				E4F04B1C29565AF000F49C68 /* RemoteFeedLoader.swift */,
+				E4F04B2829565CBD00F49C68 /* Character Feature */,
+				E4F04B2429565BFF00F49C68 /* Character API */,
 			);
 			path = LOTRCharacterFeed;
 			sourceTree = "<group>";
@@ -95,6 +93,35 @@
 				E4583BBB29533ACA007A7D7F /* RemoteCharacterLoaderTests.swift */,
 			);
 			path = LOTRCharacterFeedTests;
+			sourceTree = "<group>";
+		};
+		E4F04B2429565BFF00F49C68 /* Character API */ = {
+			isa = PBXGroup;
+			children = (
+				E4F04B2529565C2F00F49C68 /* Helpers */,
+				E4F04B1E29565B2100F49C68 /* HTTPClient.swift */,
+				E4F04B1C29565AF000F49C68 /* RemoteFeedLoader.swift */,
+				E4F04B2229565B7B00F49C68 /* CharacterItemMapper.swift */,
+				E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */,
+			);
+			path = "Character API";
+			sourceTree = "<group>";
+		};
+		E4F04B2529565C2F00F49C68 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				E4F04B2629565C6000F49C68 /* HTTPURLResponse+StatusCode.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		E4F04B2829565CBD00F49C68 /* Character Feature */ = {
+			isa = PBXGroup;
+			children = (
+				E4583BB72953390C007A7D7F /* CharacterLoader.swift */,
+				E4583BB929533996007A7D7F /* CharacterItem.swift */,
+			);
+			path = "Character Feature";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,6 +236,7 @@
 			files = (
 				E4583BBA29533996007A7D7F /* CharacterItem.swift in Sources */,
 				E4F04B1D29565AF000F49C68 /* RemoteFeedLoader.swift in Sources */,
+				E4F04B2729565C6000F49C68 /* HTTPURLResponse+StatusCode.swift in Sources */,
 				E4F04B1F29565B2100F49C68 /* HTTPClient.swift in Sources */,
 				E4F04B2129565B4F00F49C68 /* RemoteCharacterItem.swift in Sources */,
 				E4583BB82953390C007A7D7F /* CharacterLoader.swift in Sources */,

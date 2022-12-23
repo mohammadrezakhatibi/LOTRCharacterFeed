@@ -22,9 +22,3 @@ public struct CharacterItemMapper {
         return root.items
     }
 }
-
-private extension HTTPURLResponse {
-    var isOK: Bool {
-        return statusCode == 200
-    }
-}
