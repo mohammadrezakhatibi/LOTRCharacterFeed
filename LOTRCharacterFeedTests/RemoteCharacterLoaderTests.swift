@@ -191,11 +191,12 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(url: URL = URL(string: "http://any-url.com")!) -> (sut: RemoteCharacterLoader, client: HTTPClientSpy) {
+    private func makeSUT(url: URL = URL(string: "http://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterLoader, client: HTTPClientSpy) {
         
         let client = HTTPClientSpy()
         let sut = RemoteCharacterLoader(url: url, client: client)
-        
+        trackingForMemoryLeaks(client, file: file, line: line)
+        trackingForMemoryLeaks(sut, file: file, line: line)
         return (sut, client)
     }
     
@@ -266,7 +267,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         return try! JSONSerialization.data(withJSONObject: json)
     }
     
-    func failure(_ error: RemoteCharacterLoader.Error) -> RemoteCharacterLoader.Result {
+    private func failure(_ error: RemoteCharacterLoader.Error) -> RemoteCharacterLoader.Result {
         return .failure(error)
     }
     
@@ -299,4 +300,9 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         return URL(string: "http://any-url.com")!
     }
 
+    private func trackingForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Potential memory leak on \(String(describing: instance))", file: file, line: line)
+        }
+    }
 }
