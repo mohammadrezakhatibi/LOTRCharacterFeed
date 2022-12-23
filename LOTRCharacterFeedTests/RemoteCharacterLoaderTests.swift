@@ -30,7 +30,35 @@ final class RemoteCharacterLoader {
     }
     
     private struct Root: Codable {
-        var items: [CharacterItem]
+        var items: [RemoteCharacterItem]
+        
+        struct RemoteCharacterItem: Codable {
+            var _id: String
+            var height: String
+            var race: String
+            var gender: String
+            var birth: String
+            var spouse: String
+            var death: String
+            var realm: String
+            var hair: String
+            var name: String
+            var wikiUrl: String
+        
+            init(id: String, height: String, race: String, gender: String, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiUrl: String) {
+                self._id = id
+                self.height = height
+                self.race = race
+                self.gender = gender
+                self.birth = birth
+                self.spouse = spouse
+                self.death = death
+                self.realm = realm
+                self.hair = hair
+                self.name = name
+                self.wikiUrl = wikiUrl
+            }
+        }
     }
     
     typealias Result = CharacterLoader.Result
@@ -46,7 +74,9 @@ final class RemoteCharacterLoader {
                         return completion(.failure(RemoteCharacterLoader.Error.invalidData))
                     }
                     
-                    completion(.success(root.items))
+                    completion(.success(root.items.map {
+                        CharacterItem(id: $0._id, height: $0.height, race: $0.race, gender: $0.gender, birth: $0.birth, spouse: $0.spouse, death: $0.death, realm: $0.realm, hair: $0.hair, name: $0.name, wikiURL: URL(string: $0.wikiUrl)!)
+                    }))
                     
             }
         }
@@ -143,7 +173,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         ]
         
         let items = CharacterItem(
-            _id: "5cd99d4bde30eff6ebccfbe6",
+            id: "5cd99d4bde30eff6ebccfbe6",
             height: "198cm (6'6\")",
             race: "Human",
             gender: "Male",
@@ -153,7 +183,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             realm: "Reunited Kingdom,Arnor,Gondor",
             hair: "Dark",
             name: "Aragorn II Elessar",
-            wikiUrl: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")
+            wikiURL: URL(string: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")!)
         
         let data = try! JSONSerialization.data(withJSONObject: json)
         

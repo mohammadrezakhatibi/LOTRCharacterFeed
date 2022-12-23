@@ -8,7 +8,7 @@
 import Foundation
 
 public struct CharacterItem: Codable, Equatable {
-    var _id: String
+    var id: String
     var height: String
     var race: String
     var gender: String
@@ -18,10 +18,10 @@ public struct CharacterItem: Codable, Equatable {
     var realm: String
     var hair: String
     var name: String
-    var wikiUrl: String
+    var wikiURL: URL
     
-    public init(_id: String, height: String, race: String, gender: String, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiUrl: String) {
-        self._id = _id
+    public init(id: String, height: String, race: String, gender: String, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiURL: URL) {
+        self.id = id
         self.height = height
         self.race = race
         self.gender = gender
@@ -31,6 +31,6 @@ public struct CharacterItem: Codable, Equatable {
         self.realm = realm
         self.hair = hair
         self.name = name
-        self.wikiUrl = wikiUrl
+        self.wikiURL = wikiURL
     }
 }
