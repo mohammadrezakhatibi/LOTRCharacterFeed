@@ -144,35 +144,17 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     
     func test_load_deliversEmptyItemOn200HTTPClientResponseWithEmptyJSON() {
         let (sut, client) = makeSUT()
-        let emptyJSON = ["items": []]
-        let data = try! JSONSerialization.data(withJSONObject: emptyJSON)
         
         expect(sut, toCompleteWith: .success([]), when: {
-            client.complete(withStatusCode: 200, data: data)
+            let emptyListJSON = makeItemJSON([])
+            client.complete(withStatusCode: 200, data: emptyListJSON)
         })
     }
     
     func test_load_deliversItemsOn200HTTPClientResponseWithValidJSON() {
         let (sut, client) = makeSUT()
-        let item = [
-            "_id": "5cd99d4bde30eff6ebccfbe6",
-            "height": "198cm (6'6\")",
-            "race": "Human",
-            "gender": "Male",
-            "birth": "March 1 ,2931",
-            "spouse": "Arwen",
-            "death": "FO 120",
-            "realm": "Reunited Kingdom,Arnor,Gondor",
-            "hair": "Dark",
-            "name": "Aragorn II Elessar",
-            "wikiUrl": "http://lotr.wikia.com//wiki/Aragorn_II_Elessar"
-        ]
         
-        let json = [
-            "items": [item]
-        ]
-        
-        let items = CharacterItem(
+        let item1 = makeItem(
             id: "5cd99d4bde30eff6ebccfbe6",
             height: "198cm (6'6\")",
             race: "Human",
@@ -180,15 +162,30 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             birth: "March 1 ,2931",
             spouse: "Arwen",
             death: "FO 120",
-            realm: "Reunited Kingdom,Arnor,Gondor",
+            realm: "Reunited Kingdom, Arnor, Gondor",
             hair: "Dark",
             name: "Aragorn II Elessar",
-            wikiURL: URL(string: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")!)
+            wikiURL: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")
         
-        let data = try! JSONSerialization.data(withJSONObject: json)
         
-        expect(sut, toCompleteWith: .success([items]), when: {
-            client.complete(withStatusCode: 200, data: data)
+        let item2 = makeItem(
+            id: "5cd99d4bde3ewef6ebccfbe6",
+            height: "208cm (6'6\")",
+            race: "Elves",
+            gender: "Male",
+            birth: "March 1 ,931",
+            spouse: "Narbia",
+            death: "Departed to Aman in FO 120 from Ithilien",
+            realm: "Reunited Kingdom, Arnor, Gondor",
+            hair: "Golden",
+            name: "Legolas",
+            wikiURL: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")
+        
+        let items = [item1.model, item2.model]
+    
+        expect(sut, toCompleteWith: .success(items), when: {
+            let json = makeItemJSON([item1.json, item2.json])
+            client.complete(withStatusCode: 200, data: json)
         })
     }
     
@@ -221,6 +218,52 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         action()
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    private func makeItem(id: String,
+                          height: String,
+                          race: String,
+                          gender: String,
+                          birth: String,
+                          spouse: String,
+                          death: String,
+                          realm: String,
+                          hair: String,
+                          name: String,
+                          wikiURL: String) -> (model: CharacterItem, json: [String: Any]) {
+        let json = [
+            "_id": id,
+            "height": height,
+            "race": race,
+            "gender": gender,
+            "birth": birth,
+            "spouse": spouse,
+            "death": death,
+            "realm": realm,
+            "hair": hair,
+            "name": name,
+            "wikiUrl": wikiURL
+        ]
+        
+        let model = CharacterItem(
+            id: id,
+            height: height,
+            race: race,
+            gender: gender,
+            birth: birth,
+            spouse: spouse,
+            death: death,
+            realm: realm,
+            hair: hair,
+            name: name,
+            wikiURL: URL(string: wikiURL)!)
+        
+        return (model, json)
+    }
+    
+    private func makeItemJSON(_ items: [[String: Any]]) -> Data {
+        let json = ["items": items]
+        return try! JSONSerialization.data(withJSONObject: json)
     }
     
     func failure(_ error: RemoteCharacterLoader.Error) -> RemoteCharacterLoader.Result {
