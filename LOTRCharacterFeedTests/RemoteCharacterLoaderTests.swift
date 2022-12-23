@@ -64,22 +64,43 @@ final class RemoteCharacterLoader {
     typealias Result = CharacterLoader.Result
     
     func load(completion: @escaping (Result) -> Void) {
-        client.get(from: url) { result in
+        client.get(from: url) { [weak self] result in
             switch result {
                 case .failure:
                     completion(.failure(RemoteCharacterLoader.Error.connectivity))
                 case let .success((data, response)):
-                    guard response.statusCode == 200, let root = try? JSONDecoder().decode(Root.self, from: data) else {
-                        
-                        return completion(.failure(RemoteCharacterLoader.Error.invalidData))
-                    }
-                    
-                    completion(.success(root.items.map {
-                        CharacterItem(id: $0._id, height: $0.height, race: $0.race, gender: $0.gender, birth: $0.birth, spouse: $0.spouse, death: $0.death, realm: $0.realm, hair: $0.hair, name: $0.name, wikiURL: URL(string: $0.wikiUrl)!)
-                    }))
-                    
+                    guard let self = self else { return }
+                    completion(self.map(data, with: response))
             }
         }
+    }
+    
+    private func map(_ data: Data, with response: HTTPURLResponse) -> RemoteCharacterLoader.Result {
+        guard response.isOK,
+                let root = try? JSONDecoder().decode(Root.self, from: data) else {
+            return .failure(RemoteCharacterLoader.Error.invalidData)
+        }
+        
+        return .success(root.items.map {
+            CharacterItem(
+                id: $0._id,
+                height: $0.height,
+                race: $0.race,
+                gender: $0.gender,
+                birth: $0.birth,
+                spouse: $0.spouse,
+                death: $0.death,
+                realm: $0.realm,
+                hair: $0.hair,
+                name: $0.name,
+                wikiURL: URL(string: $0.wikiUrl)!)
+        })
+    }
+}
+
+extension HTTPURLResponse {
+    var isOK: Bool {
+        return statusCode == 200
     }
 }
 
