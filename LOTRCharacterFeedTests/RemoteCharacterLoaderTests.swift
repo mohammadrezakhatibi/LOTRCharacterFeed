@@ -29,38 +29,6 @@ final class RemoteCharacterLoader {
         self.client = client
     }
     
-    private struct Root: Codable {
-        var items: [RemoteCharacterItem]
-        
-        struct RemoteCharacterItem: Codable {
-            var _id: String
-            var height: String
-            var race: String
-            var gender: String
-            var birth: String
-            var spouse: String
-            var death: String
-            var realm: String
-            var hair: String
-            var name: String
-            var wikiUrl: String
-        
-            init(id: String, height: String, race: String, gender: String, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiUrl: String) {
-                self._id = id
-                self.height = height
-                self.race = race
-                self.gender = gender
-                self.birth = birth
-                self.spouse = spouse
-                self.death = death
-                self.realm = realm
-                self.hair = hair
-                self.name = name
-                self.wikiUrl = wikiUrl
-            }
-        }
-    }
-    
     typealias Result = CharacterLoader.Result
     
     func load(completion: @escaping (Result) -> Void) {
@@ -76,12 +44,18 @@ final class RemoteCharacterLoader {
     }
     
     private func map(_ data: Data, with response: HTTPURLResponse) -> RemoteCharacterLoader.Result {
-        guard response.isOK,
-                let root = try? JSONDecoder().decode(Root.self, from: data) else {
+        do {
+            let items = try CharacterItemMapper.map(data, response: response)
+            return .success(items.toModel())
+        } catch {
             return .failure(RemoteCharacterLoader.Error.invalidData)
         }
-        
-        return .success(root.items.map {
+    }
+}
+
+private extension Array where Element == RemoteCharacterItem {
+    func toModel() -> [CharacterItem] {
+        return map {
             CharacterItem(
                 id: $0._id,
                 height: $0.height,
@@ -93,8 +67,53 @@ final class RemoteCharacterLoader {
                 realm: $0.realm,
                 hair: $0.hair,
                 name: $0.name,
-                wikiURL: URL(string: $0.wikiUrl)!)
-        })
+                wikiURL: URL(string: $0.wikiUrl)!
+            )
+        }
+    }
+}
+
+struct RemoteCharacterItem: Codable {
+    var _id: String
+    var height: String
+    var race: String
+    var gender: String
+    var birth: String
+    var spouse: String
+    var death: String
+    var realm: String
+    var hair: String
+    var name: String
+    var wikiUrl: String
+
+    init(id: String, height: String, race: String, gender: String, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiUrl: String) {
+        self._id = id
+        self.height = height
+        self.race = race
+        self.gender = gender
+        self.birth = birth
+        self.spouse = spouse
+        self.death = death
+        self.realm = realm
+        self.hair = hair
+        self.name = name
+        self.wikiUrl = wikiUrl
+    }
+}
+
+struct CharacterItemMapper {
+    
+    private struct Root: Codable {
+        var items: [RemoteCharacterItem]
+        
+    }
+    
+    static func map(_ data: Data, response: HTTPURLResponse) throws -> [RemoteCharacterItem] {
+        guard response.isOK, let root = try? JSONDecoder().decode(Root.self, from: data) else {
+            throw RemoteCharacterLoader.Error.invalidData
+        }
+        
+        return root.items
     }
 }
 
