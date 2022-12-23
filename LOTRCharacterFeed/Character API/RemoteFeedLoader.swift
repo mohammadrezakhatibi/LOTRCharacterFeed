@@ -47,7 +47,7 @@ public final class RemoteCharacterLoader {
     }
 }
 
-private extension Array where Element == RemoteCharacterItem {
+public extension Array where Element == RemoteCharacterItem {
     func toModel() -> [CharacterItem] {
         return map {
             CharacterItem(
