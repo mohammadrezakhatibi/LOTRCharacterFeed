@@ -210,6 +210,21 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_doseNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+        let url = anyURL()
+        let client = HTTPClientSpy()
+        var sut: RemoteCharacterLoader? = RemoteCharacterLoader(url: url, client: client)
+        
+        
+        var capturedResult: [RemoteCharacterLoader.Result] = []
+        sut?.load(completion: { capturedResult.append($0) })
+        
+        sut = nil
+        client.complete(withStatusCode: 200, data: makeItemJSON([]))
+        
+        XCTAssertTrue(capturedResult.isEmpty)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(url: URL = URL(string: "http://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterLoader, client: HTTPClientSpy) {
