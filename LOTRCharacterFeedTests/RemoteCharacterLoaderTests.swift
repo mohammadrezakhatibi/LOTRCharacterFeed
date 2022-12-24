@@ -264,8 +264,4 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             completions[index].completion(.success((data, response)))
         }
     }
-    
-    private func anyURL() -> URL {
-        return URL(string: "http://any-url.com")!
-    }
 }

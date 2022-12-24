@@ -18,6 +18,7 @@
 		E4F04B2729565C6000F49C68 /* HTTPURLResponse+StatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B2629565C6000F49C68 /* HTTPURLResponse+StatusCode.swift */; };
 		E4F43D0229577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F43D0129577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift */; };
 		E4F43D0529578DFC00F39D60 /* XCTestCase+MemoryLeaksTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F43D0429578DFC00F39D60 /* XCTestCase+MemoryLeaksTracking.swift */; };
+		E4F43D0729578E7B00F39D60 /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F43D0629578E7B00F39D60 /* SharedTestHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		E4F04B2629565C6000F49C68 /* HTTPURLResponse+StatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+StatusCode.swift"; sourceTree = "<group>"; };
 		E4F43D0129577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCharacterImageDataLoaderTests.swift; sourceTree = "<group>"; };
 		E4F43D0429578DFC00F39D60 /* XCTestCase+MemoryLeaksTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeaksTracking.swift"; sourceTree = "<group>"; };
+		E4F43D0629578E7B00F39D60 /* SharedTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTestHelpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				E4F43D0429578DFC00F39D60 /* XCTestCase+MemoryLeaksTracking.swift */,
+				E4F43D0629578E7B00F39D60 /* SharedTestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4F43D0729578E7B00F39D60 /* SharedTestHelpers.swift in Sources */,
 				E4F43D0229577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift in Sources */,
 				E4F43D0529578DFC00F39D60 /* XCTestCase+MemoryLeaksTracking.swift in Sources */,
 				E4583BBC29533ACA007A7D7F /* RemoteCharacterLoaderTests.swift in Sources */,
