@@ -16,6 +16,7 @@
 		E4F04B2129565B4F00F49C68 /* RemoteCharacterItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */; };
 		E4F04B2329565B7B00F49C68 /* CharacterItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B2229565B7B00F49C68 /* CharacterItemMapper.swift */; };
 		E4F04B2729565C6000F49C68 /* HTTPURLResponse+StatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B2629565C6000F49C68 /* HTTPURLResponse+StatusCode.swift */; };
+		E4F43D0229577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F43D0129577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,7 @@
 		E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCharacterItem.swift; sourceTree = "<group>"; };
 		E4F04B2229565B7B00F49C68 /* CharacterItemMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterItemMapper.swift; sourceTree = "<group>"; };
 		E4F04B2629565C6000F49C68 /* HTTPURLResponse+StatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+StatusCode.swift"; sourceTree = "<group>"; };
+		E4F43D0129577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCharacterImageDataLoaderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				E4583BBB29533ACA007A7D7F /* RemoteCharacterLoaderTests.swift */,
+				E4F43D0129577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift */,
 			);
 			path = LOTRCharacterFeedTests;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4F43D0229577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift in Sources */,
 				E4583BBC29533ACA007A7D7F /* RemoteCharacterLoaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
