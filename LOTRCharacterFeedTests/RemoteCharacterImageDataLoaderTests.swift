@@ -12,16 +12,20 @@ final class RemoteCharacterImageDataLoader {
     let url: URL
     let client: HTTPClient
     
+    enum Error: Swift.Error {
+        case connectivity
+    }
+    
     init(url: URL, client: HTTPClient) {
         self.url = url
         self.client = client
     }
     
-    func loadImageData(completion: @escaping (Error) -> Void) {
+    func loadImageData(completion: @escaping (RemoteCharacterImageDataLoader.Error) -> Void) {
         client.get(from: url, completion: { result in
             switch result {
-                case let .failure(error):
-                    completion(error)
+                case .failure:
+                    completion(.connectivity)
                 default:
                     break
             }
@@ -57,11 +61,11 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     }
     
     func test_loadImageData_deliversErrorOnHTTPClientError() {
-        let anError = NSError(domain: "an error", code: 0)
+        let anError = RemoteCharacterImageDataLoader.Error.connectivity
         let (sut, client) = makeSUT()
         
         let exp = expectation(description: "Wait for load completion")
-        var receiverError: Error?
+        var receiverError: RemoteCharacterImageDataLoader.Error?
         sut.loadImageData { error in
             receiverError = error
             exp.fulfill()
@@ -71,7 +75,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         
         wait(for: [exp], timeout: 1.0)
         
-        XCTAssertEqual(receiverError as NSError?, anError)
+        XCTAssertEqual(receiverError, anError)
         
     }
     
