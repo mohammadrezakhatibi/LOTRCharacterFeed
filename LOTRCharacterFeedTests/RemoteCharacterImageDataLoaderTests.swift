@@ -77,10 +77,4 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     private func anyURL() -> URL {
         return URL(string: "http://any-url.com")!
     }
-    
-    private func trackingForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Potential memory leak on \(String(describing: instance))", file: file, line: line)
-        }
-    }
 }
