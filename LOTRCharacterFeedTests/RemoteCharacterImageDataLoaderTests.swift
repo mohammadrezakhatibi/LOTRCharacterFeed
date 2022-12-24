@@ -9,8 +9,16 @@ import XCTest
 import LOTRCharacterFeed
 
 final class RemoteCharacterImageDataLoader {
+    let url: URL
+    let client: HTTPClient
+    
     init(url: URL, client: HTTPClient) {
-        
+        self.url = url
+        self.client = client
+    }
+    
+    func loadImageData() {
+        client.get(from: url, completion: { _ in })
     }
 }
 
@@ -22,6 +30,16 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         let _ = RemoteCharacterImageDataLoader(url: url, client: client)
         
         XCTAssertTrue(client.requestedURLs.isEmpty)
+    }
+    
+    func test_loadImageData_requestsDataFromURL() {
+        let url = anyURL()
+        let client = HTTPClientSpy()
+        let sut = RemoteCharacterImageDataLoader(url: url, client: client)
+        
+        sut.loadImageData()
+        
+        XCTAssertEqual(client.requestedURLs, [url])
     }
     
     // MARK: - Helpers
