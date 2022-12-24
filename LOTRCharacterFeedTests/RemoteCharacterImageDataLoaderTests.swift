@@ -46,6 +46,16 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         XCTAssertEqual(client.requestedURLs, [url])
     }
     
+    func test_loadImageDataTwice_requestsDataFromURLTwice() {
+        let url = anyURL()
+        let (sut, client) = makeSUT(url: url)
+        
+        sut.loadImageData { _ in }
+        sut.loadImageData { _ in }
+        
+        XCTAssertEqual(client.requestedURLs, [url, url])
+    }
+    
     func test_loadImageData_deliversErrorOnHTTPClientError() {
         let anError = NSError(domain: "an error", code: 0)
         let (sut, client) = makeSUT()
