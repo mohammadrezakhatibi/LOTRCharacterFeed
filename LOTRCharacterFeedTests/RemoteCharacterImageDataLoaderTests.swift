@@ -25,17 +25,14 @@ final class RemoteCharacterImageDataLoader {
 final class RemoteCharacterImageDataLoaderTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromURL() {
-        let url = anyURL()
-        let client = HTTPClientSpy()
-        let _ = RemoteCharacterImageDataLoader(url: url, client: client)
+        let (_, client) = makeSUT()
         
         XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
     func test_loadImageData_requestsDataFromURL() {
         let url = anyURL()
-        let client = HTTPClientSpy()
-        let sut = RemoteCharacterImageDataLoader(url: url, client: client)
+        let (sut, client) = makeSUT(url: url)
         
         sut.loadImageData()
         
@@ -43,6 +40,14 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     }
     
     // MARK: - Helpers
+    
+    private func makeSUT(url: URL = URL(string: "http://a-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterImageDataLoader, client: HTTPClientSpy) {
+        let client = HTTPClientSpy()
+        let sut = RemoteCharacterImageDataLoader(url: url, client: client)
+        trackingForMemoryLeaks(client, file: file, line: line)
+        trackingForMemoryLeaks(sut, file: file, line: line)
+        return (sut, client)
+    }
     
     private class HTTPClientSpy: HTTPClient {
         private var completions = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
@@ -71,5 +76,11 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     
     private func anyURL() -> URL {
         return URL(string: "http://any-url.com")!
+    }
+    
+    private func trackingForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Potential memory leak on \(String(describing: instance))", file: file, line: line)
+        }
     }
 }
