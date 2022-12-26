@@ -21,13 +21,16 @@ final class RemoteCharacterImageDataLoader {
         self.client = client
     }
     
-    func loadImageData(completion: @escaping (RemoteCharacterImageDataLoader.Error) -> Void) {
+    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
+    func loadImageData(completion: @escaping (RemoteCharacterImageDataLoader.Result) -> Void) {
         client.get(from: url, completion: { result in
             switch result {
                 case .failure:
-                    completion(.connectivity)
-                default:
-                    break
+                    completion(.failure(.connectivity))
+                case let .success((_, response)):
+                    if response.statusCode != 200 {
+                        completion(.failure(.connectivity))
+                    }
             }
         })
     }
@@ -65,9 +68,13 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         
         let exp = expectation(description: "Wait for load completion")
-        var receiverError: RemoteCharacterImageDataLoader.Error?
-        sut.loadImageData { error in
-            receiverError = error
+        sut.loadImageData { result in
+            switch result {
+                case let .failure(receiverError):
+                    XCTAssertEqual(receiverError, anError)
+                default:
+                    XCTFail("Expecting failure, got \(result) instead")
+            }
             exp.fulfill()
         }
         
@@ -75,8 +82,26 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         
         wait(for: [exp], timeout: 1.0)
         
-        XCTAssertEqual(receiverError, anError)
+    }
         
+    func test_loadImageData_deliversErrorOnNon200HTTPClientResponse() {
+        let anError = RemoteCharacterImageDataLoader.Error.connectivity
+        let (sut, client) = makeSUT()
+        
+        let exp = expectation(description: "Wait for load completion")
+        sut.loadImageData { result in
+            switch result {
+                case let .failure(receiverError):
+                    XCTAssertEqual(receiverError, anError)
+                default:
+                    XCTFail("Expecting failure, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+        
+        client.complete(with: anError)
+        
+        wait(for: [exp], timeout: 1.0)
     }
     
     // MARK: - Helpers
