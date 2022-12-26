@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class RemoteCharacterLoader {
+public final class RemoteCharacterLoader: CharacterLoader {
     
     let url: URL
     let client: HTTPClient
@@ -23,9 +23,7 @@ public final class RemoteCharacterLoader {
         self.client = client
     }
     
-    public typealias Result = CharacterLoader.Result
-    
-    public func load(completion: @escaping (Result) -> Void) {
+    public func load(completion: @escaping (CharacterLoader.Result) -> Void) {
         client.get(from: url) { [weak self] result in
             switch result {
                 case .failure:
@@ -37,7 +35,7 @@ public final class RemoteCharacterLoader {
         }
     }
     
-    private func map(_ data: Data, with response: HTTPURLResponse) -> RemoteCharacterLoader.Result {
+    private func map(_ data: Data, with response: HTTPURLResponse) -> CharacterLoader.Result {
         do {
             let items = try CharacterItemMapper.map(data, response: response)
             return .success(items.toModel())

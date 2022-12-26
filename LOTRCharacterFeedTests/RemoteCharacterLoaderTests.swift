@@ -131,7 +131,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         var sut: RemoteCharacterLoader? = RemoteCharacterLoader(url: url, client: client)
         
         
-        var capturedResult: [RemoteCharacterLoader.Result] = []
+        var capturedResult: [CharacterLoader.Result] = []
         sut?.load(completion: { capturedResult.append($0) })
         
         sut = nil
@@ -170,7 +170,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         return (sut, client)
     }
     
-    func expect(_ sut: RemoteCharacterLoader, toCompleteWith expectedResult: RemoteCharacterLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    func expect(_ sut: RemoteCharacterLoader, toCompleteWith expectedResult: CharacterLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
     
         let exp = expectation(description: "Wait for load completion")
         sut.load { receivedResult in
@@ -237,7 +237,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         return try! JSONSerialization.data(withJSONObject: json)
     }
     
-    private func failure(_ error: RemoteCharacterLoader.Error) -> RemoteCharacterLoader.Result {
+    private func failure(_ error: RemoteCharacterLoader.Error) -> CharacterLoader.Result {
         return .failure(error)
     }
 }
