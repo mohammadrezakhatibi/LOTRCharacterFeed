@@ -38,7 +38,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     func test_loadImageDataFromURL_deliversErrorOnHTTPClientError() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWith: .failure(.connectivity), when: {
+        expect(sut, toCompleteWith: failure(.connectivity), when: {
             client.complete(with: anyNSError())
         })
     }
@@ -57,7 +57,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     func test_loadImageDataFromURL_delviresInvalidDataErrorOn200HTTPResponseWithEmptyData() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWith: .failure(.invalidData), when: {
+        expect(sut, toCompleteWith: failure(.invalidData), when: {
             client.complete(withStatusCode: 200, data: Data())
         })
     }
@@ -86,7 +86,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         let givenURL = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSUT()
         
-        var receivedResult = [RemoteCharacterImageDataLoader.Result]()
+        var receivedResult = [CharacterImageDataLoader.Result]()
         let task = sut.loadImageData(url: givenURL) { receivedResult.append($0) }
         
         task.cancel()
@@ -103,7 +103,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         let client = HTTPClientSpy()
         var sut: RemoteCharacterImageDataLoader? = RemoteCharacterImageDataLoader(client: client)
         
-        var receivedResult = [RemoteCharacterImageDataLoader.Result]()
+        var receivedResult = [CharacterImageDataLoader.Result]()
         _ = sut?.loadImageData(url: givenURL) { receivedResult.append($0) }
         
         sut = nil
@@ -125,13 +125,13 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         return (sut, client)
     }
     
-    private func expect(_ sut: RemoteCharacterImageDataLoader, toCompleteWith expectedResult: RemoteCharacterImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: RemoteCharacterImageDataLoader, toCompleteWith expectedResult: CharacterImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         
         let exp = expectation(description: "Wait for load completion")
         _ = sut.loadImageData(url: anyURL()) { receivedResult in
             switch (receivedResult, expectedResult) {
                 case let (.failure(receiverError), .failure(expectedError)):
-                    XCTAssertEqual(receiverError, expectedError, file: file, line: line)
+                    XCTAssertEqual(receiverError as? RemoteCharacterImageDataLoader.Error, expectedError as? RemoteCharacterImageDataLoader.Error, file: file, line: line)
                     
                 case let (.success(receiverData), .success(expectedData)):
                     XCTAssertEqual(receiverData, expectedData, file: file, line: line)
@@ -147,7 +147,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
-    private func failure(_ error: RemoteCharacterImageDataLoader.Error) -> RemoteCharacterImageDataLoader.Result {
+    private func failure(_ error: RemoteCharacterImageDataLoader.Error) -> CharacterImageDataLoader.Result {
         return .failure(error)
     }
 }

@@ -7,11 +7,7 @@
 
 import Foundation
 
-public protocol CharacterImageDataLoaderTask {
-    func cancel()
-}
-
-public final class RemoteCharacterImageDataLoader {
+public final class RemoteCharacterImageDataLoader: CharacterImageDataLoader {
     
     let client: HTTPClient
     
@@ -25,15 +21,15 @@ public final class RemoteCharacterImageDataLoader {
     }
     
     private final class HTTPClientTaskWrapper: CharacterImageDataLoaderTask {
-        private var completion: ((RemoteCharacterImageDataLoader.Result) -> Void)?
+        private var completion: ((CharacterImageDataLoader.Result) -> Void)?
 
         var wrapped: HTTPClientTask?
 
-        init(_ completion: @escaping (RemoteCharacterImageDataLoader.Result) -> Void) {
+        init(_ completion: @escaping (CharacterImageDataLoader.Result) -> Void) {
             self.completion = completion
         }
 
-        func complete(with result: RemoteCharacterImageDataLoader.Result) {
+        func complete(with result: CharacterImageDataLoader.Result) {
             completion?(result)
         }
 
@@ -47,9 +43,7 @@ public final class RemoteCharacterImageDataLoader {
         }
     }
     
-    public typealias Result = Swift.Result<(Data), Error>
-    
-    public func loadImageData(url: URL, completion: @escaping (RemoteCharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
+    public func loadImageData(url: URL, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
         let task = HTTPClientTaskWrapper(completion)
         task.wrapped = client.get(from: url, completion: { [weak self] result in
             guard self != nil else { return }
@@ -62,7 +56,7 @@ public final class RemoteCharacterImageDataLoader {
                     if response.statusCode == 200, !data.isEmpty {
                         return .success(data)
                     } else {
-                        return .failure(.invalidData)
+                        return .failure(Error.invalidData)
                     }
                 }
             )
