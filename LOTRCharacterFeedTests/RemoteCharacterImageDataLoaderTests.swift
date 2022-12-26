@@ -73,10 +73,13 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         
     func test_loadImageData_deliversErrorOnNon200HTTPClientResponse() {
         let (sut, client) = makeSUT()
+        let samples = [100, 199, 300, 400, 500]
         
-        expect(sut, toCompleteWith: failure(.connectivity), when: {
-            client.complete(with: anyNSError())
-        })
+        samples.enumerated().forEach { (index, code) in
+            expect(sut, toCompleteWith: failure(.connectivity), when: {
+                client.complete(withStatusCode: code, data: Data(), at: index)
+            })
+        }
     }
     
     // MARK: - Helpers
