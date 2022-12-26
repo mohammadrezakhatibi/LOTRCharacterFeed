@@ -49,7 +49,6 @@ public final class RemoteCharacterImageDataLoader {
     
     public typealias Result = Swift.Result<(Data), Error>
     
-    @discardableResult
     public func loadImageData(url: URL, completion: @escaping (RemoteCharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
         let task = HTTPClientTaskWrapper(completion)
         task.wrapped = client.get(from: url, completion: { [weak self] result in

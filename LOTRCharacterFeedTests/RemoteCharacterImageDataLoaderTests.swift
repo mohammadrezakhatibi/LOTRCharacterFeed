@@ -20,7 +20,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         let url = anyURL()
         let (sut, client) = makeSUT()
         
-        sut.loadImageData(url: url) { _ in }
+        _ = sut.loadImageData(url: url) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
@@ -29,8 +29,8 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         let url = anyURL()
         let (sut, client) = makeSUT()
         
-        sut.loadImageData(url: url) { _ in }
-        sut.loadImageData(url: url) { _ in }
+        _ = sut.loadImageData(url: url) { _ in }
+        _ = sut.loadImageData(url: url) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url, url])
     }
@@ -104,7 +104,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         var sut: RemoteCharacterImageDataLoader? = RemoteCharacterImageDataLoader(client: client)
         
         var receivedResult = [RemoteCharacterImageDataLoader.Result]()
-        sut?.loadImageData(url: givenURL) { receivedResult.append($0) }
+        _ = sut?.loadImageData(url: givenURL) { receivedResult.append($0) }
         
         sut = nil
         
@@ -128,7 +128,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     private func expect(_ sut: RemoteCharacterImageDataLoader, toCompleteWith expectedResult: RemoteCharacterImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         
         let exp = expectation(description: "Wait for load completion")
-        sut.loadImageData(url: anyURL()) { receivedResult in
+        _ = sut.loadImageData(url: anyURL()) { receivedResult in
             switch (receivedResult, expectedResult) {
                 case let (.failure(receiverError), .failure(expectedError)):
                     XCTAssertEqual(receiverError, expectedError, file: file, line: line)
