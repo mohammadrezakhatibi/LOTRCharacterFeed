@@ -32,6 +32,7 @@ final class RemoteCharacterImageDataLoader {
                     guard response.statusCode == 200, !data.isEmpty else {
                         return completion(.failure(.invalidData))
                     }
+                    completion(.success(data))
             }
         })
     }
@@ -88,6 +89,15 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         
         expect(sut, toCompleteWith: .failure(.invalidData), when: {
             client.complete(withStatusCode: 200, data: Data())
+        })
+    }
+    
+    func test_loadImageData_deliverReceivedNonEmptyDataOn200HTTPResponse() {
+        let (sut, client) = makeSUT()
+        let nonEmptyData = Data("a data".utf8)
+        
+        expect(sut, toCompleteWith: .success(data), when: {
+            client.complete(withStatusCode: 200, data: nonEmptyData)
         })
     }
     
