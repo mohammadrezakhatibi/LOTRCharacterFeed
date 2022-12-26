@@ -96,7 +96,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         let nonEmptyData = Data("a data".utf8)
         
-        expect(sut, toCompleteWith: .success(data), when: {
+        expect(sut, toCompleteWith: .success(nonEmptyData), when: {
             client.complete(withStatusCode: 200, data: nonEmptyData)
         })
     }
