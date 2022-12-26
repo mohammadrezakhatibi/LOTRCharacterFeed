@@ -14,6 +14,7 @@ final class RemoteCharacterImageDataLoader {
     
     enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
     
     init(url: URL, client: HTTPClient) {
@@ -21,15 +22,15 @@ final class RemoteCharacterImageDataLoader {
         self.client = client
     }
     
-    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
+    typealias Result = Swift.Result<(Data), Error>
     func loadImageData(completion: @escaping (RemoteCharacterImageDataLoader.Result) -> Void) {
         client.get(from: url, completion: { result in
             switch result {
                 case .failure:
                     completion(.failure(.connectivity))
-                case let .success((_, response)):
-                    if response.statusCode != 200 {
-                        completion(.failure(.connectivity))
+                case let .success((data, response)):
+                    guard response.statusCode == 200, !data.isEmpty else {
+                        return completion(.failure(.invalidData))
                     }
             }
         })
@@ -76,10 +77,18 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         let samples = [100, 199, 300, 400, 500]
         
         samples.enumerated().forEach { (index, code) in
-            expect(sut, toCompleteWith: failure(.connectivity), when: {
+            expect(sut, toCompleteWith: failure(.invalidData), when: {
                 client.complete(withStatusCode: code, data: Data(), at: index)
             })
         }
+    }
+    
+    func test_loadImageData_delviresInvalidDataErrorOn200HTTPResponseWithEmptyData() {
+        let (sut, client) = makeSUT()
+        
+        expect(sut, toCompleteWith: .failure(.invalidData), when: {
+            client.complete(withStatusCode: 200, data: Data())
+        })
     }
     
     // MARK: - Helpers
@@ -99,8 +108,12 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
             switch (receivedResult, expectedResult) {
                 case let (.failure(receiverError), .failure(expectedError)):
                     XCTAssertEqual(receiverError, expectedError, file: file, line: line)
+                    
+                case let (.success(receiverData), .success(expectedData)):
+                    XCTAssertEqual(receiverData, expectedData, file: file, line: line)
+                    
                 default:
-                    XCTFail("Expecting \(expectedResult), got \(receivedResult) instead")
+                    XCTFail("Expecting \(expectedResult), got \(receivedResult) instead", file: file, line: line)
             }
             exp.fulfill()
         }
