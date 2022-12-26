@@ -97,7 +97,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     
     func test_loadImageData_deliverReceivedNonEmptyDataOn200HTTPResponse() {
         let (sut, client) = makeSUT()
-        let nonEmptyData = Data("a data".utf8)
+        let nonEmptyData = anyData()
         
         expect(sut, toCompleteWith: .success(nonEmptyData), when: {
             client.complete(withStatusCode: 200, data: nonEmptyData)
@@ -142,6 +142,10 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     
     private func anyNSError() -> NSError {
         return NSError(domain: "an error", code: 0)
+    }
+    
+    private func anyData() -> Data {
+        return Data("a data".utf8)
     }
     
     private class HTTPClientSpy: HTTPClient {
