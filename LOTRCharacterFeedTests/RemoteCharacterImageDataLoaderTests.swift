@@ -163,6 +163,23 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         XCTAssertTrue(receivedResult.isEmpty, "Expecting empty result, but got \(receivedResult)")
     }
     
+    func test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+        let givenURL = URL(string: "https://a-given-url.com")!
+        let client = HTTPClientSpy()
+        var sut: RemoteCharacterImageDataLoader? = RemoteCharacterImageDataLoader(client: client)
+        
+        var receivedResult = [RemoteCharacterImageDataLoader.Result]()
+        sut?.loadImageData(url: givenURL) { receivedResult.append($0) }
+        
+        sut = nil
+        
+        client.complete(withStatusCode: 200, data: anyData())
+        client.complete(withStatusCode: 400, data: anyData())
+        client.complete(with: anyNSError())
+        
+        XCTAssertTrue(receivedResult.isEmpty, "Expecting empty result, but got \(receivedResult)")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterImageDataLoader, client: HTTPClientSpy) {
