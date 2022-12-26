@@ -11,9 +11,9 @@ import LOTRCharacterFeed
 protocol CharacterImageDataLoaderTask {
     func cancel()
 }
+
 final class RemoteCharacterImageDataLoader {
     
-    let url: URL
     let client: HTTPClient
     
     enum Error: Swift.Error {
@@ -21,26 +21,42 @@ final class RemoteCharacterImageDataLoader {
         case invalidData
     }
     
-    init(url: URL, client: HTTPClient) {
-        self.url = url
+    init(client: HTTPClient) {
         self.client = client
     }
     
-    private struct HTTPClientTaskWrapper: CharacterImageDataLoaderTask {
-        var task: HTTPClientTask?
-        
+    private final class HTTPClientTaskWrapper: CharacterImageDataLoaderTask {
+        private var completion: ((RemoteCharacterImageDataLoader.Result) -> Void)?
+
+        var wrapped: HTTPClientTask?
+
+        init(_ completion: @escaping (RemoteCharacterImageDataLoader.Result) -> Void) {
+            self.completion = completion
+        }
+
+        func complete(with result: RemoteCharacterImageDataLoader.Result) {
+            completion?(result)
+        }
+
         func cancel() {
-            task?.cancel()
+            preventFurtherCompletions()
+            wrapped?.cancel()
+        }
+
+        private func preventFurtherCompletions() {
+            completion = nil
         }
     }
     
     typealias Result = Swift.Result<(Data), Error>
     
     @discardableResult
-    func loadImageData(completion: @escaping (RemoteCharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
-        var task = HTTPClientTaskWrapper()
-        task.task = client.get(from: url, completion: { result in
-            completion(result
+    func loadImageData(url: URL, completion: @escaping (RemoteCharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
+        let task = HTTPClientTaskWrapper(completion)
+        task.wrapped = client.get(from: url, completion: { [weak self] result in
+            guard self != nil else { return }
+            
+            task.complete(with: result
                 .mapError { _ in
                     Error.connectivity
                 }
@@ -53,10 +69,8 @@ final class RemoteCharacterImageDataLoader {
                 }
             )
         })
-        
         return task
     }
-    
 }
 
 final class RemoteCharacterImageDataLoaderTests: XCTestCase {
@@ -67,26 +81,26 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
-    func test_loadImageData_requestsDataFromURL() {
+    func test_loadImageDataFromURL_requestsDataFromURL() {
         let url = anyURL()
-        let (sut, client) = makeSUT(url: url)
+        let (sut, client) = makeSUT()
         
-        sut.loadImageData { _ in }
+        sut.loadImageData(url: url) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
     
-    func test_loadImageDataTwice_requestsDataFromURLTwice() {
+    func test_loadImageDataFromURLTwice_requestsDataFromURLTwice() {
         let url = anyURL()
-        let (sut, client) = makeSUT(url: url)
+        let (sut, client) = makeSUT()
         
-        sut.loadImageData { _ in }
-        sut.loadImageData { _ in }
+        sut.loadImageData(url: url) { _ in }
+        sut.loadImageData(url: url) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url, url])
     }
     
-    func test_loadImageData_deliversErrorOnHTTPClientError() {
+    func test_loadImageDataFromURL_deliversErrorOnHTTPClientError() {
         let (sut, client) = makeSUT()
         
         expect(sut, toCompleteWith: .failure(.connectivity), when: {
@@ -94,7 +108,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         })
     }
         
-    func test_loadImageData_deliversErrorOnNon200HTTPClientResponse() {
+    func test_loadImageDataFromURL_deliversErrorOnNon200HTTPClientResponse() {
         let (sut, client) = makeSUT()
         let samples = [100, 199, 300, 400, 500]
         
@@ -105,7 +119,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         }
     }
     
-    func test_loadImageData_delviresInvalidDataErrorOn200HTTPResponseWithEmptyData() {
+    func test_loadImageDataFromURL_delviresInvalidDataErrorOn200HTTPResponseWithEmptyData() {
         let (sut, client) = makeSUT()
         
         expect(sut, toCompleteWith: .failure(.invalidData), when: {
@@ -113,7 +127,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         })
     }
     
-    func test_loadImageData_deliverReceivedNonEmptyDataOn200HTTPResponse() {
+    func test_loadImageDataFromURL_deliverReceivedNonEmptyDataOn200HTTPResponse() {
         let (sut, client) = makeSUT()
         let nonEmptyData = anyData()
         
@@ -122,22 +136,38 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         })
     }
     
-    func test_cancelLoadImageDataURLTask_cancelsClientURLRequest() {
+    func test_cancelLoadImageDataFromURLTask_cancelsClientURLRequest() {
         let givenURL = URL(string: "https://a-given-url.com")!
-        let (sut, client) = makeSUT(url: givenURL)
+        let (sut, client) = makeSUT()
         
-        let task = sut.loadImageData { _ in }
+        let task = sut.loadImageData(url: givenURL) { _ in }
         XCTAssertTrue(client.canceledURLs.isEmpty, "Expected no canceled URL request until task is cancelled")
         
         task.cancel()
         XCTAssertEqual(client.canceledURLs, [givenURL], "Expected canceled URL request after task is cancelled")
     }
     
+    func test_loadImageDataFromURL_doseNotDeliverResultAfterCancellingTask() {
+        let givenURL = URL(string: "https://a-given-url.com")!
+        let (sut, client) = makeSUT()
+        
+        var receivedResult = [RemoteCharacterImageDataLoader.Result]()
+        let task = sut.loadImageData(url: givenURL) { receivedResult.append($0) }
+        
+        task.cancel()
+        
+        client.complete(withStatusCode: 200, data: anyData())
+        client.complete(withStatusCode: 400, data: anyData())
+        client.complete(with: anyNSError())
+        
+        XCTAssertTrue(receivedResult.isEmpty, "Expecting empty result, but got \(receivedResult)")
+    }
+    
     // MARK: - Helpers
     
-    private func makeSUT(url: URL = URL(string: "http://a-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterImageDataLoader, client: HTTPClientSpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterImageDataLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = RemoteCharacterImageDataLoader(url: url, client: client)
+        let sut = RemoteCharacterImageDataLoader(client: client)
         trackingForMemoryLeaks(client, file: file, line: line)
         trackingForMemoryLeaks(sut, file: file, line: line)
         return (sut, client)
@@ -146,7 +176,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     private func expect(_ sut: RemoteCharacterImageDataLoader, toCompleteWith expectedResult: RemoteCharacterImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         
         let exp = expectation(description: "Wait for load completion")
-        sut.loadImageData { receivedResult in
+        sut.loadImageData(url: anyURL()) { receivedResult in
             switch (receivedResult, expectedResult) {
                 case let (.failure(receiverError), .failure(expectedError)):
                     XCTAssertEqual(receiverError, expectedError, file: file, line: line)
