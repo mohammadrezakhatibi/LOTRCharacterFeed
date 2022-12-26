@@ -25,15 +25,18 @@ final class RemoteCharacterImageDataLoader {
     typealias Result = Swift.Result<(Data), Error>
     func loadImageData(completion: @escaping (RemoteCharacterImageDataLoader.Result) -> Void) {
         client.get(from: url, completion: { result in
-            switch result {
-                case .failure:
-                    completion(.failure(.connectivity))
-                case let .success((data, response)):
-                    guard response.statusCode == 200, !data.isEmpty else {
-                        return completion(.failure(.invalidData))
+            completion(result
+                .mapError { _ in
+                    Error.connectivity
+                }
+                .flatMap{ data, response in
+                    if response.statusCode == 200, !data.isEmpty {
+                        return .success(data)
+                    } else {
+                        return .failure(.invalidData)
                     }
-                    completion(.success(data))
-            }
+                }
+            )
         })
     }
 }
