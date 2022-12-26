@@ -14,6 +14,10 @@
 		E4BDB947295A165900147D3D /* HTTPClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB946295A165900147D3D /* HTTPClientSpy.swift */; };
 		E4BDB949295A368D00147D3D /* RemoteCharacterImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB948295A368D00147D3D /* RemoteCharacterImageDataLoader.swift */; };
 		E4BDB94B295A395F00147D3D /* CharacterImageDataLoaderTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB94A295A395F00147D3D /* CharacterImageDataLoaderTask.swift */; };
+		E4BDB953295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB952295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.swift */; };
+		E4BDB954295A499200147D3D /* LOTRCharacterFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */; };
+		E4BDB95A295A4AF300147D3D /* XCTestCase+MemoryLeaksTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F43D0429578DFC00F39D60 /* XCTestCase+MemoryLeaksTracking.swift */; };
+		E4BDB95C295A573E00147D3D /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB95B295A573E00147D3D /* URLSessionHTTPClient.swift */; };
 		E4F04B1D29565AF000F49C68 /* RemoteCharacterLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B1C29565AF000F49C68 /* RemoteCharacterLoader.swift */; };
 		E4F04B1F29565B2100F49C68 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B1E29565B2100F49C68 /* HTTPClient.swift */; };
 		E4F04B2129565B4F00F49C68 /* RemoteCharacterItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */; };
@@ -32,6 +36,13 @@
 			remoteGlobalIDString = E4583B9C29532D8F007A7D7F;
 			remoteInfo = LOTRCharacterFeed;
 		};
+		E4BDB955295A499200147D3D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4583B9429532D8F007A7D7F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4583B9C29532D8F007A7D7F;
+			remoteInfo = LOTRCharacterFeed;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +54,9 @@
 		E4BDB946295A165900147D3D /* HTTPClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientSpy.swift; sourceTree = "<group>"; };
 		E4BDB948295A368D00147D3D /* RemoteCharacterImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCharacterImageDataLoader.swift; sourceTree = "<group>"; };
 		E4BDB94A295A395F00147D3D /* CharacterImageDataLoaderTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterImageDataLoaderTask.swift; sourceTree = "<group>"; };
+		E4BDB950295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LOTRCharacterFeedAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4BDB952295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTRCharacterFeedAPIEndToEndTests.swift; sourceTree = "<group>"; };
+		E4BDB95B295A573E00147D3D /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		E4F04B1C29565AF000F49C68 /* RemoteCharacterLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCharacterLoader.swift; sourceTree = "<group>"; };
 		E4F04B1E29565B2100F49C68 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCharacterItem.swift; sourceTree = "<group>"; };
@@ -69,6 +83,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4BDB94D295A499200147D3D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4BDB954295A499200147D3D /* LOTRCharacterFeed.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -77,6 +99,7 @@
 			children = (
 				E4583B9F29532D8F007A7D7F /* LOTRCharacterFeed */,
 				E4583BA929532D8F007A7D7F /* LOTRCharacterFeedTests */,
+				E4BDB951295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests */,
 				E4583B9E29532D8F007A7D7F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,6 +109,7 @@
 			children = (
 				E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */,
 				E4583BA529532D8F007A7D7F /* LOTRCharacterFeedTests.xctest */,
+				E4BDB950295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,6 +133,14 @@
 			path = LOTRCharacterFeedTests;
 			sourceTree = "<group>";
 		};
+		E4BDB951295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDB952295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.swift */,
+			);
+			path = LOTRCharacterFeedAPIEndToEndTests;
+			sourceTree = "<group>";
+		};
 		E4F04B2429565BFF00F49C68 /* Character API */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,7 +150,7 @@
 				E4F04B2229565B7B00F49C68 /* CharacterItemMapper.swift */,
 				E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */,
 				E4BDB948295A368D00147D3D /* RemoteCharacterImageDataLoader.swift */,
-				E4BDB94A295A395F00147D3D /* CharacterImageDataLoaderTask.swift */,
+				E4BDB95B295A573E00147D3D /* URLSessionHTTPClient.swift */,
 			);
 			path = "Character API";
 			sourceTree = "<group>";
@@ -136,6 +168,7 @@
 			children = (
 				E4583BB72953390C007A7D7F /* CharacterLoader.swift */,
 				E4583BB929533996007A7D7F /* CharacterItem.swift */,
+				E4BDB94A295A395F00147D3D /* CharacterImageDataLoaderTask.swift */,
 			);
 			path = "Character Feature";
 			sourceTree = "<group>";
@@ -199,6 +232,24 @@
 			productReference = E4583BA529532D8F007A7D7F /* LOTRCharacterFeedTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		E4BDB94F295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4BDB957295A499200147D3D /* Build configuration list for PBXNativeTarget "LOTRCharacterFeedAPIEndToEndTests" */;
+			buildPhases = (
+				E4BDB94C295A499200147D3D /* Sources */,
+				E4BDB94D295A499200147D3D /* Frameworks */,
+				E4BDB94E295A499200147D3D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E4BDB956295A499200147D3D /* PBXTargetDependency */,
+			);
+			name = LOTRCharacterFeedAPIEndToEndTests;
+			productName = LOTRCharacterFeedAPIEndToEndTests;
+			productReference = E4BDB950295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -217,6 +268,9 @@
 						CreatedOnToolsVersion = 14.2;
 						LastSwiftMigration = 1420;
 					};
+					E4BDB94F295A499200147D3D = {
+						CreatedOnToolsVersion = 14.2;
+					};
 				};
 			};
 			buildConfigurationList = E4583B9729532D8F007A7D7F /* Build configuration list for PBXProject "LOTRCharacterFeed" */;
@@ -234,6 +288,7 @@
 			targets = (
 				E4583B9C29532D8F007A7D7F /* LOTRCharacterFeed */,
 				E4583BA429532D8F007A7D7F /* LOTRCharacterFeedTests */,
+				E4BDB94F295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests */,
 			);
 		};
 /* End PBXProject section */
@@ -253,6 +308,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4BDB94E295A499200147D3D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -261,6 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4583BBA29533996007A7D7F /* CharacterItem.swift in Sources */,
+				E4BDB95C295A573E00147D3D /* URLSessionHTTPClient.swift in Sources */,
 				E4F04B1D29565AF000F49C68 /* RemoteCharacterLoader.swift in Sources */,
 				E4F04B2729565C6000F49C68 /* HTTPURLResponse+StatusCode.swift in Sources */,
 				E4F04B1F29565B2100F49C68 /* HTTPClient.swift in Sources */,
@@ -284,6 +347,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4BDB94C295A499200147D3D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4BDB953295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.swift in Sources */,
+				E4BDB95A295A4AF300147D3D /* XCTestCase+MemoryLeaksTracking.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -291,6 +363,11 @@
 			isa = PBXTargetDependency;
 			target = E4583B9C29532D8F007A7D7F /* LOTRCharacterFeed */;
 			targetProxy = E4583BA729532D8F007A7D7F /* PBXContainerItemProxy */;
+		};
+		E4BDB956295A499200147D3D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4583B9C29532D8F007A7D7F /* LOTRCharacterFeed */;
+			targetProxy = E4BDB955295A499200147D3D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -538,6 +615,46 @@
 			};
 			name = Release;
 		};
+		E4BDB958295A499200147D3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BY2VY6JUSG;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.mohammadreza.LOTRCharacterFeedAPIEndToEndTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E4BDB959295A499200147D3D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BY2VY6JUSG;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.mohammadreza.LOTRCharacterFeedAPIEndToEndTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -564,6 +681,15 @@
 			buildConfigurations = (
 				E4583BB329532D8F007A7D7F /* Debug */,
 				E4583BB429532D8F007A7D7F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E4BDB957295A499200147D3D /* Build configuration list for PBXNativeTarget "LOTRCharacterFeedAPIEndToEndTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4BDB958295A499200147D3D /* Debug */,
+				E4BDB959295A499200147D3D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

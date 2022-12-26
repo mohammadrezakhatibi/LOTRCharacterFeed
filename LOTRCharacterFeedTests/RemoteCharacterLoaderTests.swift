@@ -49,7 +49,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         let url = anyURL()
         let (sut, client) = makeSUT(url: url)
         let data = anyData()
-        let samples = [100, 199, 300, 399, 401, 500]
+        let samples = [100, 199, 300, 399, 400, 500]
         
         samples.enumerated().forEach { index, code in
             expect(sut, toCompleteWith: failure(.invalidData), when: {
@@ -64,7 +64,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         let data = anyData()
         
         expect(sut, toCompleteWith: failure(.unauthorized), when: {
-            client.complete(withStatusCode: 400, data: data)
+            client.complete(withStatusCode: 401, data: data)
         })
     }
     
@@ -94,14 +94,14 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             id: "5cd99d4bde30eff6ebccfbe6",
             height: "198cm (6'6\")",
             race: "Human",
-            gender: "Male",
+            gender: nil,
             birth: "March 1 ,2931",
             spouse: "Arwen",
             death: "FO 120",
             realm: "Reunited Kingdom, Arnor, Gondor",
             hair: "Dark",
             name: "Aragorn II Elessar",
-            wikiURL: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")
+            wikiURL: nil)
         
         
         let item2 = makeItem(
@@ -194,14 +194,14 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     private func makeItem(id: String,
                           height: String,
                           race: String,
-                          gender: String,
+                          gender: String?,
                           birth: String,
                           spouse: String,
                           death: String,
                           realm: String,
                           hair: String,
                           name: String,
-                          wikiURL: String) -> (model: CharacterItem, json: [String: Any]) {
+                          wikiURL: String?) -> (model: CharacterItem, json: [String: Any]) {
         let json = [
             "_id": id,
             "height": height,
@@ -214,7 +214,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             "hair": hair,
             "name": name,
             "wikiUrl": wikiURL
-        ]
+        ].compactMapValues { $0 }
         
         let model = CharacterItem(
             id: id,
@@ -227,13 +227,18 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             realm: realm,
             hair: hair,
             name: name,
-            wikiURL: URL(string: wikiURL)!)
+            wikiURL: wikiURL == nil ? nil : URL(string: wikiURL!)!)
         
         return (model, json)
     }
     
     private func makeItemJSON(_ items: [[String: Any]]) -> Data {
-        let json = ["items": items]
+        let json = ["docs": items,
+                    "total": 933,
+                    "limit": 1000,
+                    "offset": 0,
+                    "page": 1,
+                    "pages": 1] as [String : Any]
         return try! JSONSerialization.data(withJSONObject: json)
     }
     

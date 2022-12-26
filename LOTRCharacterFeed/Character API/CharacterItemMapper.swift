@@ -10,7 +10,12 @@ import Foundation
 public struct CharacterItemMapper {
     
     private struct Root: Codable {
-        var items: [RemoteCharacterItem]
+        var docs: [RemoteCharacterItem]
+        var total: Int
+        var limit: Int
+        var offset : Int
+        var page: Int
+        var pages: Int
         
     }
     
@@ -20,6 +25,6 @@ public struct CharacterItemMapper {
             ? RemoteCharacterLoader.Error.unauthorized
             : RemoteCharacterLoader.Error.invalidData
         }
-        return root.items
+        return root.docs
     }
 }

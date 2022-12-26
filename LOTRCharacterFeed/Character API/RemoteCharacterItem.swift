@@ -11,14 +11,14 @@ public struct RemoteCharacterItem: Codable {
     public var _id: String
     public var height: String
     public var race: String
-    public var gender: String
+    public var gender: String?
     public var birth: String
     public var spouse: String
     public var death: String
     public var realm: String
     public var hair: String
     public var name: String
-    public var wikiUrl: String
+    public var wikiUrl: String?
 
     public init(id: String, height: String, race: String, gender: String, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiUrl: String) {
         self._id = id
