@@ -140,14 +140,6 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         return .failure(error)
     }
     
-    private func anyNSError() -> NSError {
-        return NSError(domain: "an error", code: 0)
-    }
-    
-    private func anyData() -> Data {
-        return Data("a data".utf8)
-    }
-    
     private class HTTPClientSpy: HTTPClient {
         private var completions = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
         var requestedURLs: [URL] {

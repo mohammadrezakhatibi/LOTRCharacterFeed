@@ -38,16 +38,17 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     func test_load_deliversErrorOnHTTPClientError() {
         let url = anyURL()
         let (sut, client) = makeSUT(url: url)
+        let anError = anyNSError()
         
         expect(sut, toCompleteWith: .failure(RemoteCharacterLoader.Error.connectivity), when: {
-            client.complete(with: NSError(domain: "", code: 0))
+            client.complete(with: anError)
         })
     }
     
     func test_load_deliversErrorOnNon200HTTPClientResponse() {
         let url = anyURL()
         let (sut, client) = makeSUT(url: url)
-        let data = Data()
+        let data = anyData()
         let samples = [100, 199, 300, 399, 401, 500]
         
         samples.enumerated().forEach { index, code in
@@ -60,7 +61,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     func test_load_deliversUnAuthorizedErrorOn400HTTPClientResponse() {
         let url = anyURL()
         let (sut, client) = makeSUT(url: url)
-        let data = Data()
+        let data = anyData()
         
         expect(sut, toCompleteWith: failure(.unauthorized), when: {
             client.complete(withStatusCode: 400, data: data)
@@ -70,7 +71,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     func test_load_deliversErrorOn200HTTPClientResponseWithInvalidJSON() {
         let url = anyURL()
         let (sut, client) = makeSUT(url: url)
-        let invalidData = Data("invalid data".utf8)
+        let invalidData = anyData()
         
         expect(sut, toCompleteWith: failure(.invalidData), when: {
             client.complete(withStatusCode: 200, data: invalidData, at: 0)
