@@ -240,29 +240,4 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     private func failure(_ error: RemoteCharacterLoader.Error) -> RemoteCharacterLoader.Result {
         return .failure(error)
     }
-    
-    private class HTTPClientSpy: HTTPClient {
-        private var completions = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
-        var requestedURLs: [URL] {
-            return completions.map { $0.url }
-        }
-        
-        func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
-            completions.append((url, completion))
-        }
-        
-        func complete(with error: Error, at index: Int = 0) {
-            completions[index].completion(.failure(error))
-        }
-        
-        func complete(withStatusCode status: Int, data: Data, at index: Int = 0) {
-            let response = HTTPURLResponse(
-                url: requestedURLs[index],
-                statusCode: status,
-                httpVersion: nil,
-                headerFields: nil)!
-            
-            completions[index].completion(.success((data, response)))
-        }
-    }
 }
