@@ -7,10 +7,18 @@
 
 import XCTest
 
+protocol URLSessionTask {
+    func resume()
+}
+
+protocol HTTPSession {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionTask
+}
+
 final class URLSessionHTTPClient {
-    let session: URLSession
+    let session: HTTPSession
     
-    init(session: URLSession) {
+    init(session: HTTPSession) {
         self.session = session
     }
     
@@ -55,29 +63,29 @@ final class URLSessionHTTPClientTests: XCTestCase {
 
     // MARK: - Helpers
     
-    private class URLSessionSpy: URLSession {
+    private class URLSessionSpy: HTTPSession {
         var requestedURLs = [URL]()
-        var stubs = [URL: URLSessionDataTask]()
+        var stubs = [URL: URLSessionTask]()
         
-        override func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionTask {
             requestedURLs.append(url)
             return stubs[url] ?? FakeURLSessionTask()
         }
         
-        func stub(url: URL, task: URLSessionDataTask) {
+        func stub(url: URL, task: URLSessionTask) {
             stubs[url] = task
         }
     }
     
-    private class FakeURLSessionTask: URLSessionDataTask {
-        override func resume() {
+    private class FakeURLSessionTask: URLSessionTask {
+        func resume() {
             
         }
     }
     
-    private class URLSessionTaskSpy: URLSessionDataTask {
+    private class URLSessionTaskSpy: URLSessionTask {
         var resumeCallCount = 0
-        override func resume() {
+        func resume() {
             resumeCallCount += 1
         }
     }
