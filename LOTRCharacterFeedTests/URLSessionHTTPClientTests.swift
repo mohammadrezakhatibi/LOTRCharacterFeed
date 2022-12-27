@@ -43,19 +43,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertTrue(session.requestedURLs.isEmpty)
     }
     
-    func test_getFromURL_resumeDataTaskWithURL() {
-        let url = anyURL()
-        let session = URLSessionSpy()
-        let task = URLSessionTaskSpy()
-        session.stub(url: url, task: task)
-        let sut = URLSessionHTTPClient(session: session)
-        
-        
-        sut.get(url: url) { _ in }
-        
-        XCTAssertEqual(task.resumeCallCount, 1)
-    }
-    
     func test_getFromURL_failsOnRequestError() {
         let url = anyURL()
         let error = anyNSError()
