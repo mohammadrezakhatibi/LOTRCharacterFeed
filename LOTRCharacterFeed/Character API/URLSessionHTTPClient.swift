@@ -7,39 +7,43 @@
 
 import Foundation
 
-public class URLSessionHTTPClient: HTTPClient {
+public final class URLSessionHTTPClient: HTTPClient {
+    private let session: URLSession
     
-    private var session: URLSession
-    
-    public init(session: URLSession) {
+    public init(session: URLSession = .shared) {
         self.session = session
     }
     
-    private struct UnexpectedValueRepresentation: Error {}
+    private struct UnexpectedValueRepresentationError: Error {}
     
-    private struct URLSessionTaskWrapper: HTTPClientTask {
+    private class Task: HTTPClientTask {
+        
         let wrapped: URLSessionTask
-
+        
+        init(wrapped: URLSessionTask) {
+            self.wrapped = wrapped
+        }
+        
         func cancel() {
             wrapped.cancel()
         }
     }
     
     public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-        var request = URLRequest(url: url)
-        request.setValue("Bearer 4FVcNlyhfHkLwFuqo-YP", forHTTPHeaderField: "Authorization")
-        let task = session.dataTask(with: request) { data, response, error in
-            completion(Result {
-                if let error {
-                    throw error
-                } else if let data = data, let response = response as? HTTPURLResponse {
-                    return (data, response)
-                } else {
-                    throw UnexpectedValueRepresentation()
+        let task = session
+            .dataTask(with: url, completionHandler: { data, response, error in
+                guard let data = data, let response = response as? HTTPURLResponse else {
+                    if let error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.failure(UnexpectedValueRepresentationError()))
+                    }
+                    return
                 }
+                completion(.success((data, response)))
             })
-        }
         task.resume()
-        return URLSessionTaskWrapper(wrapped: task)
+        
+        return Task(wrapped: task)
     }
 }

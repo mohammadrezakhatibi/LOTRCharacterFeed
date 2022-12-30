@@ -8,47 +8,6 @@
 import XCTest
 import LOTRCharacterFeed
 
-final class URLSessionHTTPClient: HTTPClient {
-    let session: URLSession
-    
-    init(session: URLSession = .shared) {
-        self.session = session
-    }
-    
-    private struct UnexpectedValueRepresentationError: Error {}
-    
-    private class Task: HTTPClientTask {
-        
-        let wrapped: URLSessionTask
-        
-        init(wrapped: URLSessionTask) {
-            self.wrapped = wrapped
-        }
-        
-        func cancel() {
-            wrapped.cancel()
-        }
-    }
-    
-    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-        let task = session
-            .dataTask(with: url, completionHandler: { data, response, error in
-                guard let data = data, let response = response as? HTTPURLResponse else {
-                    if let error {
-                        completion(.failure(error))
-                    } else {
-                        completion(.failure(UnexpectedValueRepresentationError()))
-                    }
-                    return
-                }
-                completion(.success((data, response)))
-            })
-        task.resume()
-        
-        return Task(wrapped: task)
-    }
-}
-
 final class URLSessionHTTPClientTests: XCTestCase {
 
     override func setUp() {
