@@ -13,7 +13,7 @@ public final class URLSessionHTTPClient: HTTPClient {
         urlRequest.httpBody = request.body
         urlRequest.httpMethod = "GET"
         _ = request.header?.map { key, value in
-            urlRequest.setValue("\(value)", forHTTPHeaderField: key)
+            urlRequest.setValue(value, forHTTPHeaderField: key)
         }
         
         let task = session

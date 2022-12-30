@@ -64,7 +64,7 @@ final class LOTRCharacterFeedAPIEndToEndTests: XCTestCase {
     private class CharacterRequest: Request {
         var url: URL
         var body: Data? = nil
-        var header: [String : String]? = ["Authentication" : "Bearer 4FVcNlyhfHkLwFuqo-YP", "Cache-Control": "no-cache"]
+        var header: [String : String]? = ["Authorization" : "Bearer 4FVcNlyhfHkLwFuqo-YP"]
         
         init(url: URL) {
             self.url = url
