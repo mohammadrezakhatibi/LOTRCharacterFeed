@@ -8,7 +8,7 @@
 import XCTest
 import LOTRCharacterFeed
 
-final class URLSessionHTTPClient {
+final class URLSessionHTTPClient: HTTPClient {
     let session: URLSession
     
     init(session: URLSession = .shared) {
@@ -17,8 +17,21 @@ final class URLSessionHTTPClient {
     
     private struct UnexpectedValueRepresentationError: Error {}
     
-    func get(url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
-        session
+    private class Task: HTTPClientTask {
+        
+        let wrapped: URLSessionTask
+        
+        init(wrapped: URLSessionTask) {
+            self.wrapped = wrapped
+        }
+        
+        func cancel() {
+            wrapped.cancel()
+        }
+    }
+    
+    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
+        let task = session
             .dataTask(with: url, completionHandler: { data, response, error in
                 guard let data = data, let response = response as? HTTPURLResponse else {
                     if let error {
@@ -30,7 +43,9 @@ final class URLSessionHTTPClient {
                 }
                 completion(.success((data, response)))
             })
-            .resume()
+        task.resume()
+        
+        return Task(wrapped: task)
     }
 }
 
@@ -58,7 +73,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
             exp.fulfill()
         }
         
-        makeSUT().get(url: url, completion: { _ in })
+        let _ = makeSUT().get(from: url, completion: { _ in })
         
         wait(for: [exp], timeout: 1.0)
     }
@@ -143,7 +158,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
         let exp = expectation(description: "Wait for get completion")
         var receivedResult: (HTTPClient.Result)!
         
-        makeSUT().get(url: anyURL()) { result in
+        let _ = makeSUT().get(from: anyURL()) { result in
             receivedResult = result
             exp.fulfill()
         }
