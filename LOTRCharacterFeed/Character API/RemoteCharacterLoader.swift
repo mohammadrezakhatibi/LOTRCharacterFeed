@@ -9,7 +9,7 @@ import Foundation
 
 public final class RemoteCharacterLoader: CharacterLoader {
     
-    let url: URL
+    let request: Request
     let client: HTTPClient
     
     public enum Error: Swift.Error {
@@ -18,13 +18,13 @@ public final class RemoteCharacterLoader: CharacterLoader {
         case unauthorized
     }
     
-    public init(url: URL, client: HTTPClient) {
-        self.url = url
+    public init(request: Request, client: HTTPClient) {
+        self.request = request
         self.client = client
     }
     
     public func load(completion: @escaping (CharacterLoader.Result) -> Void) {
-        client.get(from: url) { [weak self] result in
+        client.get(from: request) { [weak self] result in
             switch result {
                 case .failure:
                     completion(.failure(RemoteCharacterLoader.Error.connectivity))

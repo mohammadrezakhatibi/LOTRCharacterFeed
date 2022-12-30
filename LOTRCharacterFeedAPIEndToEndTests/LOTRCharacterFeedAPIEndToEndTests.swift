@@ -40,9 +40,10 @@ final class LOTRCharacterFeedAPIEndToEndTests: XCTestCase {
     func getFeedResult(file: StaticString = #filePath,
                        line: UInt = #line) -> CharacterLoader.Result? {
         
-        let url = feedTestServerURL.appendingPathComponent("character")
+        let url = feedTestServerURL.appendingPathComponent("character/")
         let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
-        let loader = RemoteCharacterLoader(url: url, client: client)
+        let r = CharacterRequest(url: url)
+        let loader = RemoteCharacterLoader(request: r, client: client)
         
         trackingForMemoryLeaks(client, file: file, line: line)
         trackingForMemoryLeaks(loader, file: file, line: line)
@@ -58,5 +59,15 @@ final class LOTRCharacterFeedAPIEndToEndTests: XCTestCase {
         wait(for: [exp], timeout: 5.0)
         return receivedResult
         
+    }
+    
+    private class CharacterRequest: Request {
+        var url: URL
+        var body: Data? = nil
+        var header: [String : String]? = ["Authentication" : "Bearer 4FVcNlyhfHkLwFuqo-YP", "Cache-Control": "no-cache"]
+        
+        init(url: URL) {
+            self.url = url
+        }
     }
 }

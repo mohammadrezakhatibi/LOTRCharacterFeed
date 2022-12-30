@@ -43,9 +43,9 @@ public final class RemoteCharacterImageDataLoader: CharacterImageDataLoader {
         }
     }
     
-    public func loadImageData(url: URL, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
+    public func loadImageData(request: Request, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
         let task = HTTPClientTaskWrapper(completion)
-        task.wrapped = client.get(from: url, completion: { [weak self] result in
+        task.wrapped = client.get(from: request, completion: { [weak self] result in
             guard self != nil else { return }
             
             task.complete(with: result
@@ -64,3 +64,5 @@ public final class RemoteCharacterImageDataLoader: CharacterImageDataLoader {
         return task
     }
 }
+
+

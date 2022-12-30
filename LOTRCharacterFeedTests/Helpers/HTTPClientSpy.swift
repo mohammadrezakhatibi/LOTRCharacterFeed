@@ -9,6 +9,14 @@ import Foundation
 import LOTRCharacterFeed
 
 class HTTPClientSpy: HTTPClient {
+    
+    func get(from request: LOTRCharacterFeed.Request, completion: @escaping (HTTPClient.Result) -> Void) -> LOTRCharacterFeed.HTTPClientTask {
+        completions.append((request.url, completion))
+        return TaskSpy { [weak self] in
+            self?.canceledURLs.append(request.url)
+        }
+    }
+    
     private var completions = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
     var requestedURLs: [URL] {
         return completions.map { $0.url }
@@ -19,12 +27,6 @@ class HTTPClientSpy: HTTPClient {
         var cancelCallback: () -> Void
         func cancel() {
             cancelCallback()
-        }
-    }
-    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask  {
-        completions.append((url, completion))
-        return TaskSpy { [weak self] in
-            self?.canceledURLs.append(url)
         }
     }
     

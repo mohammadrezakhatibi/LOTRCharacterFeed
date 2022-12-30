@@ -23,16 +23,21 @@ final class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_getFromURL_performsGETRequestWithURL() {
-        let url = anyURL()
+        let expectedRequest = MockRequest(url: anyURL())
         
         let exp = expectation(description: "Waiting for get completion")
         URLProtocolStub.observeRequests { request in
-            XCTAssertEqual(request.url, url)
+            XCTAssertEqual(request.url, expectedRequest.url)
             XCTAssertEqual(request.httpMethod, "GET")
+            
+            _ = expectedRequest.header?.keys.compactMap { key in
+                print(key)
+                XCTAssertEqual(request.allHTTPHeaderFields?[key], expectedRequest.header?[key])
+            }
             exp.fulfill()
         }
         
-        let _ = makeSUT().get(from: url, completion: { _ in })
+        let _ = makeSUT().get(from: expectedRequest, completion: { _ in })
         
         wait(for: [exp], timeout: 1.0)
     }
@@ -116,8 +121,8 @@ final class URLSessionHTTPClientTests: XCTestCase {
         
         let exp = expectation(description: "Wait for get completion")
         var receivedResult: (HTTPClient.Result)!
-        
-        let _ = makeSUT().get(from: anyURL()) { result in
+        let request = MockRequest(url: anyURL())
+        let _ = makeSUT().get(from: request) { result in
             receivedResult = result
             exp.fulfill()
         }
@@ -193,5 +198,23 @@ final class URLSessionHTTPClientTests: XCTestCase {
     
     private func nonHTTPURLResponse() -> URLResponse {
         return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+    }
+    
+    private class MockRequest: Request {
+        
+        init(url: URL) {
+            self.url = url
+        }
+        
+        var url: URL
+        
+        var body: Data? = nil
+        
+        var header: [String : String]? {
+            get {
+                ["Authentication" : "fsadfdsf"]
+            }
+        }
+        
     }
 }

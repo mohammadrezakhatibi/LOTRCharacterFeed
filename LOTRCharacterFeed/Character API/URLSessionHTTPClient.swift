@@ -8,6 +8,31 @@
 import Foundation
 
 public final class URLSessionHTTPClient: HTTPClient {
+    public func get(from request: Request, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
+        var urlRequest = URLRequest(url: request.url)
+        urlRequest.httpBody = request.body
+        urlRequest.httpMethod = "GET"
+        _ = request.header?.map { key, value in
+            urlRequest.setValue("\(value)", forHTTPHeaderField: key)
+        }
+        
+        let task = session
+            .dataTask(with: urlRequest, completionHandler: { data, response, error in
+                guard let data = data, let response = response as? HTTPURLResponse else {
+                    if let error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.failure(UnexpectedValueRepresentationError()))
+                    }
+                    return
+                }
+                completion(.success((data, response)))
+            })
+        task.resume()
+        
+        return Task(wrapped: task)
+    }
+    
     private let session: URLSession
     
     public init(session: URLSession = .shared) {
@@ -28,22 +53,5 @@ public final class URLSessionHTTPClient: HTTPClient {
             wrapped.cancel()
         }
     }
-    
-    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-        let task = session
-            .dataTask(with: url, completionHandler: { data, response, error in
-                guard let data = data, let response = response as? HTTPURLResponse else {
-                    if let error {
-                        completion(.failure(error))
-                    } else {
-                        completion(.failure(UnexpectedValueRepresentationError()))
-                    }
-                    return
-                }
-                completion(.success((data, response)))
-            })
-        task.resume()
-        
-        return Task(wrapped: task)
-    }
+
 }
