@@ -11,32 +11,32 @@ import LOTRCharacterFeed
 final class RemoteCharacterImageDataLoaderTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromURL() {
-        let (_, client, _) = makeSUT()
+        let (_, client) = makeSUT()
         
         XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
     func test_loadImageDataFromURL_requestsDataFromURL() {
         let url = anyURL()
-        let (sut, client, request) = makeSUT()
+        let (sut, client) = makeSUT()
         
-        _ = sut.loadImageData(request: request) { _ in }
+        _ = sut.loadImageData(url: url) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
     
     func test_loadImageDataFromURLTwice_requestsDataFromURLTwice() {
         let url = anyURL()
-        let (sut, client, request) = makeSUT()
+        let (sut, client) = makeSUT()
         
-        _ = sut.loadImageData(request: request) { _ in }
-        _ = sut.loadImageData(request: request) { _ in }
+        _ = sut.loadImageData(url: url) { _ in }
+        _ = sut.loadImageData(url: url) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url, url])
     }
     
     func test_loadImageDataFromURL_deliversErrorOnHTTPClientError() {
-        let (sut, client, _) = makeSUT()
+        let (sut, client) = makeSUT()
         
         expect(sut, toCompleteWith: failure(.connectivity), when: {
             client.complete(with: anyNSError())
@@ -44,7 +44,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     }
         
     func test_loadImageDataFromURL_deliversErrorOnNon200HTTPClientResponse() {
-        let (sut, client, _) = makeSUT()
+        let (sut, client) = makeSUT()
         let samples = [100, 199, 300, 400, 500]
         
         samples.enumerated().forEach { (index, code) in
@@ -55,7 +55,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     }
     
     func test_loadImageDataFromURL_delviresInvalidDataErrorOn200HTTPResponseWithEmptyData() {
-        let (sut, client, _) = makeSUT()
+        let (sut, client) = makeSUT()
         
         expect(sut, toCompleteWith: failure(.invalidData), when: {
             client.complete(withStatusCode: 200, data: Data())
@@ -63,7 +63,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     }
     
     func test_loadImageDataFromURL_deliverReceivedNonEmptyDataOn200HTTPResponse() {
-        let (sut, client, _) = makeSUT()
+        let (sut, client) = makeSUT()
         let nonEmptyData = anyData()
         
         expect(sut, toCompleteWith: .success(nonEmptyData), when: {
@@ -73,9 +73,9 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     
     func test_cancelLoadImageDataFromURLTask_cancelsClientURLRequest() {
         let givenURL = URL(string: "https://a-given-url.com")!
-        let (sut, client, request) = makeSUT(url: givenURL)
+        let (sut, client) = makeSUT(url: givenURL)
         
-        let task = sut.loadImageData(request: request) { _ in }
+        let task = sut.loadImageData(url: givenURL) { _ in }
         XCTAssertTrue(client.canceledURLs.isEmpty, "Expected no canceled URL request until task is cancelled")
         
         task.cancel()
@@ -84,10 +84,10 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     
     func test_loadImageDataFromURL_doseNotDeliverResultAfterCancellingTask() {
         let givenURL = URL(string: "https://a-given-url.com")!
-        let (sut, client, request) = makeSUT(url: givenURL)
+        let (sut, client) = makeSUT(url: givenURL)
         
         var receivedResult = [CharacterImageDataLoader.Result]()
-        let task = sut.loadImageData(request: request) { receivedResult.append($0) }
+        let task = sut.loadImageData(url: givenURL) { receivedResult.append($0) }
         
         task.cancel()
         
@@ -101,11 +101,10 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     func test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let givenURL = URL(string: "https://a-given-url.com")!
         let client = HTTPClientSpy()
-        let request = MockRequest(url: givenURL).create()
         var sut: RemoteCharacterImageDataLoader? = RemoteCharacterImageDataLoader(client: client)
         
         var receivedResult = [CharacterImageDataLoader.Result]()
-        _ = sut?.loadImageData(request: request) { receivedResult.append($0) }
+        _ = sut?.loadImageData(url: givenURL) { receivedResult.append($0) }
         
         sut = nil
         
@@ -118,19 +117,17 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(url: URL = anyURL(),file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterImageDataLoader, client: HTTPClientSpy, request: URLRequest) {
+    private func makeSUT(url: URL = anyURL(),file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterImageDataLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut = RemoteCharacterImageDataLoader(client: client)
-        let request = MockRequest(url: url).create()
         trackingForMemoryLeaks(client, file: file, line: line)
         trackingForMemoryLeaks(sut, file: file, line: line)
-        return (sut, client, request)
+        return (sut, client)
     }
     
     private func expect(_ sut: RemoteCharacterImageDataLoader, toCompleteWith expectedResult: CharacterImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        let request = MockRequest(url: anyURL()).create()
         let exp = expectation(description: "Wait for load completion")
-        _ = sut.loadImageData(request: request) { receivedResult in
+        _ = sut.loadImageData(url: anyURL()) { receivedResult in
             switch (receivedResult, expectedResult) {
                 case let (.failure(receiverError), .failure(expectedError)):
                     XCTAssertEqual(receiverError as? RemoteCharacterImageDataLoader.Error, expectedError as? RemoteCharacterImageDataLoader.Error, file: file, line: line)
