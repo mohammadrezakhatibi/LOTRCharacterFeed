@@ -32,11 +32,6 @@ final class LOTRCharacterFeedAPIEndToEndTests: XCTestCase {
         }
     }
 
-    
-    private var feedTestServerURL: URL {
-        return URL(string: "https://the-one-api.dev/v2/")!
-    }
-    
     func getFeedResult(file: StaticString = #filePath,
                        line: UInt = #line) -> CharacterLoader.Result? {
         
