@@ -10,10 +10,10 @@ import LOTRCharacterFeed
 
 class HTTPClientSpy: HTTPClient {
     
-    func get(from request: LOTRCharacterFeed.Request, completion: @escaping (HTTPClient.Result) -> Void) -> LOTRCharacterFeed.HTTPClientTask {
-        completions.append((request.url, completion))
+    func get(from request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> LOTRCharacterFeed.HTTPClientTask {
+        completions.append((request.url!, completion))
         return TaskSpy { [weak self] in
-            self?.canceledURLs.append(request.url)
+            self?.canceledURLs.append(request.url!)
         }
     }
     

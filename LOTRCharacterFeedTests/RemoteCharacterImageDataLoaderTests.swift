@@ -101,7 +101,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     func test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let givenURL = URL(string: "https://a-given-url.com")!
         let client = HTTPClientSpy()
-        let request = MockRequest(url: givenURL)
+        let request = MockRequest(url: givenURL).create()
         var sut: RemoteCharacterImageDataLoader? = RemoteCharacterImageDataLoader(client: client)
         
         var receivedResult = [CharacterImageDataLoader.Result]()
@@ -118,17 +118,17 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(url: URL = anyURL(),file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterImageDataLoader, client: HTTPClientSpy, request: Request) {
+    private func makeSUT(url: URL = anyURL(),file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterImageDataLoader, client: HTTPClientSpy, request: URLRequest) {
         let client = HTTPClientSpy()
         let sut = RemoteCharacterImageDataLoader(client: client)
-        let request = MockRequest(url: url)
+        let request = MockRequest(url: url).create()
         trackingForMemoryLeaks(client, file: file, line: line)
         trackingForMemoryLeaks(sut, file: file, line: line)
         return (sut, client, request)
     }
     
     private func expect(_ sut: RemoteCharacterImageDataLoader, toCompleteWith expectedResult: CharacterImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        let request = MockRequest(url: anyURL())
+        let request = MockRequest(url: anyURL()).create()
         let exp = expectation(description: "Wait for load completion")
         _ = sut.loadImageData(request: request) { receivedResult in
             switch (receivedResult, expectedResult) {
@@ -151,19 +151,5 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     
     private func failure(_ error: RemoteCharacterImageDataLoader.Error) -> CharacterImageDataLoader.Result {
         return .failure(error)
-    }
-    
-    private class MockRequest: Request {
-        
-        init(url: URL) {
-            self.url = url
-        }
-        
-        var url: URL
-        
-        var body: Data? = nil
-        
-        var header: [String : String]? = nil
-        
     }
 }

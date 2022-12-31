@@ -128,7 +128,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     func test_load_doseNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let url = anyURL()
         let client = HTTPClientSpy()
-        let request = MockRequest(url: url)
+        let request = MockRequest(url: url).create()
         var sut: RemoteCharacterLoader? = RemoteCharacterLoader(request: request, client: client)
         
         
@@ -165,7 +165,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     private func makeSUT(url: URL = URL(string: "http://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterLoader, client: HTTPClientSpy) {
         
         let client = HTTPClientSpy()
-        let request = MockRequest(url: url)
+        let request = MockRequest(url: url).create()
         let sut = RemoteCharacterLoader(request: request, client: client)
         trackingForMemoryLeaks(client, file: file, line: line)
         trackingForMemoryLeaks(sut, file: file, line: line)
@@ -246,19 +246,5 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     
     private func failure(_ error: RemoteCharacterLoader.Error) -> CharacterLoader.Result {
         return .failure(error)
-    }
-    
-    private class MockRequest: Request {
-        
-        init(url: URL) {
-            self.url = url
-        }
-        
-        var url: URL
-        
-        var body: Data? = nil
-        
-        var header: [String : String]? = nil
-        
     }
 }

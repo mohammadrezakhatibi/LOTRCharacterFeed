@@ -9,7 +9,7 @@ import Foundation
 
 public final class RemoteCharacterLoader: CharacterLoader {
     
-    let request: Request
+    let request: URLRequest
     let client: HTTPClient
     
     public enum Error: Swift.Error {
@@ -18,7 +18,7 @@ public final class RemoteCharacterLoader: CharacterLoader {
         case unauthorized
     }
     
-    public init(request: Request, client: HTTPClient) {
+    public init(request: URLRequest, client: HTTPClient) {
         self.request = request
         self.client = client
     }

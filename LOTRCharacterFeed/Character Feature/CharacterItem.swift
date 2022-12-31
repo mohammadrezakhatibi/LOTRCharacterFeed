@@ -8,17 +8,17 @@
 import Foundation
 
 public struct CharacterItem: Codable, Equatable {
-    public var id: String
-    public var height: String
-    public var race: String
-    public var gender: String?
-    public var birth: String
-    public var spouse: String
-    public var death: String
-    public var realm: String
-    public var hair: String
-    public var name: String
-    public var wikiURL: URL?
+    public let id: String
+    public let height: String
+    public let race: String
+    public let gender: String?
+    public let birth: String
+    public let spouse: String
+    public let death: String
+    public let realm: String
+    public let hair: String
+    public let name: String
+    public let wikiURL: URL?
     
     public init(id: String, height: String, race: String, gender: String?, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiURL: URL?) {
         self.id = id

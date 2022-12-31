@@ -8,16 +8,10 @@
 import Foundation
 
 public final class URLSessionHTTPClient: HTTPClient {
-    public func get(from request: Request, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-        var urlRequest = URLRequest(url: request.url)
-        urlRequest.httpBody = request.body
-        urlRequest.httpMethod = "GET"
-        _ = request.header?.map { key, value in
-            urlRequest.setValue(value, forHTTPHeaderField: key)
-        }
+    public func get(from request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
         
         let task = session
-            .dataTask(with: urlRequest, completionHandler: { data, response, error in
+            .dataTask(with: request, completionHandler: { data, response, error in
                 guard let data = data, let response = response as? HTTPURLResponse else {
                     if let error {
                         completion(.failure(error))

@@ -23,16 +23,16 @@ final class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_getFromURL_performsGETRequestWithURL() {
-        let expectedRequest = MockRequest(url: anyURL())
+        let expectedRequest = MockRequest(url: anyURL()).create()
         
         let exp = expectation(description: "Waiting for get completion")
         URLProtocolStub.observeRequests { request in
             XCTAssertEqual(request.url, expectedRequest.url)
             XCTAssertEqual(request.httpMethod, "GET")
             
-            _ = expectedRequest.header?.keys.compactMap { key in
+            expectedRequest.allHTTPHeaderFields?.keys.forEach { key in
                 print(key)
-                XCTAssertEqual(request.allHTTPHeaderFields?[key], expectedRequest.header?[key])
+                XCTAssertEqual(request.allHTTPHeaderFields?[key], expectedRequest.allHTTPHeaderFields?[key])
             }
             exp.fulfill()
         }
@@ -121,7 +121,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
         
         let exp = expectation(description: "Wait for get completion")
         var receivedResult: (HTTPClient.Result)!
-        let request = MockRequest(url: anyURL())
+        let request = MockRequest(url: anyURL()).create()
         let _ = makeSUT().get(from: request) { result in
             receivedResult = result
             exp.fulfill()
@@ -198,23 +198,5 @@ final class URLSessionHTTPClientTests: XCTestCase {
     
     private func nonHTTPURLResponse() -> URLResponse {
         return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
-    }
-    
-    private class MockRequest: Request {
-        
-        init(url: URL) {
-            self.url = url
-        }
-        
-        var url: URL
-        
-        var body: Data? = nil
-        
-        var header: [String : String]? {
-            get {
-                ["Authentication" : "fsadfdsf"]
-            }
-        }
-        
     }
 }
