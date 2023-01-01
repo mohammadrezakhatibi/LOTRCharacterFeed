@@ -23,10 +23,9 @@
 		E4BDB95C295A573E00147D3D /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB95B295A573E00147D3D /* URLSessionHTTPClient.swift */; };
 		E4DE7C862962145400877E7B /* LOTRCharacterFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DE7C7E2962145400877E7B /* LOTRCharacterFeediOS.framework */; platformFilter = ios; };
 		E4DE7C8B2962145400877E7B /* LOTRCharacterFeediOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DE7C8A2962145400877E7B /* LOTRCharacterFeediOSTests.swift */; };
-		E4DE7C952962147D00877E7B /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = E4DE7C942962147D00877E7B /* ViewInspector */; };
-		E4DE7C982962148B00877E7B /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = E4DE7C972962148B00877E7B /* ViewInspector */; };
 		E4DE7C9A296214CE00877E7B /* CharacterFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DE7C99296214CE00877E7B /* CharacterFeed.swift */; };
 		E4DE7C9B296215BB00877E7B /* LOTRCharacterFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */; };
+		E4DE7C9E2962255E00877E7B /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = E4DE7C9D2962255E00877E7B /* ViewInspector */; };
 		E4F04B1D29565AF000F49C68 /* RemoteCharacterLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B1C29565AF000F49C68 /* RemoteCharacterLoader.swift */; };
 		E4F04B1F29565B2100F49C68 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B1E29565B2100F49C68 /* HTTPClient.swift */; };
 		E4F04B2129565B4F00F49C68 /* RemoteCharacterItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */; };
@@ -95,7 +94,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4DE7C952962147D00877E7B /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,7 +126,7 @@
 			files = (
 				E4DE7C9B296215BB00877E7B /* LOTRCharacterFeed.framework in Frameworks */,
 				E4DE7C862962145400877E7B /* LOTRCharacterFeediOS.framework in Frameworks */,
-				E4DE7C982962148B00877E7B /* ViewInspector in Frameworks */,
+				E4DE7C9E2962255E00877E7B /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,7 +288,6 @@
 			);
 			name = LOTRCharacterFeed;
 			packageProductDependencies = (
-				E4DE7C942962147D00877E7B /* ViewInspector */,
 			);
 			productName = LOTRCharacterFeed;
 			productReference = E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */;
@@ -365,7 +362,7 @@
 			);
 			name = LOTRCharacterFeediOSTests;
 			packageProductDependencies = (
-				E4DE7C972962148B00877E7B /* ViewInspector */,
+				E4DE7C9D2962255E00877E7B /* ViewInspector */,
 			);
 			productName = LOTRCharacterFeediOSTests;
 			productReference = E4DE7C852962145400877E7B /* LOTRCharacterFeediOSTests.xctest */;
@@ -411,7 +408,7 @@
 			);
 			mainGroup = E4583B9329532D8F007A7D7F;
 			packageReferences = (
-				E4DE7C932962147D00877E7B /* XCRemoteSwiftPackageReference "ViewInspector" */,
+				E4DE7C9C2962255E00877E7B /* XCRemoteSwiftPackageReference "ViewInspector" */,
 			);
 			productRefGroup = E4583B9E29532D8F007A7D7F /* Products */;
 			projectDirPath = "";
@@ -1006,7 +1003,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E4DE7C932962147D00877E7B /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+		E4DE7C9C2962255E00877E7B /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nalexn/ViewInspector";
 			requirement = {
@@ -1017,14 +1014,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E4DE7C942962147D00877E7B /* ViewInspector */ = {
+		E4DE7C9D2962255E00877E7B /* ViewInspector */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E4DE7C932962147D00877E7B /* XCRemoteSwiftPackageReference "ViewInspector" */;
-			productName = ViewInspector;
-		};
-		E4DE7C972962148B00877E7B /* ViewInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E4DE7C932962147D00877E7B /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			package = E4DE7C9C2962255E00877E7B /* XCRemoteSwiftPackageReference "ViewInspector" */;
 			productName = ViewInspector;
 		};
 /* End XCSwiftPackageProductDependency section */
