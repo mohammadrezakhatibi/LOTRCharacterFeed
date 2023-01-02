@@ -8,25 +8,24 @@
 import SwiftUI
 import LOTRCharacterFeed
 
+class FeedDataSource: ObservableObject {
+    @Published var items: [CharacterFeedViewModel] = []
+}
 struct CharacterFeed: View {
-    private let loader: CharacterLoader
+    var interactor: CharacterFeedBusinessLogic?
     public var didAppear: ((Self) -> Void)?
-    @State var characters: [CharacterItem] = []
-    @ObservedObject var viewModel = CharacterFeedErrorViewModel()
+    var datas = FeedDataSource()
+    @ObservedObject var error = CharacterFeedErrorViewModel()
     
     private let columns = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16),
     ]
     
-    init(loader: CharacterLoader) {
-        self.loader = loader
-    }
-    
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns) {
-                ForEach(characters, id: \.id) { character in
+                ForEach(datas.items, id: \.id) { character in
                     CharacterRow(character: character)
                 }
             }
@@ -35,23 +34,15 @@ struct CharacterFeed: View {
             loadCharacters()
             didAppear?(self)
         }
-        .alert("Error", isPresented: $viewModel.isErrorPresented, actions: {
+        .alert("Error", isPresented: $error.isErrorPresented, actions: {
             Button("OK", role: .cancel) { }
         }, message: {
-            Text(viewModel.errorMessage)
+            Text(error.errorMessage)
         })
     }
     
     private func loadCharacters() {
-        loader.load { result in
-            do {
-                self.characters = try result.get()
-                
-            } catch {
-                viewModel.isErrorPresented = true
-                viewModel.errorMessage = error.localizedDescription
-            }
-        }
+        interactor?.loadItems()
     }
 }
 

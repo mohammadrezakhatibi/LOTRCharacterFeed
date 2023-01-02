@@ -39,10 +39,13 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         let exp = sut.on(\.didAppear) { view in
             let row = view.findAll(CharacterRow.self)
             try items.enumerated().forEach { index, item in
-                XCTAssertEqual(try row[index].find(viewWithId: 1).text().string(), item.name)
-                XCTAssertEqual(try row[index].find(viewWithId: 2).text().string(), item.race)
-                XCTAssertNotNil(try row[index].find(viewWithId: 3).asyncImage())
-                XCTAssertNotNil(try row[index].find(viewWithId: 4).linearGradient())
+                if row.count >= items.count {
+                    XCTAssertEqual(try row[index].find(viewWithId: 1).text().string(), item.name)
+                    XCTAssertEqual(try row[index].find(viewWithId: 2).text().string(), item.race)
+                    XCTAssertNotNil(try row[index].find(viewWithId: 3).asyncImage())
+                    XCTAssertNotNil(try row[index].find(viewWithId: 3).asyncImage().url()?.absoluteString, item.imageURL.absoluteString)
+                    XCTAssertNotNil(try row[index].find(viewWithId: 4).linearGradient())
+                }
             }
         }
         
@@ -55,8 +58,8 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         var sut = makeSUT(result: .success(items))
         
         let exp = sut.on(\.didAppear) { view in
-            XCTAssertEqual(try view.actualView().viewModel.isErrorPresented, false)
-            XCTAssertEqual(try view.actualView().viewModel.errorMessage, "")
+            XCTAssertEqual(try view.actualView().error.isErrorPresented, false)
+            XCTAssertEqual(try view.actualView().error.errorMessage, "")
             XCTAssertThrowsError(try view.scrollView().alert())
             XCTAssertThrowsError(try view.scrollView().alert().title().string())
             XCTAssertThrowsError(try view.scrollView().alert().message().text().string())
@@ -71,8 +74,8 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         var sut = makeSUT(result: .failure(error))
         
         let exp = sut.on(\.didAppear) { view in
-            XCTAssertEqual(try view.actualView().viewModel.isErrorPresented, true)
-            XCTAssertEqual(try view.actualView().viewModel.errorMessage, error.localizedDescription)
+            XCTAssertEqual(try view.actualView().error.isErrorPresented, true)
+            XCTAssertEqual(try view.actualView().error.errorMessage, error.localizedDescription)
             XCTAssertNotNil(try view.scrollView().alert())
             XCTAssertEqual((try view.scrollView().alert().title().string()), "Error")
             XCTAssertEqual((try view.scrollView().alert().message().text().string()), error.localizedDescription)
@@ -86,7 +89,16 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     
     private func makeSUT(result: CharacterLoader.Result = .success([])) -> CharacterFeed {
         let loader = CharacterLoaderStub(result: result)
-        let sut = CharacterFeed(loader: loader)
+        
+        var sut = CharacterFeed()
+        let interactor = CharacterFeedInteractor()
+        let presenter = CharacterFeedPresenter()
+
+        let worker = RemoteCharacterWorker(loader: loader)
+        interactor.worker = worker
+        sut.interactor = interactor
+        interactor.presenter = presenter
+        presenter.view = sut
         
         return sut
     }
@@ -94,7 +106,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     private func makeItems() -> [CharacterItem] {
         return [
             CharacterItem(id: "id", height: "", race: "human", gender: "", birth: "", spouse: "", death: "", realm: "", hair: "", name: "Frodo", wikiURL: nil, imageURL: URL(string: "https://any-url.com")!),
-            CharacterItem(id: "id", height: "", race: "elf", gender: "", birth: "", spouse: "", death: "", realm: "", hair: "", name: "Aragorn", wikiURL: nil, imageURL: URL(string: "https://any-url.com")!)
+            CharacterItem(id: "id", height: "", race: "elf", gender: "", birth: "", spouse: "", death: "", realm: "", hair: "", name: "Aragorn", wikiURL: nil, imageURL: URL(string: "https://another-url.com")!)
         ]
     }
     

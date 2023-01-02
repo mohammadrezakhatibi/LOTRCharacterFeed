@@ -9,7 +9,7 @@ import SwiftUI
 import LOTRCharacterFeed
 
 struct CharacterRow: View {
-    private(set) var character: CharacterItem
+    private(set) var character: CharacterFeedViewModel
     
     var body: some View {
         return VStack {
@@ -61,6 +61,6 @@ struct CharacterRow: View {
             }
             .clipped()
         }
-        }
+    }
     }
 }
