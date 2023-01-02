@@ -50,6 +50,22 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_loadCharacter_doesNotShowErrorOnSuccessfulLoadCharacters() throws {
+        let items = makeItems()
+        var sut = makeSUT(result: .success(items))
+        
+        let exp = sut.on(\.didAppear) { view in
+            XCTAssertEqual(try view.actualView().viewModel.isErrorPresented, false)
+            XCTAssertEqual(try view.actualView().viewModel.errorMessage, "")
+            XCTAssertThrowsError(try view.scrollView().alert())
+            XCTAssertThrowsError(try view.scrollView().alert().title().string())
+            XCTAssertThrowsError(try view.scrollView().alert().message().text().string())
+        }
+        
+        ViewHosting.host(view: sut)
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     func test_loadCharacter_showsErrorOnFailureLoadCharacters() throws {
         let error = NSError(domain: "an error", code: 0)
         var sut = makeSUT(result: .failure(error))
