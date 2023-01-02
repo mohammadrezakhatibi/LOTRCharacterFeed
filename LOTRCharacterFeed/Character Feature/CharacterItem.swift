@@ -19,8 +19,9 @@ public struct CharacterItem: Codable, Equatable {
     public let hair: String
     public let name: String
     public let wikiURL: URL?
+    public let imageURL: URL
     
-    public init(id: String, height: String, race: String, gender: String?, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiURL: URL?) {
+    public init(id: String, height: String, race: String, gender: String?, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiURL: URL?, imageURL: URL) {
         self.id = id
         self.height = height
         self.race = race
@@ -32,5 +33,6 @@ public struct CharacterItem: Codable, Equatable {
         self.hair = hair
         self.name = name
         self.wikiURL = wikiURL
+        self.imageURL = imageURL
     }
 }

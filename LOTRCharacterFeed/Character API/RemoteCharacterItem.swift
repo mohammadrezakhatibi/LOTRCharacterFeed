@@ -19,6 +19,7 @@ public struct RemoteCharacterItem: Codable {
     public var hair: String
     public var name: String
     public var wikiUrl: String?
+    public var ImageURL: URL?
 
     public init(id: String, height: String, race: String, gender: String, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiUrl: String) {
         self._id = id
