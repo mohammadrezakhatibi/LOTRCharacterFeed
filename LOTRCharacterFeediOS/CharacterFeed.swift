@@ -12,6 +12,7 @@ struct CharacterFeed: View {
     private let loader: CharacterLoader
     public var didAppear: ((Self) -> Void)?
     @State var characters: [CharacterItem] = []
+    @ObservedObject var viewModel = CharacterFeedErrorViewModel()
     
     private let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -34,11 +35,22 @@ struct CharacterFeed: View {
             loadCharacters()
             didAppear?(self)
         }
+        .alert("Error", isPresented: $viewModel.isErrorPresented, actions: {
+            Button("OK", role: .cancel) { }
+        }, message: {
+            Text(viewModel.errorMessage)
+        })
     }
     
     private func loadCharacters() {
         loader.load { result in
-            characters = try! result.get()
+            do {
+                self.characters = try result.get()
+                
+            } catch {
+                viewModel.isErrorPresented = true
+                viewModel.errorMessage = error.localizedDescription
+            }
         }
     }
 }
