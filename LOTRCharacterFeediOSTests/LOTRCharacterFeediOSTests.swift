@@ -58,8 +58,8 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         var sut = makeSUT(result: .success(items))
         
         let exp = sut.on(\.didAppear) { view in
-            XCTAssertEqual(try view.actualView().error.isErrorPresented, false)
-            XCTAssertEqual(try view.actualView().error.errorMessage, "")
+            XCTAssertEqual(try view.actualView().errorModel.isErrorPresented, false)
+            XCTAssertEqual(try view.actualView().errorModel.errorMessage, "")
             XCTAssertThrowsError(try view.scrollView().alert())
             XCTAssertThrowsError(try view.scrollView().alert().title().string())
             XCTAssertThrowsError(try view.scrollView().alert().message().text().string())
@@ -74,8 +74,8 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         var sut = makeSUT(result: .failure(error))
         
         let exp = sut.on(\.didAppear) { view in
-            XCTAssertEqual(try view.actualView().error.isErrorPresented, true)
-            XCTAssertEqual(try view.actualView().error.errorMessage, error.localizedDescription)
+            XCTAssertEqual(try view.actualView().errorModel.isErrorPresented, true)
+            XCTAssertEqual(try view.actualView().errorModel.errorMessage, error.localizedDescription)
             XCTAssertNotNil(try view.scrollView().alert())
             XCTAssertEqual((try view.scrollView().alert().title().string()), "Error")
             XCTAssertEqual((try view.scrollView().alert().message().text().string()), error.localizedDescription)
@@ -87,7 +87,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     
     // MARK: - Helper
     
-    private func makeSUT(result: CharacterLoader.Result = .success([])) -> CharacterFeed {
+    private func makeSUT(result: CharacterLoader.Result = .success([]), file: StaticString = #filePath, line: UInt = #line) -> CharacterFeed {
         let loader = CharacterLoaderStub(result: result)
         
         var sut = CharacterFeed()
@@ -99,6 +99,11 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         sut.interactor = interactor
         interactor.presenter = presenter
         presenter.view = sut
+        
+        trackingForMemoryLeaks(loader, file: file, line: line)
+        trackingForMemoryLeaks(interactor, file: file, line: line)
+        trackingForMemoryLeaks(presenter, file: file, line: line)
+        trackingForMemoryLeaks(worker, file: file, line: line)
         
         return sut
     }

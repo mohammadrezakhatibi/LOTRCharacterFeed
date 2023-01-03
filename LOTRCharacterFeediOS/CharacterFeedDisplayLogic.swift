@@ -18,7 +18,7 @@ extension CharacterFeed: CharacterFeedDisplayLogic {
     }
     
     func displayError(with error: Error) {
-        self.error.isErrorPresented = true
-        self.error.errorMessage = error.localizedDescription
+        errorModel.isErrorPresented = true
+        errorModel.errorMessage = error.localizedDescription
     }
 }

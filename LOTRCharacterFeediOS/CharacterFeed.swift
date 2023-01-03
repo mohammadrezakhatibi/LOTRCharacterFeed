@@ -15,7 +15,7 @@ struct CharacterFeed: View {
     var interactor: CharacterFeedBusinessLogic?
     public var didAppear: ((Self) -> Void)?
     var datas = FeedDataSource()
-    @ObservedObject var error = CharacterFeedErrorViewModel()
+    @ObservedObject var errorModel = CharacterFeedErrorViewModel()
     
     private let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -34,10 +34,10 @@ struct CharacterFeed: View {
             loadCharacters()
             didAppear?(self)
         }
-        .alert("Error", isPresented: $error.isErrorPresented, actions: {
+        .alert("Error", isPresented: $errorModel.isErrorPresented, actions: {
             Button("OK", role: .cancel) { }
         }, message: {
-            Text(error.errorMessage)
+            Text(errorModel.errorMessage)
         })
     }
     

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D729870B296430EA006D3E92 /* LOTRCharacterFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */; };
+		D729870D29643136006D3E92 /* CharacterFeedWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D729870C29643136006D3E92 /* CharacterFeedWorker.swift */; };
+		D729870F29643166006D3E92 /* CharacterFeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D729870E29643166006D3E92 /* CharacterFeedViewModel.swift */; };
+		D729871129643179006D3E92 /* CharacterFeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D729871029643179006D3E92 /* CharacterFeedModel.swift */; };
 		E4583BA629532D8F007A7D7F /* LOTRCharacterFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */; };
 		E4583BB82953390C007A7D7F /* CharacterLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4583BB72953390C007A7D7F /* CharacterLoader.swift */; };
 		E4583BBA29533996007A7D7F /* CharacterItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4583BB929533996007A7D7F /* CharacterItem.swift */; };
@@ -31,7 +35,6 @@
 		E4DE7C862962145400877E7B /* LOTRCharacterFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DE7C7E2962145400877E7B /* LOTRCharacterFeediOS.framework */; platformFilter = ios; };
 		E4DE7C8B2962145400877E7B /* LOTRCharacterFeediOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DE7C8A2962145400877E7B /* LOTRCharacterFeediOSTests.swift */; };
 		E4DE7C9A296214CE00877E7B /* CharacterFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DE7C99296214CE00877E7B /* CharacterFeed.swift */; };
-		E4DE7C9B296215BB00877E7B /* LOTRCharacterFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */; };
 		E4DE7C9E2962255E00877E7B /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = E4DE7C9D2962255E00877E7B /* ViewInspector */; };
 		E4F04B1D29565AF000F49C68 /* RemoteCharacterLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B1C29565AF000F49C68 /* RemoteCharacterLoader.swift */; };
 		E4F04B1F29565B2100F49C68 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B1E29565B2100F49C68 /* HTTPClient.swift */; };
@@ -68,6 +71,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D729870C29643136006D3E92 /* CharacterFeedWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterFeedWorker.swift; sourceTree = "<group>"; };
+		D729870E29643166006D3E92 /* CharacterFeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterFeedViewModel.swift; sourceTree = "<group>"; };
+		D729871029643179006D3E92 /* CharacterFeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterFeedModel.swift; sourceTree = "<group>"; };
 		E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LOTRCharacterFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4583BA529532D8F007A7D7F /* LOTRCharacterFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LOTRCharacterFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4583BB72953390C007A7D7F /* CharacterLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterLoader.swift; sourceTree = "<group>"; };
@@ -130,6 +136,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D729870B296430EA006D3E92 /* LOTRCharacterFeed.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,7 +144,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4DE7C9B296215BB00877E7B /* LOTRCharacterFeed.framework in Frameworks */,
 				E4DE7C862962145400877E7B /* LOTRCharacterFeediOS.framework in Frameworks */,
 				E4DE7C9E2962255E00877E7B /* ViewInspector in Frameworks */,
 			);
@@ -202,11 +208,14 @@
 		E4DE7C7F2962145400877E7B /* LOTRCharacterFeediOS */ = {
 			isa = PBXGroup;
 			children = (
+				E48A1C022963745300A3603F /* Assets.xcassets */,
 				E4DE7C99296214CE00877E7B /* CharacterFeed.swift */,
 				E48A1C042963748400A3603F /* CharacterRow.swift */,
 				E48A1C062963788900A3603F /* CharacterFeedErrorViewModel.swift */,
-				E48A1C022963745300A3603F /* Assets.xcassets */,
 				E48A1C0829637E7000A3603F /* CharacterFeedBusinessLogic.swift */,
+				D729871029643179006D3E92 /* CharacterFeedModel.swift */,
+				D729870E29643166006D3E92 /* CharacterFeedViewModel.swift */,
+				D729870C29643136006D3E92 /* CharacterFeedWorker.swift */,
 				E48A1C0A29637F7300A3603F /* CharacterFeedPresentationLogic.swift */,
 				E48A1C0C2963841100A3603F /* CharacterFeedDisplayLogic.swift */,
 			);
@@ -528,8 +537,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E48A1C0929637E7000A3603F /* CharacterFeedBusinessLogic.swift in Sources */,
+				D729871129643179006D3E92 /* CharacterFeedModel.swift in Sources */,
 				E48A1C0D2963841100A3603F /* CharacterFeedDisplayLogic.swift in Sources */,
+				D729870D29643136006D3E92 /* CharacterFeedWorker.swift in Sources */,
 				E48A1C0B29637F7300A3603F /* CharacterFeedPresentationLogic.swift in Sources */,
+				D729870F29643166006D3E92 /* CharacterFeedViewModel.swift in Sources */,
 				E48A1C052963748400A3603F /* CharacterRow.swift in Sources */,
 				E4DE7C9A296214CE00877E7B /* CharacterFeed.swift in Sources */,
 				E48A1C072963788900A3603F /* CharacterFeedErrorViewModel.swift in Sources */,
