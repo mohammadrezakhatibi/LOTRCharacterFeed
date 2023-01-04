@@ -26,10 +26,13 @@ struct CharacterRow: View {
                                 
                             }
                             .id(3)
+                        }
                     }
-                    .foregroundColor(.black)
-                    .frame(minHeight: 240)
+                
                     .cornerRadius(16)
+                    .clipped()
+                    .foregroundColor(.gray.opacity(0.85))
+                    .frame(minHeight: 240)
                 
                 LinearGradient(gradient: Gradient(colors: [.black.opacity(0.5), .white.opacity(0)]), startPoint: .bottom, endPoint: .top)
                     .cornerRadius(16)
@@ -44,23 +47,20 @@ struct CharacterRow: View {
                         .fontDesign(.serif)
                         .foregroundColor(.white)
                         .padding(.bottom, 4)
-                    HStack(alignment: .center) {
-                        Image("race")
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                            .scaledToFill()
-                            .clipped()
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Image(systemName: "folder")
+                            .font(.system(size: 12))
+                            .foregroundColor(.yellow)
                         Text(character.race)
                             .foregroundColor(.yellow)
-                            .font(.body)
+                            .font(.system(size: 14))
                             .id(2)
                     }
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 16)
             }
-            .clipped()
+            .frame(height: 240)
         }
-    }
     }
 }

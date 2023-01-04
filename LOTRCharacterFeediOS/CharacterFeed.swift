@@ -8,27 +8,28 @@
 import SwiftUI
 import LOTRCharacterFeed
 
-struct CharacterFeed: View {
+public struct CharacterFeed: View {
     
     public var didAppear: ((Self) -> Void)?
     @ObservedObject var viewModel: CharacterFeedDataProvider
     
-    init(viewModel: CharacterFeedDataProvider) {
+    public init(viewModel: CharacterFeedDataProvider) {
         self.viewModel = viewModel
     }
     
     private let columns = [
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12),
     ]
     
-    var body: some View {
+    public var body: some View {
         ScrollView {
             LazyVGrid(columns: columns) {
                 ForEach(viewModel.items, id: \.id) { character in
                     CharacterRow(character: character)
                 }
             }
+            .padding(.horizontal, 16)
         }
         .onAppear {
             loadCharacters()

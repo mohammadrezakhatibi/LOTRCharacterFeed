@@ -19,9 +19,9 @@ public struct RemoteCharacterItem: Codable {
     public var hair: String
     public var name: String
     public var wikiUrl: String?
-    public var ImageURL: URL?
+    public var imageURL: URL?
 
-    public init(id: String, height: String, race: String, gender: String, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiUrl: String) {
+    public init(id: String, height: String, race: String, gender: String, birth: String, spouse: String, death: String, realm: String, hair: String, name: String, wikiUrl: String, imageURL: URL) {
         self._id = id
         self.height = height
         self.race = race
@@ -33,5 +33,6 @@ public struct RemoteCharacterItem: Codable {
         self.hair = hair
         self.name = name
         self.wikiUrl = wikiUrl
+        self.imageURL = imageURL
     }
 }
