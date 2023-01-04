@@ -8,14 +8,14 @@
 import SwiftUI
 import LOTRCharacterFeed
 
-class FeedDataSource: ObservableObject {
-    @Published var items: [CharacterFeedViewModel] = []
-}
 struct CharacterFeed: View {
-    var interactor: CharacterFeedBusinessLogic?
+    
     public var didAppear: ((Self) -> Void)?
-    var datas = FeedDataSource()
-    @ObservedObject var errorModel = CharacterFeedErrorViewModel()
+    @ObservedObject var viewModel: CharacterFeedDataProvider
+    
+    init(viewModel: CharacterFeedDataProvider) {
+        self.viewModel = viewModel
+    }
     
     private let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -25,7 +25,7 @@ struct CharacterFeed: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns) {
-                ForEach(datas.items, id: \.id) { character in
+                ForEach(viewModel.items, id: \.id) { character in
                     CharacterRow(character: character)
                 }
             }
@@ -34,15 +34,18 @@ struct CharacterFeed: View {
             loadCharacters()
             didAppear?(self)
         }
-        .alert("Error", isPresented: $errorModel.isErrorPresented, actions: {
-            Button("OK", role: .cancel) { }
+        .alert("Error", isPresented: $viewModel.isErrorPresented, actions: {
+            Button("OK", role: .cancel) {
+                viewModel.isErrorPresented = false
+                viewModel.errorMessage = ""
+            }
         }, message: {
-            Text(errorModel.errorMessage)
+            Text(viewModel.errorMessage)
         })
     }
     
     private func loadCharacters() {
-        interactor?.loadItems()
+        viewModel.load()
     }
 }
 

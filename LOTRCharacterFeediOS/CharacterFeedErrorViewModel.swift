@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 class CharacterFeedErrorViewModel: ObservableObject {
     @Published var isErrorPresented = false
     @Published var errorMessage = ""
