@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D7A3E21D2966D07B00E480B5 /* MainQueueDispatchDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A3E21C2966D07B00E480B5 /* MainQueueDispatchDecorator.swift */; };
 		D7D3EF7E2965AEA6007E6C1B /* LOTRAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D3EF7D2965AEA6007E6C1B /* LOTRAppApp.swift */; };
 		D7D3EF802965AEA6007E6C1B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D3EF7F2965AEA6007E6C1B /* ContentView.swift */; };
 		D7D3EF822965AEA8007E6C1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7D3EF812965AEA8007E6C1B /* Assets.xcassets */; };
@@ -53,6 +54,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D7A3E21C2966D07B00E480B5 /* MainQueueDispatchDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQueueDispatchDecorator.swift; sourceTree = "<group>"; };
 		D7D3EF7A2965AEA6007E6C1B /* LOTRApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LOTRApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7D3EF7D2965AEA6007E6C1B /* LOTRAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTRAppApp.swift; sourceTree = "<group>"; };
 		D7D3EF7F2965AEA6007E6C1B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				D7D3EF7D2965AEA6007E6C1B /* LOTRAppApp.swift */,
+				D7A3E21C2966D07B00E480B5 /* MainQueueDispatchDecorator.swift */,
 				D7D3EF7F2965AEA6007E6C1B /* ContentView.swift */,
 				D7D3EF812965AEA8007E6C1B /* Assets.xcassets */,
 				D7D3EF832965AEA8007E6C1B /* Preview Content */,
@@ -292,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7D3EF802965AEA6007E6C1B /* ContentView.swift in Sources */,
+				D7A3E21D2966D07B00E480B5 /* MainQueueDispatchDecorator.swift in Sources */,
 				D7D3EF7E2965AEA6007E6C1B /* LOTRAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
