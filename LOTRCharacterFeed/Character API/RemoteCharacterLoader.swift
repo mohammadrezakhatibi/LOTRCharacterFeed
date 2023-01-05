@@ -60,7 +60,7 @@ public extension Array where Element == RemoteCharacterItem {
                 hair: $0.hair,
                 name: $0.name,
                 wikiURL: $0.wikiUrl == nil ? nil : URL(string: $0.wikiUrl!),
-                imageURL: $0.imageURL ?? URL(string: "https://any-image-url.com")!
+                imageURL: $0.imageUrl ?? URL(string: "https://any-image-url.com")!
             )
         }
     }

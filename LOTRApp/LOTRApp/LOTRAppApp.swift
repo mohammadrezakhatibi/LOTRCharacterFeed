@@ -30,7 +30,7 @@ struct LOTRAppApp: App {
     }
     
     private struct CharacterRequest: RemoteRequest {
-        var url: URL = URL(string: "https://the-one-api.dev/v2/character")!
+        var url: URL = URL(string: "https://lokomond.com/lotr/lotr_characters.json")!
         var header: [String : String]? = ["Authorization" : "Bearer 4FVcNlyhfHkLwFuqo-YP"]
         
         func create() -> URLRequest {

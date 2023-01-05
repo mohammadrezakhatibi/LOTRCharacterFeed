@@ -37,6 +37,13 @@
             BlueprintName = "LOTRCharacterFeed"
             ReferencedContainer = "container:LOTRCharacterFeed.xcodeproj">
          </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E4DE7C7D2962145400877E7B"
+            BuildableName = "LOTRCharacterFeediOS.framework"
+            BlueprintName = "LOTRCharacterFeediOS"
+            ReferencedContainer = "container:LOTRCharacterFeed.xcodeproj">
+         </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
          <TestableReference
@@ -58,6 +65,17 @@
                BlueprintIdentifier = "E4BDB94F295A499200147D3D"
                BuildableName = "LOTRCharacterFeedAPIEndToEndTests.xctest"
                BlueprintName = "LOTRCharacterFeedAPIEndToEndTests"
+               ReferencedContainer = "container:LOTRCharacterFeed.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E4DE7C842962145400877E7B"
+               BuildableName = "LOTRCharacterFeediOSTests.xctest"
+               BlueprintName = "LOTRCharacterFeediOSTests"
                ReferencedContainer = "container:LOTRCharacterFeed.xcodeproj">
             </BuildableReference>
          </TestableReference>

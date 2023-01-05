@@ -142,8 +142,8 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     }
     
     func test_toModel_deliverConvertedCharacterItem() {
-        let model1 = RemoteCharacterItem(id: UUID().uuidString, height: "a height", race: "a race", gender: "a gender", birth: "a birth", spouse: "a spouse", death: "a death", realm: "a realm", hair: "a hair", name: "a name", wikiUrl: "http://a-url.com", imageURL: URL(string: "https://any-image-url.com")!)
-        let model2 = RemoteCharacterItem(id: UUID().uuidString, height: "a height", race: "a race", gender: "a gender", birth: "a birth", spouse: "a spouse", death: "a death", realm: "a realm", hair: "a hair", name: "a name", wikiUrl: "http://a-url.com", imageURL: URL(string: "https://any-image-url.com")!)
+        let model1 = RemoteCharacterItem(id: UUID().uuidString, height: "a height", race: "a race", gender: "a gender", birth: "a birth", spouse: "a spouse", death: "a death", realm: "a realm", hair: "a hair", name: "a name", wikiUrl: "http://a-url.com", imageUrl: URL(string: "https://any-image-url.com")!)
+        let model2 = RemoteCharacterItem(id: UUID().uuidString, height: "a height", race: "a race", gender: "a gender", birth: "a birth", spouse: "a spouse", death: "a death", realm: "a realm", hair: "a hair", name: "a name", wikiUrl: "http://a-url.com", imageUrl: URL(string: "https://any-image-url.com")!)
         
         let items = [model1, model2]
         
@@ -216,7 +216,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             "hair": hair,
             "name": name,
             "wikiUrl": wikiURL,
-            "imageURL": URL(string: "http://any-url.com")!.absoluteString
+            "imageUrl": URL(string: "http://any-url.com")!.absoluteString
         ].compactMapValues { $0 }
         
         let model = CharacterItem(

@@ -202,8 +202,8 @@
 			children = (
 				E48A1C022963745300A3603F /* Assets.xcassets */,
 				E4DE7C99296214CE00877E7B /* CharacterFeed.swift */,
-				D7D3EF6F29657843007E6C1B /* CharacterFeedDataProvider.swift */,
 				E48A1C042963748400A3603F /* CharacterRow.swift */,
+				D7D3EF6F29657843007E6C1B /* CharacterFeedDataProvider.swift */,
 				E48A1C062963788900A3603F /* CharacterFeedErrorViewModel.swift */,
 				D729870E29643166006D3E92 /* CharacterFeedViewModel.swift */,
 			);

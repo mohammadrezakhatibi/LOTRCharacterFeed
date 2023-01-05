@@ -28,13 +28,12 @@ struct CharacterRow: View {
                             .id(3)
                         }
                     }
-                
                     .cornerRadius(16)
                     .clipped()
                     .foregroundColor(.gray.opacity(0.85))
                     .frame(minHeight: 240)
                 
-                LinearGradient(gradient: Gradient(colors: [.black.opacity(0.5), .white.opacity(0)]), startPoint: .bottom, endPoint: .top)
+                LinearGradient(gradient: Gradient(colors: [.black.opacity(0.75), .white.opacity(0)]), startPoint: .bottom, endPoint: .top)
                     .cornerRadius(16)
                     .clipped()
                     .id(4)
@@ -43,7 +42,7 @@ struct CharacterRow: View {
                     Spacer()
                     Text(character.name)
                         .id(1)
-                        .font(.title)
+                        .font(.system(size: 22))
                         .fontDesign(.serif)
                         .foregroundColor(.white)
                         .padding(.bottom, 4)
