@@ -94,15 +94,16 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             id: "5cd99d4bde30eff6ebccfbe6",
             height: "198cm (6'6\")",
             race: "Human",
-            gender: nil,
+            gender: "Female",
             birth: "March 1 ,2931",
             spouse: "Arwen",
             death: "FO 120",
             realm: "Reunited Kingdom, Arnor, Gondor",
             hair: "Dark",
             name: "Aragorn II Elessar",
-            wikiURL: nil)
-        
+            wikiURL: URL(string: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")!,
+            imageURL: URL(string: "http://any-image-url.com")!
+        )
         
         let item2 = makeItem(
             id: "5cd99d4bde3ewef6ebccfbe6",
@@ -115,7 +116,9 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             realm: "Reunited Kingdom, Arnor, Gondor",
             hair: "Golden",
             name: "Legolas",
-            wikiURL: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")
+            wikiURL: URL(string: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")!,
+            imageURL: URL(string: "http://any-image-url.com")!
+        )
         
         let items = [item1.model, item2.model]
     
@@ -142,8 +145,8 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     }
     
     func test_toModel_deliverConvertedCharacterItem() {
-        let model1 = RemoteCharacterItem(id: UUID().uuidString, height: "a height", race: "a race", gender: "a gender", birth: "a birth", spouse: "a spouse", death: "a death", realm: "a realm", hair: "a hair", name: "a name", wikiUrl: "http://a-url.com", imageUrl: URL(string: "https://any-image-url.com")!)
-        let model2 = RemoteCharacterItem(id: UUID().uuidString, height: "a height", race: "a race", gender: "a gender", birth: "a birth", spouse: "a spouse", death: "a death", realm: "a realm", hair: "a hair", name: "a name", wikiUrl: "http://a-url.com", imageUrl: URL(string: "https://any-image-url.com")!)
+        let model1 = RemoteCharacterItem(id: UUID().uuidString, height: "a height", race: "a race", gender: "a gender", birth: "a birth", spouse: "a spouse", death: "a death", realm: "a realm", hair: "a hair", name: "a name", wikiUrl: URL(string: "https://any-url.com")!, imageUrl: URL(string: "https://any-image-url.com")!)
+        let model2 = RemoteCharacterItem(id: UUID().uuidString, height: "a height", race: "a race", gender: "a gender", birth: "a birth", spouse: "a spouse", death: "a death", realm: "a realm", hair: "a hair", name: "a name", wikiUrl: URL(string: "https://any-url.com")!, imageUrl: URL(string: "https://any-image-url.com")!)
         
         let items = [model1, model2]
         
@@ -196,14 +199,15 @@ final class RemoteCharacterLoaderTests: XCTestCase {
     private func makeItem(id: String,
                           height: String,
                           race: String,
-                          gender: String?,
+                          gender: String,
                           birth: String,
                           spouse: String,
                           death: String,
                           realm: String,
                           hair: String,
                           name: String,
-                          wikiURL: String?) -> (model: CharacterItem, json: [String: Any]) {
+                          wikiURL: URL,
+                          imageURL: URL) -> (model: CharacterItem, json: [String: Any]) {
         let json = [
             "_id": id,
             "height": height,
@@ -215,8 +219,8 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             "realm": realm,
             "hair": hair,
             "name": name,
-            "wikiUrl": wikiURL,
-            "imageUrl": URL(string: "http://any-url.com")!.absoluteString
+            "wikiUrl": wikiURL.absoluteString,
+            "imageUrl": imageURL.absoluteString
         ].compactMapValues { $0 }
         
         let model = CharacterItem(
@@ -230,8 +234,8 @@ final class RemoteCharacterLoaderTests: XCTestCase {
             realm: realm,
             hair: hair,
             name: name,
-            wikiURL: wikiURL == nil ? nil : URL(string: wikiURL!)!,
-            imageURL: URL(string: "http://any-url.com")!)
+            wikiURL: wikiURL,
+            imageURL: imageURL)
         
         return (model, json)
     }

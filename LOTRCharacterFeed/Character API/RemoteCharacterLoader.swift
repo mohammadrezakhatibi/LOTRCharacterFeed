@@ -59,8 +59,8 @@ public extension Array where Element == RemoteCharacterItem {
                 realm: $0.realm,
                 hair: $0.hair,
                 name: $0.name,
-                wikiURL: $0.wikiUrl == nil ? nil : URL(string: $0.wikiUrl!),
-                imageURL: $0.imageUrl ?? URL(string: "https://any-image-url.com")!
+                wikiURL: $0.wikiUrl,
+                imageURL: $0.imageUrl
             )
         }
     }
