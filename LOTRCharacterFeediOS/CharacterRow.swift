@@ -21,6 +21,7 @@ struct CharacterRow: View {
                                 image
                                     .resizable()
                                     .scaledToFill()
+                                    .frame(height: 260, alignment: .top)
                                     .clipped()
                             } placeholder: {
                                 
@@ -28,13 +29,12 @@ struct CharacterRow: View {
                             .id(3)
                         }
                     }
-                    .cornerRadius(16)
+                    .cornerRadius(8)
                     .clipped()
-                    .foregroundColor(.gray.opacity(0.85))
-                    .frame(minHeight: 240)
+                    .foregroundColor(.gray.opacity(0.70))
                 
                 LinearGradient(gradient: Gradient(colors: [.black.opacity(0.75), .white.opacity(0)]), startPoint: .bottom, endPoint: .top)
-                    .cornerRadius(16)
+                    .cornerRadius(8)
                     .clipped()
                     .id(4)
                 
@@ -59,7 +59,8 @@ struct CharacterRow: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 16)
             }
-            .frame(height: 240)
+            .frame(height: 260)
+            .padding(.top, 8)
         }
     }
 }

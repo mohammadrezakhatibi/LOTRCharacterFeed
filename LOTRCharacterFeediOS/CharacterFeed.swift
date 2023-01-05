@@ -18,8 +18,8 @@ public struct CharacterFeed: View {
     }
     
     private let columns = [
-        GridItem(.flexible(), spacing: 12),
-        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16),
     ]
     
     public var body: some View {
