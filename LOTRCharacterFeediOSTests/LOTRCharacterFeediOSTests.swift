@@ -148,8 +148,8 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
                           realm: "Habitland",
                           hair: "Brown",
                           name: "Frodo",
-                          wikiURL: nil,
-                          imageURL: URL(string: "https://any-url.com")!),
+                          wikiURL: URL(string: "https://any-url.com")!,
+                          imageURL: URL(string: "https://any-image-url.com")!),
             
             CharacterItem(id: "id",
                           height: "2.20 cm",
@@ -161,8 +161,8 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
                           realm: "Gondor",
                           hair: "Black",
                           name: "Aragorn",
-                          wikiURL: nil,
-                          imageURL: URL(string: "https://another-url.com")!)
+                          wikiURL: URL(string: "https://any-url.com")!,
+                          imageURL: URL(string: "https://another-image-url.com")!)
         ]
     }
     

@@ -13,21 +13,12 @@ final class LOTRCharacterFeedAPIEndToEndTests: XCTestCase {
     func test() {
         switch getFeedResult() {
             case let .success(items)?:
-                XCTAssertEqual(items.count, 25)
+                XCTAssertEqual(items.count, 41)
                 
                 items.enumerated().forEach { index, item in
                     XCTAssertEqual(item.id, id(at: index))
                     XCTAssertEqual(item.name, name(at: index))
                 }
-                
-                XCTAssertEqual(items.first?.name, "Aragorn II Elessar")
-                XCTAssertEqual(items.first?.id, "5cd99d4bde30eff6ebccfbe6")
-                
-                XCTAssertEqual(items[1].name, "Frodo Baggins")
-                XCTAssertEqual(items[1].id, "5cd99d4bde30eff6ebccfc15")
-                
-                XCTAssertEqual(items.last?.name, "Elrond")
-                XCTAssertEqual(items.last?.id, "5cd99d4bde30eff6ebccfcc8")
                 
             case let .failure(error):
                 XCTFail("Expected success, got failure with \(error)")
@@ -99,6 +90,22 @@ final class LOTRCharacterFeedAPIEndToEndTests: XCTestCase {
             "5cd99d4bde30eff6ebccfc9a",
             "5cd99d4bde30eff6ebccfe9d",
             "5cd99d4bde30eff6ebccfcc8",
+            "5cd99d4bde30eff6ebccfd2b",
+            "5cdbdecb6dc0baeae48cfa42",
+            "5cd99d4bde30eff6ebccfc1b",
+            "5cd99d4bde30eff6ebccfc21",
+            "5cd99d4bde30eff6ebccfe15",
+            "5cd99d4bde30eff6ebccfca4",
+            "5cd99d4bde30eff6ebccfdca",
+            "5cd99d4bde30eff6ebccfda4",
+            "5cd99d4bde30eff6ebccfc37",
+            "5cd99d4bde30eff6ebccfe18",
+            "5cd99d4bde30eff6ebccfdc4",
+            "5cd99d4bde30eff6ebccfc54",
+            "5cd99d4bde30eff6ebccfc4f",
+            "5cdbdecb6dc0baeae48cfad4",
+            "5cdbdecb6dwrtsaeae48cfad4",
+            "5cdbdecb6dc0baeae48cfa7d"
         ][index]
     }
     
@@ -129,6 +136,22 @@ final class LOTRCharacterFeedAPIEndToEndTests: XCTestCase {
             "Denethor II",
             "Gríma Wormtongue",
             "Elrond",
+            "Glóin",
+            "Smaug",
+            "Balin",
+            "Bard",
+            "Thorin II Oakenshield",
+            "Dwalin",
+            "Ori",
+            "Master of Laketown",
+            "Bifur",
+            "Thrór",
+            "Nori",
+            "Bombur",
+            "Bofur",
+            "Azog",
+            "Tauriel",
+            "Bolg"
         ][index]
     }
 }
