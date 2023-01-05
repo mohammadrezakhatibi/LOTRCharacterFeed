@@ -24,12 +24,16 @@ public struct CharacterFeed: View {
     
     public var body: some View {
         ScrollView {
-            LazyVGrid(columns: columns) {
-                ForEach(viewModel.items, id: \.id) { character in
-                    CharacterRow(character: character)
+            if (viewModel.items.isEmpty == true) {
+                ProgressView()
+            } else {
+                LazyVGrid(columns: columns) {
+                    ForEach(viewModel.items, id: \.id) { character in
+                        CharacterRow(character: character)
+                    }
                 }
+                .padding(.horizontal, 16)
             }
-            .padding(.horizontal, 16)
         }
         .onAppear {
             loadCharacters()

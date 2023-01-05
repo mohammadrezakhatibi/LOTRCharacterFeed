@@ -21,7 +21,7 @@ struct LOTRAppApp: App {
     }
     
     private func CharacterFeedView() -> some View {
-        let client = URLSessionHTTPClient()
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let request = CharacterRequest().create()
         let loader = RemoteCharacterLoader(request: request, client: client)
         let vm = CharacterFeedDataProvider(loader: MainQueueDispatchDecorator(decoratee: loader))

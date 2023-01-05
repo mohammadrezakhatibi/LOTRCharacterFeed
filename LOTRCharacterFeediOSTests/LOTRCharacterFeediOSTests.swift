@@ -15,7 +15,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     
     func test_init_createsAList() throws {
         let sut = makeSUT()
-        XCTAssertNoThrow(try sut.inspect().scrollView().lazyVGrid())
+        XCTAssertNoThrow(try sut.inspect().scrollView())
     }
 
     func test_loadCharacter_deliversAListOfCharacters() throws {
@@ -70,6 +70,23 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         }
         
         ViewHosting.host(view: sut)
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_loadCharacter_displaysLoadingIndicatorOnLoading() {
+        let loader = CharacterLoaderSpy()
+        let vm = CharacterFeedDataProvider(loader: loader)
+        let sut = CharacterFeed(viewModel: vm)
+        
+        XCTAssertNoThrow(try sut.inspect().scrollView().progressView())
+        
+        let exp = expectation(description: "Wait for load completion")
+        loader.load { _ in
+            XCTAssertNoThrow(try? sut.inspect().scrollView().lazyVGrid())
+            exp.fulfill()
+        }
+        
+        loader.complete(with: makeItems(), at: 0)
         wait(for: [exp], timeout: 1.0)
     }
     
@@ -159,6 +176,19 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         
         func load(completion: @escaping (CharacterLoader.Result) -> Void) {
             completion(result)
+        }
+    }
+    
+    private final class CharacterLoaderSpy: CharacterLoader {
+                
+        private var results = [(CharacterLoader.Result) -> Void]()
+        
+        func load(completion: @escaping (CharacterLoader.Result) -> Void) {
+            results.append(completion)
+        }
+        
+        func complete(with items: [CharacterItem], at index: Int) {
+            results[index](.success(items))
         }
     }
 }
