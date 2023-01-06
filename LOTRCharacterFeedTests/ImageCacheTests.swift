@@ -110,8 +110,7 @@ final class ImageCacheTests: XCTestCase {
         loader.complete(with: anyData)
         
         XCTAssertEqual(loader.receivedURLs, [url])
-        XCTAssertEqual(cache.receivedURLs, [url])
-        XCTAssertEqual(cache.receivedDatas, [anyData])
+        XCTAssertEqual(cache.messages, [.save(url, anyData)])
     }
     
     func test_retrieveData_deliversDataWhenCachedImageIsAvailable() {
@@ -125,8 +124,7 @@ final class ImageCacheTests: XCTestCase {
         loader.complete(with: anyData)
         
         XCTAssertEqual(loader.receivedURLs, [url])
-        XCTAssertEqual(cache.receivedURLs, [url])
-        XCTAssertEqual(cache.receivedDatas, [anyData])
+        XCTAssertEqual(cache.messages, [.save(url, anyData)])
         
         var receivedData: Data?
         receivedData = sut.retrieveImageData(for: url)
@@ -155,8 +153,7 @@ final class ImageCacheTests: XCTestCase {
         sut.loadImageData(url: url, completion: { _ in })
     
         XCTAssertEqual(loader.receivedURLs, [url])
-        XCTAssertEqual(cache.retrievedURLs, [url])
-        XCTAssertEqual(cache.retrievedDatas, [anyData])
+        XCTAssertEqual(cache.messages, [.save(url, anyData) ,.retrieve(url, anyData)])
     }
     
     // MARK: - Helper
@@ -204,34 +201,24 @@ final class ImageCacheTests: XCTestCase {
     
     
     class NSCacheSpy: NSCache<NSURL,NSData> {
-        private var messages = [URL: Data]()
-        private var retrievalMessages = [URL: Data]()
-    
-        var receivedURLs: [URL] {
-            return messages.map { $0.key }
+        enum Message: Equatable {
+            case save(URL, Data)
+            case retrieve(URL, Data)
         }
         
-        var receivedDatas: [Data] {
-            return messages.map { $0.value }
-        }
-        
-        var retrievedURLs: [URL] {
-            return retrievalMessages.map { $0.key }
-        }
-        
-        var retrievedDatas: [Data] {
-            return retrievalMessages.map { $0.value }
-        }
-        
+        var messages = [Message]()
+        private var store = [URL: Data]()
+
         override func setObject(_ obj: NSData, forKey key: NSURL) {
-            let url = URL(string: key.absoluteString!)
+            let url = URL(string: key.absoluteString!)!
             let data = Data(referencing: obj)
-            messages[url!] = data
+            messages.append(.save(url, data))
+            store[url] = data
         }
         
         override func object(forKey key: NSURL) -> NSData? {
-            if let url = URL(string: key.absoluteString!), let data = messages[url] {
-                retrievalMessages[url] = data
+            if let url = URL(string: key.absoluteString!), let data = store[url] {
+                messages.append(.retrieve(url, data))
                 let nsData = NSData(data: data)
                 return nsData
             }
