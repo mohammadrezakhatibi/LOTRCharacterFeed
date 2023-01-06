@@ -10,10 +10,18 @@ import LOTRCharacterFeed
 
 
 final class ImageCache {
+    let loader: CharacterImageDataLoader
+    let cache: URLCache
     
     init(loader: CharacterImageDataLoader, cache: URLCache) {
-        
+        self.loader = loader
+        self.cache = cache
     }
+    
+    func loadImageData(url: URL) {
+        _ = loader.loadImageData(url: url) { _ in }
+    }
+    
 }
 
 final class ImageCacheTests: XCTestCase {
@@ -24,6 +32,17 @@ final class ImageCacheTests: XCTestCase {
         let _ = ImageCache(loader: loader, cache: cache)
         
         XCTAssertEqual(loader.numberOfCalls, 0)
+        XCTAssertEqual(cache.numberOfCalls, 0)
+    }
+    
+    func test_loadImageData_sendsURLRequestToLoaderWhenCacheNotAvailable() {
+        let loader = CharacterImageDataLoaderSpy()
+        let cache = URLCacheSpy(memoryCapacity: 10_000_000, diskCapacity: 100_000_000)
+        let sut = ImageCache(loader: loader, cache: cache)
+        
+        sut.loadImageData(url: anyURL())
+        
+        XCTAssertEqual(loader.numberOfCalls, 1)
         XCTAssertEqual(cache.numberOfCalls, 0)
     }
     
@@ -40,6 +59,7 @@ final class ImageCacheTests: XCTestCase {
         }
         
         func loadImageData(url: URL, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
+            numberOfCalls += 1
             return Task()
         }
     }
@@ -47,8 +67,5 @@ final class ImageCacheTests: XCTestCase {
     private final class URLCacheSpy: URLCache {
         var numberOfCalls = 0
         
-        override func cachedResponse(for request: URLRequest) -> CachedURLResponse? {
-            <#code#>
-        }
     }
 }
