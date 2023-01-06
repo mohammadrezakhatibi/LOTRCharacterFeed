@@ -22,6 +22,7 @@ final class ImageCache {
     
     @discardableResult
     func loadImageData(url: URL, completion: @escaping (Result) -> Void) -> CharacterImageDataLoaderTask {
+        
         let task = loader.loadImageData(url: url) { [weak self] result in
             switch result {
                 case let .success(data):
@@ -35,14 +36,13 @@ final class ImageCache {
         return task
     }
     
-    func retrieveImageData(for url: URL, completion: @escaping (Data?) -> Void)  {
+    func retrieveImageData(for url: URL) -> Data?  {
         guard let url = NSURL(string: url.absoluteString),
-              let nsData = self.cache.object(forKey: url) else {
-                completion(.none)
-                return
-              }
+          let nsData = self.cache.object(forKey: url) else {
+            return .none
+          }
         let data = Data(referencing: nsData)
-        completion(data)
+        return data
     }
 }
 
@@ -118,14 +118,9 @@ final class ImageCacheTests: XCTestCase {
         XCTAssertEqual(cache.receivedURLs, [url])
         XCTAssertEqual(cache.receivedDatas, [anyData])
         
-        let exp = expectation(description: "Wait for retrieve completion")
         var receivedData: Data?
-        sut.retrieveImageData(for: url) { data in
-            receivedData = data
-            exp.fulfill()
-        }
+        receivedData = sut.retrieveImageData(for: url)
         
-        wait(for: [exp], timeout: 1.0)
         XCTAssertEqual(receivedData, anyData)
     }
     
@@ -133,14 +128,9 @@ final class ImageCacheTests: XCTestCase {
         let url = anyURL()
         let (sut, _, _) = makeSUT()
         
-        let exp = expectation(description: "Wait for retrieve completion")
         var receivedData: Data?
-        sut.retrieveImageData(for: url) { data in
-            receivedData = data
-            exp.fulfill()
-        }
+        receivedData = sut.retrieveImageData(for: url)
         
-        wait(for: [exp], timeout: 1.0)
         XCTAssertNil(receivedData)
     }
     // MARK: - Helper
