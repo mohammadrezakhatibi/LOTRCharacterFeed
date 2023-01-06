@@ -31,18 +31,19 @@ final class ImageCacheTests: XCTestCase {
         let cache = URLCacheSpy(memoryCapacity: 10_000_000, diskCapacity: 100_000_000)
         let _ = ImageCache(loader: loader, cache: cache)
         
-        XCTAssertEqual(loader.numberOfCalls, 0)
+        XCTAssertEqual(loader.receivedURLs, [])
         XCTAssertEqual(cache.numberOfCalls, 0)
     }
     
     func test_loadImageData_sendsURLRequestToLoaderWhenCacheNotAvailable() {
+        let url = anyURL()
         let loader = CharacterImageDataLoaderSpy()
         let cache = URLCacheSpy(memoryCapacity: 10_000_000, diskCapacity: 100_000_000)
         let sut = ImageCache(loader: loader, cache: cache)
         
         sut.loadImageData(url: anyURL())
         
-        XCTAssertEqual(loader.numberOfCalls, 1)
+        XCTAssertEqual(loader.receivedURLs, [url])
         XCTAssertEqual(cache.numberOfCalls, 0)
     }
     
@@ -50,7 +51,7 @@ final class ImageCacheTests: XCTestCase {
     
     private final class CharacterImageDataLoaderSpy: CharacterImageDataLoader {
         
-        var numberOfCalls = 0
+        var receivedURLs = [URL]()
         
         private class Task: CharacterImageDataLoaderTask {
             func cancel() {
@@ -59,7 +60,7 @@ final class ImageCacheTests: XCTestCase {
         }
         
         func loadImageData(url: URL, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
-            numberOfCalls += 1
+            receivedURLs.append(url)
             return Task()
         }
     }
