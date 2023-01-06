@@ -11,9 +11,9 @@ import LOTRCharacterFeed
 
 final class ImageCache {
     let loader: CharacterImageDataLoader
-    let cache: URLCache
+    let cache: NSCache<NSURL, NSData>
     
-    init(loader: CharacterImageDataLoader, cache: URLCache) {
+    init(loader: CharacterImageDataLoader, cache: NSCache<NSURL, NSData>) {
         self.loader = loader
         self.cache = cache
     }
@@ -21,7 +21,15 @@ final class ImageCache {
     typealias Result = Swift.Result<(Data), Error>
     
     func loadImageData(url: URL, completion: @escaping (Result) -> Void) {
-        _ = loader.loadImageData(url: url, completion: completion)
+        _ = loader.loadImageData(url: url) { result in
+            switch result {
+                case let .success(data):
+                    self.cache.setObject(NSData(data: data), forKey: NSURL(string: url.absoluteString)!)
+                    completion(.success(data))
+                case let .failure(error):
+                    completion(.failure(error))
+            }
+        }
     }
     
 }
@@ -30,30 +38,28 @@ final class ImageCacheTests: XCTestCase {
 
     func test_init_doesNotRequestToLoadImage() {
         let loader = CharacterImageDataLoaderSpy()
-        let cache = URLCacheSpy(memoryCapacity: 10_000_000, diskCapacity: 100_000_000)
+        let cache = NSCacheSpy()
         let _ = ImageCache(loader: loader, cache: cache)
         
         XCTAssertEqual(loader.receivedURLs, [])
-        XCTAssertEqual(cache.numberOfCalls, 0)
     }
     
     func test_loadImageData_sendsURLRequestToLoaderWhenCacheNotAvailable() {
         let url = anyURL()
         let loader = CharacterImageDataLoaderSpy()
-        let cache = URLCacheSpy(memoryCapacity: 10_000_000, diskCapacity: 100_000_000)
+        let cache = NSCacheSpy()
         let sut = ImageCache(loader: loader, cache: cache)
         
         sut.loadImageData(url: url) { _ in }
         
         XCTAssertEqual(loader.receivedURLs, [url])
-        XCTAssertEqual(cache.numberOfCalls, 0)
     }
     
     func test_loadImageData_deliversErrorOnLoaderFailure() {
         let url = anyURL()
         let error = anyNSError()
         let loader = CharacterImageDataLoaderSpy()
-        let cache = URLCacheSpy(memoryCapacity: 10_000_000, diskCapacity: 100_000_000)
+        let cache = NSCacheSpy()
         let sut = ImageCache(loader: loader, cache: cache)
         
         let exp = expectation(description: "Wait for load completion")
@@ -73,8 +79,25 @@ final class ImageCacheTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
         
         XCTAssertEqual(loader.receivedURLs, [url])
-        XCTAssertEqual(cache.numberOfCalls, 0)
         XCTAssertEqual(receivedError as NSError?, error)
+    }
+    
+    func test_loadImageData_savesDataOnCacheOnLoaderSuccessfulLoad() {
+        let url = anyURL()
+        let loader = CharacterImageDataLoaderSpy()
+        let cache = NSCacheSpy()
+        let sut = ImageCache(loader: loader, cache: cache)
+        
+        let anyData = anyData()
+        
+        sut.loadImageData(url: url, completion: { _ in })
+        
+        loader.complete(with: anyData)
+        
+        
+        XCTAssertEqual(loader.receivedURLs, [url])
+        XCTAssertEqual(cache.receivedURLs, [url])
+        XCTAssertEqual(cache.receivedDatas, [anyData])
     }
     
     // MARK: - Helper
@@ -100,10 +123,28 @@ final class ImageCacheTests: XCTestCase {
         func complete(with error: Error, at index: Int = 0) {
             messages[index].completion(.failure(error))
         }
+        
+        func complete(with data: Data, at index: Int = 0) {
+            messages[index].completion(.success(data))
+        }
     }
     
-    private final class URLCacheSpy: URLCache {
-        var numberOfCalls = 0
+    
+    class NSCacheSpy: NSCache<NSURL,NSData> {
+        private var messages = [(url: URL?, data: Data?)]()
         
+        var receivedURLs: [URL?] {
+            return messages.map { $0.url }
+        }
+        
+        var receivedDatas: [Data?] {
+            return messages.map { $0.data }
+        }
+        
+        override func setObject(_ obj: NSData, forKey key: NSURL) {
+            let url = URL(string: key.absoluteString!)
+            let data = Data(base64Encoded: obj.base64EncodedData())
+            messages.append((url, data))
+        }
     }
 }
