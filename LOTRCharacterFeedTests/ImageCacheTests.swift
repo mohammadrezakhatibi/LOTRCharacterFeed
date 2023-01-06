@@ -22,11 +22,11 @@ final class ImageCache {
     
     @discardableResult
     func loadImageData(url: URL, completion: @escaping (Result) -> Void) -> CharacterImageDataLoaderTask {
-        let task = loader.loadImageData(url: url) { result in
+        let task = loader.loadImageData(url: url) { [weak self] result in
             switch result {
                 case let .success(data):
                     let url = NSURL(string: url.absoluteString)!
-                    self.cache.setObject(NSData(data: data), forKey: url)
+                    self?.cache.setObject(NSData(data: data), forKey: url)
                     completion(.success(data))
                 case let .failure(error):
                     completion(.failure(error))
@@ -49,18 +49,14 @@ final class ImageCache {
 final class ImageCacheTests: XCTestCase {
 
     func test_init_doesNotRequestToLoadImage() {
-        let loader = CharacterImageDataLoaderSpy()
-        let cache = NSCacheSpy()
-        let _ = ImageCache(loader: loader, cache: cache)
+        let (_, loader, _) = makeSUT()
         
         XCTAssertEqual(loader.receivedURLs, [])
     }
     
     func test_loadImageData_sendsURLRequestToLoaderWhenCacheNotAvailable() {
         let url = anyURL()
-        let loader = CharacterImageDataLoaderSpy()
-        let cache = NSCacheSpy()
-        let sut = ImageCache(loader: loader, cache: cache)
+        let (sut, loader, _) = makeSUT()
         
         sut.loadImageData(url: url) { _ in }
         
@@ -70,9 +66,8 @@ final class ImageCacheTests: XCTestCase {
     func test_loadImageData_deliversErrorOnLoaderFailure() {
         let url = anyURL()
         let error = anyNSError()
-        let loader = CharacterImageDataLoaderSpy()
-        let cache = NSCacheSpy()
-        let sut = ImageCache(loader: loader, cache: cache)
+        
+        let (sut, loader, _) = makeSUT()
         
         let exp = expectation(description: "Wait for load completion")
         var receivedError: Error?
@@ -96,16 +91,13 @@ final class ImageCacheTests: XCTestCase {
     
     func test_loadImageData_savesDataOnCacheOnLoaderSuccessfulLoad() {
         let url = anyURL()
-        let loader = CharacterImageDataLoaderSpy()
-        let cache = NSCacheSpy()
-        let sut = ImageCache(loader: loader, cache: cache)
-        
         let anyData = anyData()
+        
+        let (sut, loader, cache) = makeSUT()
         
         sut.loadImageData(url: url, completion: { _ in })
         
         loader.complete(with: anyData)
-        
         
         XCTAssertEqual(loader.receivedURLs, [url])
         XCTAssertEqual(cache.receivedURLs, [url])
@@ -114,13 +106,9 @@ final class ImageCacheTests: XCTestCase {
     
     func test_retrieveData_deliversDataWhenCachedImageIsAvailable() {
         let url = anyURL()
-        let loader = CharacterImageDataLoaderSpy()
-        let cache = NSCacheSpy()
-        cache.countLimit = 100
-        cache.totalCostLimit = 1024 * 1024 * 100
-        let sut = ImageCache(loader: loader, cache: cache)
-        
         let anyData = anyData()
+        
+        let (sut, loader, cache) = makeSUT()
         
         sut.loadImageData(url: url, completion: { _ in })
         
@@ -142,6 +130,20 @@ final class ImageCacheTests: XCTestCase {
     }
     
     // MARK: - Helper
+    
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ImageCache, loader: CharacterImageDataLoaderSpy, cache: NSCacheSpy) {
+        let loader = CharacterImageDataLoaderSpy()
+        let cache = NSCacheSpy()
+        cache.countLimit = 100
+        cache.totalCostLimit = 1024 * 1024 * 100
+        let sut = ImageCache(loader: loader, cache: cache)
+        
+        trackingForMemoryLeaks(loader, file: file, line: line)
+        trackingForMemoryLeaks(cache, file: file, line: line)
+        trackingForMemoryLeaks(sut, file: file, line: line)
+        
+        return (sut, loader, cache)
+    }
     
     private final class CharacterImageDataLoaderSpy: CharacterImageDataLoader {
         
