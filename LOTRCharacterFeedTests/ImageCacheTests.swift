@@ -20,18 +20,30 @@ final class ImageCache {
     
     typealias Result = Swift.Result<(Data), Error>
     
-    func loadImageData(url: URL, completion: @escaping (Result) -> Void) {
-        _ = loader.loadImageData(url: url) { result in
+    @discardableResult
+    func loadImageData(url: URL, completion: @escaping (Result) -> Void) -> CharacterImageDataLoaderTask {
+        let task = loader.loadImageData(url: url) { result in
             switch result {
                 case let .success(data):
-                    self.cache.setObject(NSData(data: data), forKey: NSURL(string: url.absoluteString)!)
+                    let url = NSURL(string: url.absoluteString)!
+                    self.cache.setObject(NSData(data: data), forKey: url)
                     completion(.success(data))
                 case let .failure(error):
                     completion(.failure(error))
             }
         }
+        return task
     }
     
+    func retrieveImageData(for url: URL, completion: @escaping (Data?) -> Void)  {
+        let url = NSURL(string: url.absoluteString)!
+        if let data = self.cache.object(forKey: url) {
+            let data = Data(referencing: data)
+            completion(data)
+        } else {
+            completion(nil)
+        }
+    }
 }
 
 final class ImageCacheTests: XCTestCase {
@@ -100,6 +112,35 @@ final class ImageCacheTests: XCTestCase {
         XCTAssertEqual(cache.receivedDatas, [anyData])
     }
     
+    func test_retrieveData_deliversDataWhenCachedImageIsAvailable() {
+        let url = anyURL()
+        let loader = CharacterImageDataLoaderSpy()
+        let cache = NSCacheSpy()
+        cache.countLimit = 100
+        cache.totalCostLimit = 1024 * 1024 * 100
+        let sut = ImageCache(loader: loader, cache: cache)
+        
+        let anyData = anyData()
+        
+        sut.loadImageData(url: url, completion: { _ in })
+        
+        loader.complete(with: anyData)
+        
+        XCTAssertEqual(loader.receivedURLs, [url])
+        XCTAssertEqual(cache.receivedURLs, [url])
+        XCTAssertEqual(cache.receivedDatas, [anyData])
+        
+        let exp = expectation(description: "Wait for retrieve completion")
+        var receivedData: Data?
+        sut.retrieveImageData(for: url) { data in
+            receivedData = data
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertEqual(receivedData, anyData)
+    }
+    
     // MARK: - Helper
     
     private final class CharacterImageDataLoaderSpy: CharacterImageDataLoader {
@@ -131,20 +172,28 @@ final class ImageCacheTests: XCTestCase {
     
     
     class NSCacheSpy: NSCache<NSURL,NSData> {
-        private var messages = [(url: URL?, data: Data?)]()
-        
-        var receivedURLs: [URL?] {
-            return messages.map { $0.url }
+        private var messages = [URL: Data]()
+    
+        var receivedURLs: [URL] {
+            return messages.map { $0.key }
         }
         
-        var receivedDatas: [Data?] {
-            return messages.map { $0.data }
+        var receivedDatas: [Data] {
+            return messages.map { $0.value }
         }
         
         override func setObject(_ obj: NSData, forKey key: NSURL) {
             let url = URL(string: key.absoluteString!)
-            let data = Data(base64Encoded: obj.base64EncodedData())
-            messages.append((url, data))
+            let data = Data(referencing: obj)
+            messages[url!] = data
+        }
+        
+        override func object(forKey key: NSURL) -> NSData? {
+            if let url = URL(string: key.absoluteString!), let data = messages[url] {
+                let nsData = NSData(data: data)
+                return nsData
+            }
+            return nil
         }
     }
 }
