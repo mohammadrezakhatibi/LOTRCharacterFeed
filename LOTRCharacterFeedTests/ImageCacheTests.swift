@@ -8,54 +8,6 @@
 import XCTest
 import LOTRCharacterFeed
 
-
-final class ImageCache {
-    let loader: CharacterImageDataLoader
-    let cache: NSCache<NSURL, NSData>
-    
-    init(loader: CharacterImageDataLoader, cache: NSCache<NSURL, NSData>) {
-        self.loader = loader
-        self.cache = cache
-    }
-    
-    private class LoadImageDataTask: CharacterImageDataLoaderTask {
-        func cancel() { }
-        
-    }
-    
-    typealias Result = Swift.Result<(Data), Error>
-    
-    @discardableResult
-    func loadImageData(url: URL, completion: @escaping (Result) -> Void) -> CharacterImageDataLoaderTask? {
-        var task: CharacterImageDataLoaderTask?
-        if let cached = retrieveImageData(for: url) {
-            completion(.success(cached))
-            return task
-        }
-        
-        task = loader.loadImageData(url: url) { [weak self] result in
-            switch result {
-                case let .success(data):
-                    let url = NSURL(string: url.absoluteString)!
-                    self?.cache.setObject(NSData(data: data), forKey: url)
-                    completion(.success(data))
-                case let .failure(error):
-                    completion(.failure(error))
-            }
-        }
-        return task
-    }
-    
-    func retrieveImageData(for url: URL) -> Data?  {
-        guard let url = NSURL(string: url.absoluteString),
-          let nsData = self.cache.object(forKey: url) else {
-            return .none
-          }
-        let data = Data(referencing: nsData)
-        return data
-    }
-}
-
 final class ImageCacheTests: XCTestCase {
 
     func test_init_doesNotRequestToLoadImage() {
