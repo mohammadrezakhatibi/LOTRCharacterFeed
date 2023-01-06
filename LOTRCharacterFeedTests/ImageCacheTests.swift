@@ -18,12 +18,22 @@ final class ImageCache {
         self.cache = cache
     }
     
+    private class LoadImageDataTask: CharacterImageDataLoaderTask {
+        func cancel() { }
+        
+    }
+    
     typealias Result = Swift.Result<(Data), Error>
     
     @discardableResult
-    func loadImageData(url: URL, completion: @escaping (Result) -> Void) -> CharacterImageDataLoaderTask {
+    func loadImageData(url: URL, completion: @escaping (Result) -> Void) -> CharacterImageDataLoaderTask? {
+        var task: CharacterImageDataLoaderTask?
+        if let cached = retrieveImageData(for: url) {
+            completion(.success(cached))
+            return task
+        }
         
-        let task = loader.loadImageData(url: url) { [weak self] result in
+        task = loader.loadImageData(url: url) { [weak self] result in
             switch result {
                 case let .success(data):
                     let url = NSURL(string: url.absoluteString)!
@@ -133,6 +143,22 @@ final class ImageCacheTests: XCTestCase {
         
         XCTAssertNil(receivedData)
     }
+    
+    func test_loadData_deliversCachedImageWhenCachedImageIsAvailable() {
+        let url = anyURL()
+        let anyData = anyData()
+        let (sut, loader, cache) = makeSUT()
+
+        sut.loadImageData(url: url, completion: { _ in })
+        loader.complete(with: anyData)
+        
+        sut.loadImageData(url: url, completion: { _ in })
+    
+        XCTAssertEqual(loader.receivedURLs, [url])
+        XCTAssertEqual(cache.retrievedURLs, [url])
+        XCTAssertEqual(cache.retrievedDatas, [anyData])
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ImageCache, loader: CharacterImageDataLoaderSpy, cache: NSCacheSpy) {
@@ -179,6 +205,7 @@ final class ImageCacheTests: XCTestCase {
     
     class NSCacheSpy: NSCache<NSURL,NSData> {
         private var messages = [URL: Data]()
+        private var retrievalMessages = [URL: Data]()
     
         var receivedURLs: [URL] {
             return messages.map { $0.key }
@@ -186,6 +213,14 @@ final class ImageCacheTests: XCTestCase {
         
         var receivedDatas: [Data] {
             return messages.map { $0.value }
+        }
+        
+        var retrievedURLs: [URL] {
+            return retrievalMessages.map { $0.key }
+        }
+        
+        var retrievedDatas: [Data] {
+            return retrievalMessages.map { $0.value }
         }
         
         override func setObject(_ obj: NSData, forKey key: NSURL) {
@@ -196,6 +231,7 @@ final class ImageCacheTests: XCTestCase {
         
         override func object(forKey key: NSURL) -> NSData? {
             if let url = URL(string: key.absoluteString!), let data = messages[url] {
+                retrievalMessages[url] = data
                 let nsData = NSData(data: data)
                 return nsData
             }
