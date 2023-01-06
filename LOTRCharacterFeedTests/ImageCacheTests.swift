@@ -36,13 +36,13 @@ final class ImageCache {
     }
     
     func retrieveImageData(for url: URL, completion: @escaping (Data?) -> Void)  {
-        let url = NSURL(string: url.absoluteString)!
-        if let data = self.cache.object(forKey: url) {
-            let data = Data(referencing: data)
-            completion(data)
-        } else {
-            completion(nil)
-        }
+        guard let url = NSURL(string: url.absoluteString),
+              let nsData = self.cache.object(forKey: url) else {
+                completion(.none)
+                return
+              }
+        let data = Data(referencing: nsData)
+        completion(data)
     }
 }
 
@@ -129,6 +129,20 @@ final class ImageCacheTests: XCTestCase {
         XCTAssertEqual(receivedData, anyData)
     }
     
+    func test_retrieveData_deliversNoneDataWhenCachedImageIsNotAvailable() {
+        let url = anyURL()
+        let (sut, _, _) = makeSUT()
+        
+        let exp = expectation(description: "Wait for retrieve completion")
+        var receivedData: Data?
+        sut.retrieveImageData(for: url) { data in
+            receivedData = data
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertNil(receivedData)
+    }
     // MARK: - Helper
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ImageCache, loader: CharacterImageDataLoaderSpy, cache: NSCacheSpy) {
