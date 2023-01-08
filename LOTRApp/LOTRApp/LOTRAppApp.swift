@@ -21,7 +21,14 @@ struct LOTRAppApp: App {
     }
     
     private func CharacterFeedView() -> some View {
-        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        let diskCacheURL = cacheURL.appendingPathComponent("DownloadCache")
+        let cache = URLCache(memoryCapacity: 10_000_000, diskCapacity: 1_000_000_000, directory: diskCacheURL)
+        print(diskCacheURL)
+        let config = URLSessionConfiguration.default
+        config.urlCache = cache
+        let session = URLSession(configuration: config)
+        let client = URLSessionHTTPClient(session: session)
         let request = CharacterRequest().create()
         let loader = RemoteCharacterLoader(request: request, client: client)
         let vm = CharacterFeedDataProvider(loader: MainQueueDispatchDecorator(decoratee: loader))
