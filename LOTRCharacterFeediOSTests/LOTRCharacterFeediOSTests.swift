@@ -113,8 +113,9 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
             }
             XCTAssertEqual(try row[index].find(viewWithId: 1).text().string(), item.name)
             XCTAssertEqual(try row[index].find(viewWithId: 2).text().string(), item.race)
-            XCTAssertNotNil(try row[index].find(viewWithId: 3).asyncImage())
-            XCTAssertNotNil(try row[index].find(viewWithId: 3).asyncImage().url()?.absoluteString, item.imageURL.absoluteString)
+            XCTAssertNotNil(try row[index].find(LOTRAsyncImage.self).actualView())
+            XCTAssertNotNil(try row[index].find(LOTRAsyncImage.self).actualView().cacheLoader)
+            XCTAssertEqual(try row[index].find(LOTRAsyncImage.self).actualView().url.absoluteString, item.imageURL.absoluteString)
             XCTAssertNotNil(try row[index].find(viewWithId: 4).linearGradient())
             
         }

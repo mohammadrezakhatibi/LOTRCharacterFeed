@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class ImageCache {
+public final class ImageCacheLoader {
     private let loader: CharacterImageDataLoader
     private let cache: NSCache<NSURL, NSData>
     

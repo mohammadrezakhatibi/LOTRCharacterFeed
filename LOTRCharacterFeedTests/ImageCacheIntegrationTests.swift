@@ -8,17 +8,17 @@
 import XCTest
 import LOTRCharacterFeed
 
-final class ImageCacheTests: XCTestCase {
+final class ImageCacheIntegrationTests: XCTestCase {
 
     func test_init_doesNotRequestToLoadImage() {
-        let (_, loader, _) = makeSUT()
+        let (_, loader) = makeSUT()
         
         XCTAssertEqual(loader.receivedURLs, [])
     }
     
     func test_loadImageData_sendsURLRequestToLoaderWhenCacheNotAvailable() {
         let url = anyURL()
-        let (sut, loader, _) = makeSUT()
+        let (sut, loader) = makeSUT()
         
         sut.loadImageData(url: url) { _ in }
         
@@ -29,7 +29,7 @@ final class ImageCacheTests: XCTestCase {
         let url = anyURL()
         let error = anyNSError()
         
-        let (sut, loader, _) = makeSUT()
+        let (sut, loader) = makeSUT()
         
         let exp = expectation(description: "Wait for load completion")
         var receivedError: Error?
@@ -54,8 +54,9 @@ final class ImageCacheTests: XCTestCase {
     func test_loadImageData_savesDataOnCacheOnLoaderSuccessfulLoad() {
         let url = anyURL()
         let anyData = anyData()
+        let cache = NSCacheSpy()
         
-        let (sut, loader, cache) = makeSUT()
+        let (sut, loader) = makeSUT(cache: cache)
         
         sut.loadImageData(url: url, completion: { _ in })
         
@@ -68,8 +69,8 @@ final class ImageCacheTests: XCTestCase {
     func test_retrieveData_deliversDataWhenCachedImageIsAvailable() {
         let url = anyURL()
         let anyData = anyData()
-        
-        let (sut, loader, cache) = makeSUT()
+        let cache = NSCacheSpy()
+        let (sut, loader) = makeSUT(cache: cache)
         
         sut.loadImageData(url: url, completion: { _ in })
         
@@ -86,7 +87,7 @@ final class ImageCacheTests: XCTestCase {
     
     func test_retrieveData_deliversNoneDataWhenCachedImageIsNotAvailable() {
         let url = anyURL()
-        let (sut, _, _) = makeSUT()
+        let (sut, _) = makeSUT()
         
         var receivedData: Data?
         receivedData = sut.retrieveImageData(for: url)
@@ -97,7 +98,8 @@ final class ImageCacheTests: XCTestCase {
     func test_loadData_deliversCachedImageWhenCachedImageIsAvailable() {
         let url = anyURL()
         let anyData = anyData()
-        let (sut, loader, cache) = makeSUT()
+        let cache = NSCacheSpy()
+        let (sut, loader) = makeSUT(cache: cache)
 
         sut.loadImageData(url: url, completion: { _ in })
         loader.complete(with: anyData)
@@ -110,18 +112,17 @@ final class ImageCacheTests: XCTestCase {
     
     // MARK: - Helper
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ImageCache, loader: CharacterImageDataLoaderSpy, cache: NSCacheSpy) {
+    private func makeSUT(cache: NSCacheSpy = .init(), file: StaticString = #filePath, line: UInt = #line) -> (sut: ImageCacheLoader, loader: CharacterImageDataLoaderSpy) {
         let loader = CharacterImageDataLoaderSpy()
-        let cache = NSCacheSpy()
         cache.countLimit = 100
         cache.totalCostLimit = 1024 * 1024 * 100
-        let sut = ImageCache(loader: loader, cache: cache)
+        let sut = ImageCacheLoader(loader: loader, cache: cache)
         
         trackingForMemoryLeaks(loader, file: file, line: line)
         trackingForMemoryLeaks(cache, file: file, line: line)
         trackingForMemoryLeaks(sut, file: file, line: line)
         
-        return (sut, loader, cache)
+        return (sut, loader)
     }
     
     private final class CharacterImageDataLoaderSpy: CharacterImageDataLoader {

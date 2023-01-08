@@ -11,21 +11,23 @@ import LOTRCharacterFeed
 struct CharacterRow: View {
     private(set) var character: CharacterFeedViewModel
     
+    private let cacheLoader: ImageCacheLoader = {
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        let loader = RemoteCharacterImageDataLoader(client: client)
+        let store = NSCache<NSURL, NSData>()
+        store.totalCostLimit = 1024 * 1024 * 100
+        store.countLimit = 100
+        return ImageCacheLoader(loader: loader, cache: store)
+    }()
+    
     var body: some View {
         return VStack {
             ZStack(alignment: .bottomLeading) {
                 Rectangle()
                     .overlay {
                         ZStack(alignment: .topLeading) {
-                            AsyncImage(url: character.imageURL) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(height: 260, alignment: .top)
-                                    .clipped()
-                            } placeholder: {
-                                
-                            }
+                            LOTRAsyncImage(url: character.imageURL,
+                                       cacheLoader: cacheLoader)
                             .id(3)
                         }
                     }
