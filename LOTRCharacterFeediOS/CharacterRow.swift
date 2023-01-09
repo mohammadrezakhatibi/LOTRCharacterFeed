@@ -17,7 +17,7 @@ struct CharacterRow: View {
         let store = NSCache<NSURL, NSData>()
         store.totalCostLimit = 1024 * 1024 * 100
         store.countLimit = 100
-        return ImageCacheLoader(loader: loader, cache: store)
+        return ImageCacheLoader(loader: loader, cache: store, imageFileCache: ImageFileCache())
     }()
     
     var body: some View {
