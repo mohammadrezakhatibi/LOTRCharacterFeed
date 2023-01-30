@@ -32,9 +32,18 @@ struct LOTRAppApp: App {
         let request = CharacterRequest().create()
         let loader = RemoteCharacterLoader(request: request, client: client)
         let vm = CharacterFeedDataProvider(loader: MainQueueDispatchDecorator(decoratee: loader))
-        let view = CharacterFeed(viewModel: vm)
+        let view = CharacterFeed(viewModel: vm, imageLoader: cacheLoader)
         return view
     }
+    
+    private let cacheLoader: ImageLoader = {
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        let loader = RemoteCharacterImageDataLoader(client: client)
+        let store = NSCache<NSURL, NSData>()
+        store.totalCostLimit = 1024 * 1024 * 100
+        store.countLimit = 100
+        return ImageLoaderWithCache(loader: loader, cache: store, imageFileCache: ImageFileCache())
+    }()
     
     private struct CharacterRequest: RemoteRequest {
         var url: URL = URL(string: "https://lokomond.com/lotr/lotr_characters.json")!

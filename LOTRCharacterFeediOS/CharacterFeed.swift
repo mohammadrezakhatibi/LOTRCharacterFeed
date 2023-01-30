@@ -12,9 +12,11 @@ public struct CharacterFeed: View {
     
     public var didAppear: ((Self) -> Void)?
     @ObservedObject var viewModel: CharacterFeedDataProvider
+    private let imageLoader: ImageLoader
     
-    public init(viewModel: CharacterFeedDataProvider) {
+    public init(viewModel: CharacterFeedDataProvider, imageLoader: ImageLoader) {
         self.viewModel = viewModel
+        self.imageLoader = imageLoader
     }
     
     private let columns = [
@@ -29,7 +31,7 @@ public struct CharacterFeed: View {
             } else {
                 LazyVGrid(columns: columns) {
                     ForEach(viewModel.items, id: \.id) { character in
-                        CharacterRow(character: character)
+                        CharacterRow(character: character, cacheLoader: imageLoader)
                     }
                 }
                 .padding(.horizontal, 16)

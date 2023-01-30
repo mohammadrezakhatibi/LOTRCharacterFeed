@@ -8,7 +8,14 @@
 import Foundation
 import UIKit
 
-public final class ImageCacheLoader {
+public protocol ImageLoader {
+    typealias Result = Swift.Result<(Data), Error>
+    
+    @discardableResult
+    func loadImageData(url: URL, completion: @escaping (Result) -> Void) -> CharacterImageDataLoaderTask?
+}
+
+public final class ImageLoaderWithCache: ImageLoader {
     private let loader: CharacterImageDataLoader
     private let cache: NSCache<NSURL, NSData>
     private let imageFileCache: ImageFileCache
@@ -24,10 +31,8 @@ public final class ImageCacheLoader {
         
     }
     
-    public typealias Result = Swift.Result<(Data), Error>
-    
     @discardableResult
-    public func loadImageData(url: URL, completion: @escaping (Result) -> Void) -> CharacterImageDataLoaderTask? {
+    public func loadImageData(url: URL, completion: @escaping (ImageLoader.Result) -> Void) -> CharacterImageDataLoaderTask? {
 
         var task: CharacterImageDataLoaderTask?
         if let cached = retrieveImageData(for: url) {

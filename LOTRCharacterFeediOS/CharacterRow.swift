@@ -10,15 +10,12 @@ import LOTRCharacterFeed
 
 struct CharacterRow: View {
     private(set) var character: CharacterFeedViewModel
+    private let cacheLoader: ImageLoader
     
-    private let cacheLoader: ImageCacheLoader = {
-        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
-        let loader = RemoteCharacterImageDataLoader(client: client)
-        let store = NSCache<NSURL, NSData>()
-        store.totalCostLimit = 1024 * 1024 * 100
-        store.countLimit = 100
-        return ImageCacheLoader(loader: loader, cache: store, imageFileCache: ImageFileCache())
-    }()
+    init(character: CharacterFeedViewModel, cacheLoader: ImageLoader) {
+        self.character = character
+        self.cacheLoader = cacheLoader
+    }
     
     var body: some View {
         return VStack {

@@ -9,9 +9,14 @@ import SwiftUI
 import LOTRCharacterFeed
 
 public struct LOTRAsyncImage: View {
-    public let url: URL
-    public let cacheLoader: ImageCacheLoader
+    private let url: URL
+    private let cacheLoader: ImageLoader
     @State var data: Data?
+    
+    init(url: URL, cacheLoader: ImageLoader) {
+        self.url = url
+        self.cacheLoader = cacheLoader
+    }
     
     @ViewBuilder
     public var body: some View {
