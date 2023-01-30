@@ -112,11 +112,22 @@ final class ImageCacheIntegrationTests: XCTestCase {
     
     // MARK: - Helper
     
-    private func makeSUT(cache: NSCacheSpy = .init(), file: StaticString = #filePath, line: UInt = #line) -> (sut: ImageCacheLoader, loader: CharacterImageDataLoaderSpy) {
+    private class ImageFileCacheSpy: ImageFileCache {
+        
+        override init(fileManager: FileManager = .default) {
+            super.init(fileManager: fileManager)
+        }
+        
+        override func retrieve(from url: URL) -> Data? {
+            return nil
+        }
+    }
+    
+    private func makeSUT(cache: NSCacheSpy = .init(), file: StaticString = #filePath, line: UInt = #line) -> (sut: ImageLoaderWithCache, loader: CharacterImageDataLoaderSpy) {
         let loader = CharacterImageDataLoaderSpy()
         cache.countLimit = 100
         cache.totalCostLimit = 1024 * 1024 * 100
-        let sut = ImageCacheLoader(loader: loader, cache: cache, imageFileCache: ImageFileCache(url: anyURL()))
+        let sut = ImageLoaderWithCache(loader: loader, cache: cache, imageFileCache: ImageFileCacheSpy())
         
         trackingForMemoryLeaks(loader, file: file, line: line)
         trackingForMemoryLeaks(cache, file: file, line: line)
@@ -138,7 +149,7 @@ final class ImageCacheIntegrationTests: XCTestCase {
             }
         }
         
-        func loadImageData(url: URL, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
+        func loadImageData(url: URL, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask? {
             messages.append((url, completion))
             return Task()
         }

@@ -10,9 +10,9 @@ import LOTRCharacterFeed
 
 struct CharacterRow: View {
     private(set) var character: CharacterFeedViewModel
-    private let cacheLoader: ImageLoader
+    private let cacheLoader: CharacterImageDataLoader
     
-    init(character: CharacterFeedViewModel, cacheLoader: ImageLoader) {
+    init(character: CharacterFeedViewModel, cacheLoader: CharacterImageDataLoader) {
         self.character = character
         self.cacheLoader = cacheLoader
     }

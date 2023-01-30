@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class ImageFileCache {
+open class ImageFileCache {
     private let fileManager: FileManager
     
     enum Error: Swift.Error {
@@ -18,7 +18,7 @@ public final class ImageFileCache {
         self.fileManager = fileManager
     }
     
-    public func save(data: Data, fileName: URL) throws {
+    open func save(data: Data, fileName: URL) throws {
         let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let filename = fileName.absoluteString
             .replacingOccurrences(of: "/", with: "")
@@ -32,7 +32,7 @@ public final class ImageFileCache {
         }
     }
     
-    public func retrieve(from url: URL) -> Data? {
+    open func retrieve(from url: URL) -> Data? {
         let filename = url.absoluteString.replacingOccurrences(of: "/", with: "").replacingOccurrences(of: ":", with: "")
         let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
 

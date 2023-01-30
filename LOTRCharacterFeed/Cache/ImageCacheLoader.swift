@@ -8,14 +8,7 @@
 import Foundation
 import UIKit
 
-public protocol ImageLoader {
-    typealias Result = Swift.Result<(Data), Error>
-    
-    @discardableResult
-    func loadImageData(url: URL, completion: @escaping (Result) -> Void) -> CharacterImageDataLoaderTask?
-}
-
-public final class ImageLoaderWithCache: ImageLoader {
+public final class ImageLoaderWithCache: CharacterImageDataLoader {
     private let loader: CharacterImageDataLoader
     private let cache: NSCache<NSURL, NSData>
     private let imageFileCache: ImageFileCache
@@ -32,7 +25,7 @@ public final class ImageLoaderWithCache: ImageLoader {
     }
     
     @discardableResult
-    public func loadImageData(url: URL, completion: @escaping (ImageLoader.Result) -> Void) -> CharacterImageDataLoaderTask? {
+    public func loadImageData(url: URL, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask? {
 
         var task: CharacterImageDataLoaderTask?
         if let cached = retrieveImageData(for: url) {
@@ -56,7 +49,7 @@ public final class ImageLoaderWithCache: ImageLoader {
         return task
     }
     
-    public func retrieveImageData(for url: URL) -> Data?  {
+    public func retrieveImageData(for url: URL) -> Data? {
         if let fileCacheData = self.imageFileCache.retrieve(from: url) {
             return fileCacheData
         }

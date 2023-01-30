@@ -78,7 +78,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         let task = sut.loadImageData(url: givenURL) { _ in }
         XCTAssertTrue(client.canceledURLs.isEmpty, "Expected no canceled URL request until task is cancelled")
         
-        task.cancel()
+        task?.cancel()
         XCTAssertEqual(client.canceledURLs, [givenURL], "Expected canceled URL request after task is cancelled")
     }
     
@@ -89,7 +89,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         var receivedResult = [CharacterImageDataLoader.Result]()
         let task = sut.loadImageData(url: givenURL) { receivedResult.append($0) }
         
-        task.cancel()
+        task?.cancel()
         
         client.complete(withStatusCode: 200, data: anyData())
         client.complete(withStatusCode: 400, data: anyData())

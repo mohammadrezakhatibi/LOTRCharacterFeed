@@ -12,9 +12,9 @@ public struct CharacterFeed: View {
     
     public var didAppear: ((Self) -> Void)?
     @ObservedObject var viewModel: CharacterFeedDataProvider
-    private let imageLoader: ImageLoader
+    private let imageLoader: CharacterImageDataLoader
     
-    public init(viewModel: CharacterFeedDataProvider, imageLoader: ImageLoader) {
+    public init(viewModel: CharacterFeedDataProvider, imageLoader: CharacterImageDataLoader) {
         self.viewModel = viewModel
         self.imageLoader = imageLoader
     }

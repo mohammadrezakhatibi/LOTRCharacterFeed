@@ -1,10 +1,3 @@
-//
-//  LOTRCharacterFeediOSTests.swift
-//  LOTRCharacterFeediOSTests
-//
-//  Created by Mohammadreza on 1/1/23.
-//
-
 import XCTest
 import SwiftUI
 import ViewInspector
@@ -76,7 +69,8 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     func test_loadCharacter_displaysLoadingIndicatorOnLoading() {
         let loader = CharacterLoaderSpy()
         let vm = CharacterFeedDataProvider(loader: loader)
-        let sut = CharacterFeed(viewModel: vm)
+        let imageLoader = ImageLoaderStub()
+        let sut = CharacterFeed(viewModel: vm, imageLoader: imageLoader)
         
         XCTAssertNoThrow(try sut.inspect().scrollView().progressView())
         
@@ -96,7 +90,8 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         
         let loader = CharacterLoaderStub(result: result)
         let vm = CharacterFeedDataProvider(loader: loader)
-        let sut = CharacterFeed(viewModel: vm)
+        let imageLoader = ImageLoaderStub()
+        let sut = CharacterFeed(viewModel: vm, imageLoader: imageLoader)
         
         trackingForMemoryLeaks(loader, file: file, line: line)
         trackingForMemoryLeaks(vm, file: file, line: line)
@@ -114,7 +109,6 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
             XCTAssertEqual(try row[index].find(viewWithId: 1).text().string(), item.name)
             XCTAssertEqual(try row[index].find(viewWithId: 2).text().string(), item.race)
             XCTAssertNotNil(try row[index].find(LOTRAsyncImage.self).actualView())
-            XCTAssertNotNil(try row[index].find(LOTRAsyncImage.self).actualView().cacheLoader)
             XCTAssertEqual(try row[index].find(LOTRAsyncImage.self).actualView().url.absoluteString, item.imageURL.absoluteString)
             XCTAssertNotNil(try row[index].find(viewWithId: 4).linearGradient())
             
@@ -139,7 +133,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     
     private func makeItems() -> [CharacterItem] {
         return [
-            CharacterItem(id: "id",
+            CharacterItem(id: "id1",
                           height: "1.20 cm",
                           race: "human",
                           gender: "",
@@ -152,7 +146,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
                           wikiURL: URL(string: "https://any-url.com")!,
                           imageURL: URL(string: "https://any-image-url.com")!),
             
-            CharacterItem(id: "id",
+            CharacterItem(id: "id2",
                           height: "2.20 cm",
                           race: "elf",
                           gender: "",
@@ -190,6 +184,33 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         
         func complete(with items: [CharacterItem], at index: Int) {
             results[index](.success(items))
+        }
+    }
+    
+    private final class ImageLoaderStub: CharacterImageDataLoader {
+        
+        private struct Task: CharacterImageDataLoaderTask {
+            func cancel() {
+                
+            }
+        }
+        
+        func loadImageData(url: URL, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask? {
+            completion(.success(makeImageData()))
+            return Task()
+        }
+        
+        private func makeImageData() -> Data {
+            let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+            let format = UIGraphicsImageRendererFormat()
+            format.scale = 1
+            
+            let image = UIGraphicsImageRenderer(bounds: rect, format: format).image { rendererContext in
+                let color = UIColor.red
+                color.setFill()
+                rendererContext.fill(rect)
+            }
+            return image.pngData()!
         }
     }
 }

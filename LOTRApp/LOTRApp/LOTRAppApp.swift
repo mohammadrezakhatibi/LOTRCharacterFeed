@@ -36,7 +36,7 @@ struct LOTRAppApp: App {
         return view
     }
     
-    private let cacheLoader: ImageLoader = {
+    private let cacheLoader: CharacterImageDataLoader = {
         let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let loader = RemoteCharacterImageDataLoader(client: client)
         let store = NSCache<NSURL, NSData>()
