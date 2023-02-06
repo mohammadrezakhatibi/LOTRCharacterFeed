@@ -23,7 +23,8 @@ public struct LOTRAsyncImage: View {
                 .clipped()
         } else {
             VStack {
-                
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
             }
             .task {
                 data = await loadImage()
