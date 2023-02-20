@@ -52,9 +52,6 @@ public final class ImageCacheLoader {
     }
     
     public func retrieveImageData(for url: URL) -> Data?  {
-        if let fileCacheData = self.imageFileCache.retrieve(from: url) {
-            return fileCacheData
-        }
         guard let url = NSURL(string: url.absoluteString),
           let nsData = self.cache.object(forKey: url) else {
             return .none

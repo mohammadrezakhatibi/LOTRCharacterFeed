@@ -116,7 +116,7 @@ final class ImageCacheIntegrationTests: XCTestCase {
         let loader = CharacterImageDataLoaderSpy()
         cache.countLimit = 100
         cache.totalCostLimit = 1024 * 1024 * 100
-        let sut = ImageCacheLoader(loader: loader, cache: cache, imageFileCache: ImageFileCache(url: anyURL()))
+        let sut = ImageCacheLoader(loader: loader, cache: cache, imageFileCache: ImageFileCache())
         
         trackingForMemoryLeaks(loader, file: file, line: line)
         trackingForMemoryLeaks(cache, file: file, line: line)
