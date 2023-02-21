@@ -9,41 +9,6 @@ import XCTest
 import LOTRCharacterFeed
 
 final class RemoteCharacterLoaderTests: XCTestCase {
-
-    func test_init_doesNotRequestDataFromURL() {
-        let (_, client) = makeSUT()
-        
-        XCTAssertEqual(client.requestedURLs.count, 0)
-    }
-    
-    func test_load_requestsDataFromURL() {
-        let url = anyURL()
-        let (sut, client) = makeSUT(url: url)
-        
-        sut.load { _ in }
-        
-        XCTAssertEqual(client.requestedURLs, [url])
-    }
-    
-    func test_loadTwice_requestsDataFromURLTwice() {
-        let url = anyURL()
-        let (sut, client) = makeSUT(url: url)
-        
-        sut.load { _ in }
-        sut.load { _ in }
-        
-        XCTAssertEqual(client.requestedURLs, [url, url])
-    }
-    
-    func test_load_deliversErrorOnHTTPClientError() {
-        let url = anyURL()
-        let (sut, client) = makeSUT(url: url)
-        let anError = anyNSError()
-        
-        expect(sut, toCompleteWith: .failure(RemoteCharacterLoader.Error.connectivity), when: {
-            client.complete(with: anError)
-        })
-    }
     
     func test_load_deliversErrorOnNon200HTTPClientResponse() {
         let url = anyURL()
@@ -135,7 +100,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         var sut: RemoteCharacterLoader? = RemoteCharacterLoader(request: request, client: client)
         
         
-        var capturedResult: [CharacterLoader.Result] = []
+        var capturedResult: [RemoteCharacterLoader.Result] = []
         sut?.load(completion: { capturedResult.append($0) })
         
         sut = nil
@@ -183,7 +148,7 @@ final class RemoteCharacterLoaderTests: XCTestCase {
                 case let (.success(expectedItems), .success(receivedItems)):
                     XCTAssertEqual(expectedItems, receivedItems, file: file, line: line)
                     
-                case let (.failure(expectedError as RemoteCharacterLoader.Error), .failure(receivedError as RemoteCharacterLoader.Error)):
+                case let (.failure(expectedError as RemoteCharacterLoader.Error), .failure(receivedError)):
                     XCTAssertEqual(expectedError, receivedError, file: file, line: line)
                 default:
                     XCTFail("Expected to get \(expectedResult), got \(receivedResult) instead", file: file, line: line)

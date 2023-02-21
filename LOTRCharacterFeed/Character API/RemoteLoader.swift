@@ -1,13 +1,13 @@
 import Foundation
 
-public final class RemoteLoader<Resource> {
-    
+open class RemoteLoader<Resource> {
     let request: URLRequest
     let client: HTTPClient
     let mapper: Mapper
     
     public typealias Mapper = (Data, HTTPURLResponse) throws -> Resource
     public typealias Result = Swift.Result<Resource, RemoteLoader.Error>
+    
     public enum Error: Swift.Error {
         case invalidData
         case connectivity
@@ -20,7 +20,7 @@ public final class RemoteLoader<Resource> {
         self.mapper = mapper
     }
     
-    public func load(completion: @escaping (Result) -> Void) {
+    open func load(completion: @escaping (Result) -> Void) {
         client.get(from: request) { [weak self] result in
             guard let self = self else { return }
             
@@ -34,6 +34,9 @@ public final class RemoteLoader<Resource> {
     }
     
     private func map(_ data: Data, with response: HTTPURLResponse) -> Result {
+        guard !response.isUnauthorized else {
+            return .failure(Error.unauthorized)
+        }
         do {
             return .success(try mapper(data, response))
         } catch {

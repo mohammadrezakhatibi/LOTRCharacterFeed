@@ -24,8 +24,8 @@ struct LOTRAppApp: App {
         let session = URLSession(configuration: .default)
         let client = URLSessionHTTPClient(session: session)
         let request = CharacterRequest().create()
-        let loader = RemoteCharacterLoader(request: request, client: client)
-        let vm = CharacterFeedDataProvider(loader: MainQueueDispatchDecorator(decoratee: loader))
+        let loader = RemoteLoader(request: request, client: client, mapper: CharacterItemMapper.map)
+        let vm = CharacterFeedDataProvider(loader: loader)
         let view = CharacterFeedViewContainer(viewModel: vm)
         return view
     }
