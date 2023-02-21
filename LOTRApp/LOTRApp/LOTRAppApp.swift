@@ -26,7 +26,7 @@ struct LOTRAppApp: App {
         let request = CharacterRequest().create()
         let loader = RemoteCharacterLoader(request: request, client: client)
         let vm = CharacterFeedDataProvider(loader: MainQueueDispatchDecorator(decoratee: loader))
-        let view = CharacterFeed(viewModel: vm)
+        let view = CharacterFeedViewContainer(viewModel: vm)
         return view
     }
     
