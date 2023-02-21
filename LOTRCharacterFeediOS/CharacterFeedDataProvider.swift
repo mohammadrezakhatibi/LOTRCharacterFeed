@@ -8,15 +8,15 @@
 import Foundation
 import LOTRCharacterFeed
 
-public class CharacterFeedDataProvider: ObservableObject {
+public class CharacterFeedDataProvider<L: Loader>: ObservableObject where L.Resource == [CharacterItem] {
     @Published var items: [CharacterFeedViewModel] = []
     
     @Published var isErrorPresented = false
     @Published var errorMessage = ""
     
-    private let loader: RemoteLoader<[CharacterItem]>
+    private let loader: L
     
-    public init(loader: RemoteLoader<[CharacterItem]>) {
+    public init(loader: L) {
         self.loader = loader
     }
     

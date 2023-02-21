@@ -92,7 +92,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     
     // MARK: - Helper
     
-    private func makeSUT(result: CharacterLoader.Result = .success([]), file: StaticString = #filePath, line: UInt = #line) -> CharacterFeedViewContainer {
+    private func makeSUT(result: CharacterLoader.Result = .success([]), file: StaticString = #filePath, line: UInt = #line) -> CharacterFeedViewContainer<CharacterLoaderStub> {
         
         let loader = CharacterLoaderStub(result: result)
         let vm = CharacterFeedDataProvider(loader: loader)
@@ -104,7 +104,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         return sut
     }
     
-    private func render(_ view: InspectableView<ViewType.View<CharacterFeedViewContainer>>, for items: [CharacterItem]) throws {
+    private func render(_ view: InspectableView<ViewType.View<CharacterFeedViewContainer<CharacterLoaderStub>>>, for items: [CharacterItem]) throws {
         let row = try view.find(CharacterFeedView.self).scrollView().lazyVGrid().findAll(CharacterRow.self)
         try? items.enumerated().forEach { index, item in
             guard row.count == items.count else {
@@ -120,7 +120,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         }
     }
     
-    private func hideErrorAlert(in view: InspectableView<ViewType.View<CharacterFeedViewContainer>>) {
+    private func hideErrorAlert(in view: InspectableView<ViewType.View<CharacterFeedViewContainer<CharacterLoaderStub>>>) {
         XCTAssertEqual(try view.actualView().viewModel.isErrorPresented, false)
         XCTAssertEqual(try view.actualView().viewModel.errorMessage, "")
         XCTAssertThrowsError(try view.scrollView().alert())
@@ -128,7 +128,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         XCTAssertThrowsError(try view.scrollView().alert().message().text().string())
     }
     
-    private func renderErrorAlert(in view: InspectableView<ViewType.View<CharacterFeedViewContainer>>, with error: Error) {
+    private func renderErrorAlert(in view: InspectableView<ViewType.View<CharacterFeedViewContainer<CharacterLoaderStub>>>, with error: Error) {
         XCTAssertEqual(try view.actualView().viewModel.isErrorPresented, true)
         XCTAssertEqual(try view.actualView().viewModel.errorMessage, error.localizedDescription)
         XCTAssertNotNil(try view.find(CharacterFeedView.self).alert())
@@ -166,22 +166,22 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         ]
     }
     
-    private final class CharacterLoaderStub: CharacterLoader {
+    private final class CharacterLoaderStub: Loader {
                 
-        private let result: CharacterLoader.Result
+        private let result: Result<[CharacterItem], Error>
         
-        init(result: CharacterLoader.Result) {
+        init(result: Result<[CharacterItem], Error>) {
             self.result = result
         }
         
-        func load(completion: @escaping (CharacterLoader.Result) -> Void) {
+        func load(completion: @escaping (Result<[CharacterItem], Error>) -> Void) {
             completion(result)
         }
     }
     
-    private final class CharacterLoaderSpy: CharacterLoader {
+    private final class CharacterLoaderSpy: Loader {
                 
-        private var results = [(CharacterLoader.Result) -> Void]()
+        private var results = [(Result) -> Void]()
         
         func load(completion: @escaping (CharacterLoader.Result) -> Void) {
             results.append(completion)

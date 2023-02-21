@@ -1,12 +1,12 @@
 import SwiftUI
 import LOTRCharacterFeed
 
-public struct CharacterFeedViewContainer: View {
+public struct CharacterFeedViewContainer<L: Loader>: View where L.Resource == [CharacterItem] {
     
     public var didAppear: ((Self) -> Void)?
-    @ObservedObject var viewModel: CharacterFeedDataProvider
+    @ObservedObject var viewModel: CharacterFeedDataProvider<L>
     
-    public init(viewModel: CharacterFeedDataProvider) {
+    public init(viewModel: CharacterFeedDataProvider<L>) {
         self.viewModel = viewModel
     }
     
