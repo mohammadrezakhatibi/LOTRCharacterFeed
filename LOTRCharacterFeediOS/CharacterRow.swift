@@ -17,15 +17,7 @@ struct CharacterRow: View {
                 Rectangle()
                     .overlay {
                         ZStack(alignment: .topLeading) {
-                            AsyncImage(url: character.imageURL) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(height: 260, alignment: .top)
-                                    .clipped()
-                            } placeholder: {
-                                
-                            }
+                            LOTRAsyncImage(url: character.imageURL)
                             .id(3)
                         }
                     }
@@ -42,17 +34,17 @@ struct CharacterRow: View {
                     Spacer()
                     Text(character.name)
                         .id(1)
-                        .font(.system(size: 22))
+                        .font(.title2)
                         .fontDesign(.serif)
                         .foregroundColor(.white)
                         .padding(.bottom, 4)
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Image(systemName: "folder")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundColor(.yellow)
                         Text(character.race)
                             .foregroundColor(.yellow)
-                            .font(.system(size: 14))
+                            .font(.caption)
                             .id(2)
                     }
                 }
@@ -61,6 +53,16 @@ struct CharacterRow: View {
             }
             .frame(height: 260)
             .padding(.top, 8)
+        }
+    }
+}
+
+
+struct CharacterRow_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            CharacterRow(character: CharacterFeedViewModel(id: UUID().uuidString, name: "Aragorn II Elessar", race: "Human", imageURL: URL(string: "https://lokomond.com/lotr/characters/images/Aragorn_II_Elessar.jpg")!))
+                .previewLayout(.sizeThatFits)
         }
     }
 }

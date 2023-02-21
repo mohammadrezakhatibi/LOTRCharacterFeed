@@ -9,7 +9,11 @@
 /* Begin PBXBuildFile section */
 		D729870B296430EA006D3E92 /* LOTRCharacterFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */; };
 		D729870F29643166006D3E92 /* CharacterFeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D729870E29643166006D3E92 /* CharacterFeedViewModel.swift */; };
+		D79E4A4B29A4C6C10033C6AD /* CharacterFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79E4A4A29A4C6C10033C6AD /* CharacterFeedView.swift */; };
 		D7D3EF7029657843007E6C1B /* CharacterFeedDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D3EF6F29657843007E6C1B /* CharacterFeedDataProvider.swift */; };
+		E40C355229684F0D0096DAAC /* ImageCacheIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40C355129684F0D0096DAAC /* ImageCacheIntegrationTests.swift */; };
+		E40C35542968CC8B0096DAAC /* ImageCacheLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40C35532968CC8B0096DAAC /* ImageCacheLoader.swift */; };
+		E40C35562968CCF90096DAAC /* LOTRAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40C35552968CCF90096DAAC /* LOTRAsyncImage.swift */; };
 		E4583BA629532D8F007A7D7F /* LOTRCharacterFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */; };
 		E4583BB82953390C007A7D7F /* CharacterLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4583BB72953390C007A7D7F /* CharacterLoader.swift */; };
 		E4583BBA29533996007A7D7F /* CharacterItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4583BB929533996007A7D7F /* CharacterItem.swift */; };
@@ -28,9 +32,10 @@
 		E4BDB954295A499200147D3D /* LOTRCharacterFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */; };
 		E4BDB95A295A4AF300147D3D /* XCTestCase+MemoryLeaksTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F43D0429578DFC00F39D60 /* XCTestCase+MemoryLeaksTracking.swift */; };
 		E4BDB95C295A573E00147D3D /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB95B295A573E00147D3D /* URLSessionHTTPClient.swift */; };
+		E4CD2B5F296CA4C9007A0303 /* ImageFileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CD2B5E296CA4C9007A0303 /* ImageFileCache.swift */; };
 		E4DE7C862962145400877E7B /* LOTRCharacterFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DE7C7E2962145400877E7B /* LOTRCharacterFeediOS.framework */; platformFilter = ios; };
 		E4DE7C8B2962145400877E7B /* LOTRCharacterFeediOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DE7C8A2962145400877E7B /* LOTRCharacterFeediOSTests.swift */; };
-		E4DE7C9A296214CE00877E7B /* CharacterFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DE7C99296214CE00877E7B /* CharacterFeed.swift */; };
+		E4DE7C9A296214CE00877E7B /* CharacterFeedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DE7C99296214CE00877E7B /* CharacterFeedContainer.swift */; };
 		E4DE7C9E2962255E00877E7B /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = E4DE7C9D2962255E00877E7B /* ViewInspector */; };
 		E4F04B1D29565AF000F49C68 /* RemoteCharacterLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B1C29565AF000F49C68 /* RemoteCharacterLoader.swift */; };
 		E4F04B1F29565B2100F49C68 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F04B1E29565B2100F49C68 /* HTTPClient.swift */; };
@@ -68,7 +73,11 @@
 
 /* Begin PBXFileReference section */
 		D729870E29643166006D3E92 /* CharacterFeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterFeedViewModel.swift; sourceTree = "<group>"; };
+		D79E4A4A29A4C6C10033C6AD /* CharacterFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterFeedView.swift; sourceTree = "<group>"; };
 		D7D3EF6F29657843007E6C1B /* CharacterFeedDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterFeedDataProvider.swift; sourceTree = "<group>"; };
+		E40C355129684F0D0096DAAC /* ImageCacheIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheIntegrationTests.swift; sourceTree = "<group>"; };
+		E40C35532968CC8B0096DAAC /* ImageCacheLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheLoader.swift; sourceTree = "<group>"; };
+		E40C35552968CCF90096DAAC /* LOTRAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTRAsyncImage.swift; sourceTree = "<group>"; };
 		E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LOTRCharacterFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4583BA529532D8F007A7D7F /* LOTRCharacterFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LOTRCharacterFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4583BB72953390C007A7D7F /* CharacterLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterLoader.swift; sourceTree = "<group>"; };
@@ -86,10 +95,11 @@
 		E4BDB950295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LOTRCharacterFeedAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BDB952295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTRCharacterFeedAPIEndToEndTests.swift; sourceTree = "<group>"; };
 		E4BDB95B295A573E00147D3D /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
+		E4CD2B5E296CA4C9007A0303 /* ImageFileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileCache.swift; sourceTree = "<group>"; };
 		E4DE7C7E2962145400877E7B /* LOTRCharacterFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LOTRCharacterFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4DE7C852962145400877E7B /* LOTRCharacterFeediOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LOTRCharacterFeediOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4DE7C8A2962145400877E7B /* LOTRCharacterFeediOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTRCharacterFeediOSTests.swift; sourceTree = "<group>"; };
-		E4DE7C99296214CE00877E7B /* CharacterFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterFeed.swift; sourceTree = "<group>"; };
+		E4DE7C99296214CE00877E7B /* CharacterFeedContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterFeedContainer.swift; sourceTree = "<group>"; };
 		E4F04B1C29565AF000F49C68 /* RemoteCharacterLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCharacterLoader.swift; sourceTree = "<group>"; };
 		E4F04B1E29565B2100F49C68 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		E4F04B2029565B4F00F49C68 /* RemoteCharacterItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCharacterItem.swift; sourceTree = "<group>"; };
@@ -144,6 +154,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E40C355029684ED80096DAAC /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				E40C35532968CC8B0096DAAC /* ImageCacheLoader.swift */,
+				E4CD2B5E296CA4C9007A0303 /* ImageFileCache.swift */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
 		E4583B9329532D8F007A7D7F = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +191,7 @@
 		E4583B9F29532D8F007A7D7F /* LOTRCharacterFeed */ = {
 			isa = PBXGroup;
 			children = (
+				E40C355029684ED80096DAAC /* Cache */,
 				E4F04B2829565CBD00F49C68 /* Character Feature */,
 				E4F04B2429565BFF00F49C68 /* Character API */,
 			);
@@ -185,6 +205,7 @@
 				E4583BBB29533ACA007A7D7F /* RemoteCharacterLoaderTests.swift */,
 				E4F43D0129577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift */,
 				E463AEF4295B8D8F00F4DD2E /* URLSessionHTTPClientTests.swift */,
+				E40C355129684F0D0096DAAC /* ImageCacheIntegrationTests.swift */,
 			);
 			path = LOTRCharacterFeedTests;
 			sourceTree = "<group>";
@@ -201,8 +222,10 @@
 			isa = PBXGroup;
 			children = (
 				E48A1C022963745300A3603F /* Assets.xcassets */,
-				E4DE7C99296214CE00877E7B /* CharacterFeed.swift */,
+				E4DE7C99296214CE00877E7B /* CharacterFeedContainer.swift */,
+				D79E4A4A29A4C6C10033C6AD /* CharacterFeedView.swift */,
 				E48A1C042963748400A3603F /* CharacterRow.swift */,
+				E40C35552968CCF90096DAAC /* LOTRAsyncImage.swift */,
 				D7D3EF6F29657843007E6C1B /* CharacterFeedDataProvider.swift */,
 				E48A1C062963788900A3603F /* CharacterFeedErrorViewModel.swift */,
 				D729870E29643166006D3E92 /* CharacterFeedViewModel.swift */,
@@ -483,12 +506,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4CD2B5F296CA4C9007A0303 /* ImageFileCache.swift in Sources */,
 				E4583BBA29533996007A7D7F /* CharacterItem.swift in Sources */,
 				E490F5772960B9B10075BB0A /* RemoteRequest.swift in Sources */,
 				E4BDB95C295A573E00147D3D /* URLSessionHTTPClient.swift in Sources */,
 				E4F04B1D29565AF000F49C68 /* RemoteCharacterLoader.swift in Sources */,
 				E4F04B2729565C6000F49C68 /* HTTPURLResponse+StatusCode.swift in Sources */,
 				E4F04B1F29565B2100F49C68 /* HTTPClient.swift in Sources */,
+				E40C35542968CC8B0096DAAC /* ImageCacheLoader.swift in Sources */,
 				E4BDB949295A368D00147D3D /* RemoteCharacterImageDataLoader.swift in Sources */,
 				E4F04B2129565B4F00F49C68 /* RemoteCharacterItem.swift in Sources */,
 				E4583BB82953390C007A7D7F /* CharacterLoader.swift in Sources */,
@@ -503,6 +528,7 @@
 			files = (
 				E4F43D0729578E7B00F39D60 /* SharedTestHelpers.swift in Sources */,
 				E490F5752960B86B0075BB0A /* MockRequest.swift in Sources */,
+				E40C355229684F0D0096DAAC /* ImageCacheIntegrationTests.swift in Sources */,
 				E463AEF5295B8D8F00F4DD2E /* URLSessionHTTPClientTests.swift in Sources */,
 				E4F43D0229577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift in Sources */,
 				E4F43D0529578DFC00F39D60 /* XCTestCase+MemoryLeaksTracking.swift in Sources */,
@@ -526,9 +552,11 @@
 			files = (
 				D729870F29643166006D3E92 /* CharacterFeedViewModel.swift in Sources */,
 				E48A1C052963748400A3603F /* CharacterRow.swift in Sources */,
-				E4DE7C9A296214CE00877E7B /* CharacterFeed.swift in Sources */,
+				E4DE7C9A296214CE00877E7B /* CharacterFeedContainer.swift in Sources */,
 				E48A1C072963788900A3603F /* CharacterFeedErrorViewModel.swift in Sources */,
 				D7D3EF7029657843007E6C1B /* CharacterFeedDataProvider.swift in Sources */,
+				E40C35562968CCF90096DAAC /* LOTRAsyncImage.swift in Sources */,
+				D79E4A4B29A4C6C10033C6AD /* CharacterFeedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

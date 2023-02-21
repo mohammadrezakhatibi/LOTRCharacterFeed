@@ -15,7 +15,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     
     func test_init_createsAList() throws {
         let sut = makeSUT()
-        XCTAssertNoThrow(try sut.inspect().scrollView())
+        XCTAssertNoThrow(try sut.inspect().find(CharacterFeedView.self).scrollView())
     }
 
     func test_loadCharacter_deliversAListOfCharacters() throws {
@@ -23,7 +23,8 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         var sut = makeSUT(result: .success(items))
         
         let exp = sut.on(\.didAppear) { view in
-            let cells = view.findAll(CharacterRow.self)
+            let cells = try view.find(CharacterFeedView.self).findAll(CharacterRow.self)
+    
             XCTAssertEqual(cells.count, items.count)
         }
         
@@ -32,13 +33,12 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     }
     
     func test_loadCharacter_displaysCharacterNameAndRaceOnSuccessfulLoadCharacter() throws {
-        
         let items = makeItems()
         var sut = makeSUT(result: .success(items))
         
         let exp = sut.on(\.didAppear) { [weak self] view in
             guard let self else { return }
-            self.render(view, for: items)
+            try self.render(view, for: items)
         }
         
         ViewHosting.host(view: sut)
@@ -65,7 +65,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         let exp = sut.on(\.didAppear) { [weak self] view in
             guard let self else { return }
             self.renderErrorAlert(in: view, with: anyError)
-            try view.scrollView().alert().actions().first?.button().tap()
+            try view.find(CharacterFeedView.self).alert().actions().first?.button().tap()
             self.hideErrorAlert(in: view)
         }
         
@@ -76,9 +76,9 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     func test_loadCharacter_displaysLoadingIndicatorOnLoading() {
         let loader = CharacterLoaderSpy()
         let vm = CharacterFeedDataProvider(loader: loader)
-        let sut = CharacterFeed(viewModel: vm)
+        let sut = CharacterFeedViewContainer(viewModel: vm)
         
-        XCTAssertNoThrow(try sut.inspect().scrollView().progressView())
+        XCTAssertNoThrow(try sut.inspect().find(CharacterFeedView.self).scrollView().progressView())
         
         let exp = expectation(description: "Wait for load completion")
         loader.load { _ in
@@ -92,11 +92,11 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     
     // MARK: - Helper
     
-    private func makeSUT(result: CharacterLoader.Result = .success([]), file: StaticString = #filePath, line: UInt = #line) -> CharacterFeed {
+    private func makeSUT(result: CharacterLoader.Result = .success([]), file: StaticString = #filePath, line: UInt = #line) -> CharacterFeedViewContainer {
         
         let loader = CharacterLoaderStub(result: result)
         let vm = CharacterFeedDataProvider(loader: loader)
-        let sut = CharacterFeed(viewModel: vm)
+        let sut = CharacterFeedViewContainer(viewModel: vm)
         
         trackingForMemoryLeaks(loader, file: file, line: line)
         trackingForMemoryLeaks(vm, file: file, line: line)
@@ -104,8 +104,8 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         return sut
     }
     
-    private func render(_ view: InspectableView<ViewType.View<CharacterFeed>>, for items: [CharacterItem]) {
-        let row = view.findAll(CharacterRow.self)
+    private func render(_ view: InspectableView<ViewType.View<CharacterFeedViewContainer>>, for items: [CharacterItem]) throws {
+        let row = try view.find(CharacterFeedView.self).scrollView().lazyVGrid().findAll(CharacterRow.self)
         try? items.enumerated().forEach { index, item in
             guard row.count == items.count else {
                 XCTFail("Couldn't find any rows")
@@ -113,14 +113,14 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
             }
             XCTAssertEqual(try row[index].find(viewWithId: 1).text().string(), item.name)
             XCTAssertEqual(try row[index].find(viewWithId: 2).text().string(), item.race)
-            XCTAssertNotNil(try row[index].find(viewWithId: 3).asyncImage())
-            XCTAssertNotNil(try row[index].find(viewWithId: 3).asyncImage().url()?.absoluteString, item.imageURL.absoluteString)
+            XCTAssertNotNil(try row[index].find(LOTRAsyncImage.self).actualView())
+            XCTAssertEqual(try row[index].find(LOTRAsyncImage.self).actualView().url.absoluteString, item.imageURL.absoluteString)
             XCTAssertNotNil(try row[index].find(viewWithId: 4).linearGradient())
             
         }
     }
     
-    private func hideErrorAlert(in view: InspectableView<ViewType.View<CharacterFeed>>) {
+    private func hideErrorAlert(in view: InspectableView<ViewType.View<CharacterFeedViewContainer>>) {
         XCTAssertEqual(try view.actualView().viewModel.isErrorPresented, false)
         XCTAssertEqual(try view.actualView().viewModel.errorMessage, "")
         XCTAssertThrowsError(try view.scrollView().alert())
@@ -128,12 +128,12 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
         XCTAssertThrowsError(try view.scrollView().alert().message().text().string())
     }
     
-    private func renderErrorAlert(in view: InspectableView<ViewType.View<CharacterFeed>>, with error: Error) {
+    private func renderErrorAlert(in view: InspectableView<ViewType.View<CharacterFeedViewContainer>>, with error: Error) {
         XCTAssertEqual(try view.actualView().viewModel.isErrorPresented, true)
         XCTAssertEqual(try view.actualView().viewModel.errorMessage, error.localizedDescription)
-        XCTAssertNotNil(try view.scrollView().alert())
-        XCTAssertEqual((try view.scrollView().alert().title().string()), "Error")
-        XCTAssertEqual((try view.scrollView().alert().message().text().string()), error.localizedDescription)
+        XCTAssertNotNil(try view.find(CharacterFeedView.self).alert())
+        XCTAssertEqual((try view.find(CharacterFeedView.self).alert().title().string()), "Error")
+        XCTAssertEqual((try view.find(CharacterFeedView.self).alert().message().text().string()), error.localizedDescription)
     }
     
     private func makeItems() -> [CharacterItem] {
