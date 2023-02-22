@@ -11,5 +11,7 @@ struct CharacterFeedViewModel {
     let id: String
     let name: String
     let race: String
+    let birth: String
+    let realm: String
     let imageURL: URL
 }

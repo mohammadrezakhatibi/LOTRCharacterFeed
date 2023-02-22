@@ -25,7 +25,13 @@ public class CharacterFeedDataProvider: ObservableObject {
             guard let self else { return }
             do {
                 self.items = try result.get().map {
-                    return CharacterFeedViewModel(id: $0.id, name: $0.name, race: $0.race, imageURL: $0.imageURL)
+                    return CharacterFeedViewModel(
+                        id: $0.id,
+                        name: $0.name,
+                        race: $0.race,
+                        birth: $0.birth,
+                        realm: $0.realm,
+                        imageURL: $0.imageURL)
                 }
             } catch {
                 self.isErrorPresented = true

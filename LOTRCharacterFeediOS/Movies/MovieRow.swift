@@ -18,7 +18,7 @@ struct MovieRow: View {
                     .clipped()
                     .foregroundColor(.gray.opacity(0.30))
             }
-            .frame(width: 130,height: 190)
+            .frame(width: 155, height: 240)
             VStack(alignment: .leading, spacing: 12) {
                 Text(movie.name)
                     .id(1)
@@ -28,30 +28,30 @@ struct MovieRow: View {
                     .foregroundColor(Color.primary)
                     .padding(.bottom, 4)
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Image(systemName: "creditcard.fill")
-                        .font(.headline)
-                        .foregroundColor(Color.gray.opacity(0.25))
-                    Text(movie.revenue)
-                        .foregroundColor(Color.gray.opacity(0.65))
-                        .font(.headline)
+                    Image(systemName: "staroflife.fill")
+                        .font(.subheadline)
+                        .foregroundColor(Color.gray.opacity(0.35))
+                    Text(movie.score)
+                        .foregroundColor(Color.gray.opacity(0.85))
+                        .font(.subheadline)
                         .id(2)
                 }
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Image(systemName: "staroflife.fill")
-                        .font(.headline)
-                        .foregroundColor(Color.gray.opacity(0.25))
-                    Text(movie.score)
-                        .foregroundColor(Color.gray.opacity(0.65))
-                        .font(.headline)
+                    Image(systemName: "creditcard.fill")
+                        .font(.subheadline)
+                        .foregroundColor(Color.gray.opacity(0.35))
+                    Text(movie.revenue)
+                        .foregroundColor(Color.gray.opacity(0.85))
+                        .font(.subheadline)
                         .id(2)
                 }
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Image(systemName: "clock.fill")
-                        .font(.headline)
-                        .foregroundColor(Color.gray.opacity(0.25))
+                        .font(.subheadline)
+                        .foregroundColor(Color.gray.opacity(0.35))
                     Text(movie.runtime)
-                        .foregroundColor(Color.gray.opacity(0.65))
-                        .font(.headline)
+                        .foregroundColor(Color.gray.opacity(0.85))
+                        .font(.subheadline)
                         .id(2)
                 }
             }
