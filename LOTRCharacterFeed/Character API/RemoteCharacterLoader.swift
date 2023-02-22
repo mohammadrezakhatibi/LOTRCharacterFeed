@@ -38,30 +38,10 @@ public final class RemoteCharacterLoader: CharacterLoader {
     private func map(_ data: Data, with response: HTTPURLResponse) -> CharacterLoader.Result {
         do {
             let items = try CharacterItemMapper.map(data, response: response)
-            return .success(items.toModel())
+            return .success(items)
         } catch(let error) {
             return .failure(error)
         }
     }
 }
 
-public extension Array where Element == RemoteCharacterItem {
-    func toModel() -> [CharacterItem] {
-        return map {
-            CharacterItem(
-                id: $0._id,
-                height: $0.height,
-                race: $0.race,
-                gender: $0.gender,
-                birth: $0.birth,
-                spouse: $0.spouse,
-                death: $0.death,
-                realm: $0.realm,
-                hair: $0.hair,
-                name: $0.name,
-                wikiURL: $0.wikiUrl,
-                imageURL: $0.imageUrl
-            )
-        }
-    }
-}

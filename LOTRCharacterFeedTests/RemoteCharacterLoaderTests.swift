@@ -144,25 +144,6 @@ final class RemoteCharacterLoaderTests: XCTestCase {
         XCTAssertTrue(capturedResult.isEmpty)
     }
     
-    func test_toModel_deliverConvertedCharacterItem() {
-        let model1 = RemoteCharacterItem(id: UUID().uuidString, height: "a height", race: "a race", gender: "a gender", birth: "a birth", spouse: "a spouse", death: "a death", realm: "a realm", hair: "a hair", name: "a name", wikiUrl: URL(string: "https://any-url.com")!, imageUrl: URL(string: "https://any-image-url.com")!)
-        let model2 = RemoteCharacterItem(id: UUID().uuidString, height: "a height", race: "a race", gender: "a gender", birth: "a birth", spouse: "a spouse", death: "a death", realm: "a realm", hair: "a hair", name: "a name", wikiUrl: URL(string: "https://any-url.com")!, imageUrl: URL(string: "https://any-image-url.com")!)
-        
-        let items = [model1, model2]
-        
-        XCTAssertEqual(model1._id, items.toModel().first?.id)
-        XCTAssertEqual(model1.height, items.toModel().first?.height)
-        XCTAssertEqual(model1.race, items.toModel().first?.race)
-        XCTAssertEqual(model1.gender, items.toModel().first?.gender)
-        XCTAssertEqual(model1.birth, items.toModel().first?.birth)
-        XCTAssertEqual(model1.spouse, items.toModel().first?.spouse)
-        XCTAssertEqual(model1.death, items.toModel().first?.death)
-        XCTAssertEqual(model1.realm, items.toModel().first?.realm)
-        XCTAssertEqual(model1.hair, items.toModel().first?.hair)
-        XCTAssertEqual(model1.name, items.toModel().first?.name)
-        XCTAssertEqual(model2._id, items.toModel()[1].id)
-    }
-    
     // MARK: - Helpers
     
     private func makeSUT(url: URL = URL(string: "http://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterLoader, client: HTTPClientSpy) {
