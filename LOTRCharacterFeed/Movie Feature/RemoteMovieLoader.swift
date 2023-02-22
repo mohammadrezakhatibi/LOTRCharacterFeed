@@ -1,6 +1,6 @@
 import Foundation
 
-public final class RemoteMovieLoader: CharacterLoader {
+public final class RemoteMovieLoader: MovieLoader {
     
     public typealias Resource = [MovieItem]
     public typealias Result = Swift.Result<Resource, Swift.Error>

@@ -92,7 +92,7 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     
     // MARK: - Helper
     
-    private func makeSUT(result: CharacterLoader.Result = .success([]), file: StaticString = #filePath, line: UInt = #line) -> CharacterFeedViewContainer {
+    private func makeSUT(result: RemoteCharacterLoader.Result = .success([]), file: StaticString = #filePath, line: UInt = #line) -> CharacterFeedViewContainer {
         
         let loader = CharacterLoaderStub(result: result)
         let vm = CharacterFeedDataProvider(loader: loader)
@@ -168,22 +168,22 @@ final class LOTRCharacterFeediOSTests: XCTestCase {
     
     private final class CharacterLoaderStub: CharacterLoader {
                 
-        private let result: CharacterLoader.Result
+        private let result: RemoteCharacterLoader.Result
         
-        init(result: CharacterLoader.Result) {
+        init(result: RemoteCharacterLoader.Result) {
             self.result = result
         }
         
-        func load(completion: @escaping (CharacterLoader.Result) -> Void) {
+        func load(completion: @escaping (RemoteCharacterLoader.Result) -> Void) {
             completion(result)
         }
     }
     
     private final class CharacterLoaderSpy: CharacterLoader {
                 
-        private var results = [(CharacterLoader.Result) -> Void]()
+        private var results = [(RemoteCharacterLoader.Result) -> Void]()
         
-        func load(completion: @escaping (CharacterLoader.Result) -> Void) {
+        func load(completion: @escaping (RemoteCharacterLoader.Result) -> Void) {
             results.append(completion)
         }
         
