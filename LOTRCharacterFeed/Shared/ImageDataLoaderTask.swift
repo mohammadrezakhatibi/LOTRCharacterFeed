@@ -11,7 +11,7 @@ public protocol CharacterImageDataLoaderTask {
     func cancel()
 }
 
-public protocol CharacterImageDataLoader {
+public protocol ImageDataLoader {
     typealias Result = Swift.Result<(Data), Error>
     
     func loadImageData(url: URL, completion: @escaping (Result) -> Void) -> CharacterImageDataLoaderTask

@@ -9,11 +9,11 @@ import Foundation
 import UIKit
 
 public final class ImageCacheLoader {
-    private let loader: CharacterImageDataLoader
+    private let loader: ImageDataLoader
     private let cache: NSCache<NSURL, NSData>
     private let imageFileCache: ImageFileCache
     
-    public init(loader: CharacterImageDataLoader, cache: NSCache<NSURL, NSData>, imageFileCache: ImageFileCache) {
+    public init(loader: ImageDataLoader, cache: NSCache<NSURL, NSData>, imageFileCache: ImageFileCache) {
         self.loader = loader
         self.cache = cache
         self.imageFileCache = imageFileCache

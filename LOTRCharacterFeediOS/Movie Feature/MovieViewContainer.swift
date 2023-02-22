@@ -1,17 +1,23 @@
+//
+//  MovieViewContainer.swift
+//  LOTRCharacterFeediOS
+//
+//  Created by mohammadreza on 2/22/23.
+//
+
 import SwiftUI
 import LOTRCharacterFeed
 
-public struct CharacterFeedViewContainer: View {
-    
+public struct MovieViewContainer<L: Loader>: View where L.Resource == [MovieItem] {
     public var didAppear: ((Self) -> Void)?
-    @ObservedObject var viewModel: CharacterFeedDataProvider
+    @ObservedObject var viewModel: MoviesDataProvider<L>
     
-    public init(viewModel: CharacterFeedDataProvider) {
+    public init(viewModel: MoviesDataProvider<L>) {
         self.viewModel = viewModel
     }
     
     public var body: some View {
-        CharacterFeedView(items: viewModel.items)
+        MovieFeedView(items: viewModel.items)
         .onAppear {
             loadCharacters()
             didAppear?(self)
@@ -30,4 +36,3 @@ public struct CharacterFeedViewContainer: View {
         viewModel.load()
     }
 }
-

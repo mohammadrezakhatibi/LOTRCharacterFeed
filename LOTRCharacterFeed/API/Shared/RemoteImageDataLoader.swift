@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class RemoteCharacterImageDataLoader: CharacterImageDataLoader {
+public final class RemoteImageDataLoader: ImageDataLoader {
     
     private let client: HTTPClient
     
@@ -21,15 +21,15 @@ public final class RemoteCharacterImageDataLoader: CharacterImageDataLoader {
     }
     
     private final class HTTPClientTaskWrapper: CharacterImageDataLoaderTask {
-        private var completion: ((CharacterImageDataLoader.Result) -> Void)?
+        private var completion: ((ImageDataLoader.Result) -> Void)?
 
         var wrapped: HTTPClientTask?
 
-        init(_ completion: @escaping (CharacterImageDataLoader.Result) -> Void) {
+        init(_ completion: @escaping (ImageDataLoader.Result) -> Void) {
             self.completion = completion
         }
 
-        func complete(with result: CharacterImageDataLoader.Result) {
+        func complete(with result: ImageDataLoader.Result) {
             completion?(result)
         }
 
@@ -43,7 +43,7 @@ public final class RemoteCharacterImageDataLoader: CharacterImageDataLoader {
         }
     }
     
-    public func loadImageData(url: URL, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
+    public func loadImageData(url: URL, completion: @escaping (ImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
         let task = HTTPClientTaskWrapper(completion)
         let request = URLRequest(url: url)
         task.wrapped = client.get(from: request, completion: { [weak self] result in

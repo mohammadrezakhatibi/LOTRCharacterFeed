@@ -29,7 +29,7 @@ final class LOTRCharacterFeedAPIEndToEndTests: XCTestCase {
     }
 
     func getFeedResult(file: StaticString = #filePath,
-                       line: UInt = #line) -> CharacterLoader.Result? {
+                       line: UInt = #line) -> RemoteLoader<[CharacterItem]>.Result? {
         
         let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let request = CharacterRequest().create()
@@ -40,7 +40,7 @@ final class LOTRCharacterFeedAPIEndToEndTests: XCTestCase {
         
         let exp = expectation(description: "Wait for load completion")
         
-        var receivedResult: CharacterLoader.Result?
+        var receivedResult: RemoteLoader<[CharacterItem]>.Result?
         loader.load { result in
             receivedResult = result
             exp.fulfill()
