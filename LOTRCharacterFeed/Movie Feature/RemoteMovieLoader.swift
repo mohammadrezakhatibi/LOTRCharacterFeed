@@ -2,7 +2,7 @@ import Foundation
 
 public final class RemoteMovieLoader: CharacterLoader {
     
-    public typealias Resource = [CharacterItem]
+    public typealias Resource = [MovieItem]
     public typealias Result = Swift.Result<Resource, Swift.Error>
     
     let request: URLRequest
@@ -33,7 +33,7 @@ public final class RemoteMovieLoader: CharacterLoader {
     
     private func map(_ data: Data, with response: HTTPURLResponse) -> Result {
         do {
-            let items = try CharacterItemMapper.map(data, response: response)
+            let items = try MovieItemMapper.map(data, response: response)
             return .success(items)
         } catch(let error) {
             return .failure(error)

@@ -1,10 +1,3 @@
-//
-//  RemoteMovieLoaderTests.swift
-//  LOTRCharacterFeedTests
-//
-//  Created by Mohammadreza on 2/22/23.
-//
-
 import XCTest
 import LOTRCharacterFeed
 
@@ -40,7 +33,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
         let (sut, client) = makeSUT(url: url)
         let anError = anyNSError()
         
-        expect(sut, toCompleteWith: .failure(RemoteCharacterLoader.Error.connectivity), when: {
+        expect(sut, toCompleteWith: .failure(RemoteMovieLoader.Error.connectivity), when: {
             client.complete(with: anError)
         })
     }
@@ -91,33 +84,27 @@ final class RemoteMovieLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         
         let item1 = makeItem(
-            id: "5cd99d4bde30eff6ebccfbe6",
-            height: "198cm (6'6\")",
-            race: "Human",
-            gender: "Female",
-            birth: "March 1 ,2931",
-            spouse: "Arwen",
-            death: "FO 120",
-            realm: "Reunited Kingdom, Arnor, Gondor",
-            hair: "Dark",
-            name: "Aragorn II Elessar",
-            wikiURL: URL(string: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")!,
-            imageURL: URL(string: "http://any-image-url.com")!
+            id: "5cd95395de30eff6ebccde58",
+            name: "The Unexpected Journey",
+            runtime: 1.0,
+            budget: 1.0,
+            revenue: 1.0,
+            academyAwardNominations: 1,
+            academyAwardWins: 1,
+            score: 1,
+            posterURL: URL(string: "http://any-url.com")!
         )
         
         let item2 = makeItem(
-            id: "5cd99d4bde3ewef6ebccfbe6",
-            height: "208cm (6'6\")",
-            race: "Elves",
-            gender: "Male",
-            birth: "March 1 ,931",
-            spouse: "Narbia",
-            death: "Departed to Aman in FO 120 from Ithilien",
-            realm: "Reunited Kingdom, Arnor, Gondor",
-            hair: "Golden",
-            name: "Legolas",
-            wikiURL: URL(string: "http://lotr.wikia.com//wiki/Aragorn_II_Elessar")!,
-            imageURL: URL(string: "http://any-image-url.com")!
+            id: "5cd95395de30eff6ebccde56",
+            name: "The Lord of the Rings Series",
+            runtime: 2.0,
+            budget: 2.0,
+            revenue: 2.0,
+            academyAwardNominations: 2,
+            academyAwardWins: 2,
+            score: 2,
+            posterURL: URL(string: "http://any-url.com")!
         )
         
         let items = [item1.model, item2.model]
@@ -132,7 +119,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
         let url = anyURL()
         let client = HTTPClientSpy()
         let request = MockRequest(url: url).create()
-        var sut: RemoteCharacterLoader? = RemoteCharacterLoader(request: request, client: client)
+        var sut: RemoteMovieLoader? = RemoteMovieLoader(request: request, client: client)
         
         
         var capturedResult: [RemoteMovieLoader.Result] = []
@@ -146,17 +133,17 @@ final class RemoteMovieLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(url: URL = URL(string: "http://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterLoader, client: HTTPClientSpy) {
+    private func makeSUT(url: URL = URL(string: "http://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteMovieLoader, client: HTTPClientSpy) {
         
         let client = HTTPClientSpy()
         let request = MockRequest(url: url).create()
-        let sut = RemoteCharacterLoader(request: request, client: client)
+        let sut = RemoteMovieLoader(request: request, client: client)
         trackingForMemoryLeaks(client, file: file, line: line)
         trackingForMemoryLeaks(sut, file: file, line: line)
         return (sut, client)
     }
     
-    func expect(_ sut: RemoteCharacterLoader, toCompleteWith expectedResult: RemoteMovieLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    func expect(_ sut: RemoteMovieLoader, toCompleteWith expectedResult: RemoteMovieLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
     
         let exp = expectation(description: "Wait for load completion")
         sut.load { receivedResult in
@@ -164,7 +151,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
                 case let (.success(expectedItems), .success(receivedItems)):
                     XCTAssertEqual(expectedItems, receivedItems, file: file, line: line)
                     
-                case let (.failure(expectedError as RemoteCharacterLoader.Error), .failure(receivedError as RemoteCharacterLoader.Error)):
+                case let (.failure(expectedError as RemoteMovieLoader.Error), .failure(receivedError as RemoteMovieLoader.Error)):
                     XCTAssertEqual(expectedError, receivedError, file: file, line: line)
                 default:
                     XCTFail("Expected to get \(expectedResult), got \(receivedResult) instead", file: file, line: line)
@@ -178,45 +165,37 @@ final class RemoteMovieLoaderTests: XCTestCase {
     }
     
     private func makeItem(id: String,
-                          height: String,
-                          race: String,
-                          gender: String,
-                          birth: String,
-                          spouse: String,
-                          death: String,
-                          realm: String,
-                          hair: String,
                           name: String,
-                          wikiURL: URL,
-                          imageURL: URL) -> (model: CharacterItem, json: [String: Any]) {
+                          runtime: Double,
+                          budget: Double,
+                          revenue: Double,
+                          academyAwardNominations: Int,
+                          academyAwardWins: Int,
+                          score: Double,
+                          posterURL: URL
+    ) -> (model: MovieItem, json: [String: Any]) {
         let json = [
             "_id": id,
-            "height": height,
-            "race": race,
-            "gender": gender,
-            "birth": birth,
-            "spouse": spouse,
-            "death": death,
-            "realm": realm,
-            "hair": hair,
             "name": name,
-            "wikiUrl": wikiURL.absoluteString,
-            "imageUrl": imageURL.absoluteString
+            "runtimeInMinutes": runtime,
+            "budgetInMillions": budget,
+            "boxOfficeRevenueInMillions": revenue,
+            "academyAwardNominations": academyAwardNominations,
+            "academyAwardWins": academyAwardWins,
+            "rottenTomatoesScore": score,
+            "posterURL": posterURL.absoluteString,
         ].compactMapValues { $0 }
         
-        let model = CharacterItem(
+        let model = MovieItem(
             id: id,
-            height: height,
-            race: race,
-            gender: gender,
-            birth: birth,
-            spouse: spouse,
-            death: death,
-            realm: realm,
-            hair: hair,
             name: name,
-            wikiURL: wikiURL,
-            imageURL: imageURL)
+            runtime: runtime,
+            budget: budget,
+            revenue: revenue,
+            academyAwardNominations: academyAwardNominations,
+            academyAwardWins: academyAwardWins,
+            score: score,
+            posterURL: posterURL)
         
         return (model, json)
     }
@@ -231,7 +210,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
         return try! JSONSerialization.data(withJSONObject: json)
     }
     
-    private func failure(_ error: RemoteCharacterLoader.Error) -> RemoteMovieLoader.Result {
+    private func failure(_ error: RemoteMovieLoader.Error) -> RemoteMovieLoader.Result {
         return .failure(error)
     }
 }
