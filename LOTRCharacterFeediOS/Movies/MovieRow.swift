@@ -11,7 +11,7 @@ struct MovieRow: View {
                     .overlay {
                         ZStack(alignment: .topLeading) {
                             LOTRAsyncImage(url: movie.posterURL)
-                            .id(3)
+                            .id(5)
                         }
                     }
                     .cornerRadius(8)

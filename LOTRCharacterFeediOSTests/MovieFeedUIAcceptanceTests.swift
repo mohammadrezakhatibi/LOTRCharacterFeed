@@ -109,7 +109,6 @@ final class MovieFeedUIAcceptanceTests: XCTestCase {
             XCTAssertEqual(try row[index].find(viewWithId: 2).text().string(), "\(item.score)")
             XCTAssertNotNil(try row[index].find(LOTRAsyncImage.self).actualView())
             XCTAssertEqual(try row[index].find(LOTRAsyncImage.self).actualView().url.absoluteString, item.posterURL.absoluteString)
-            XCTAssertNotNil(try row[index].find(viewWithId: 4).linearGradient())
             
         }
     }

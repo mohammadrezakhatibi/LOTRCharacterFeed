@@ -42,11 +42,11 @@ struct CharacterRow: View {
                 Text(character.birth)
                     .foregroundColor(Color.gray.opacity(0.85))
                     .font(.subheadline)
-                    .id(2)
+                    .id(3)
                 Text(character.realm)
                     .foregroundColor(Color.gray.opacity(0.85))
                     .font(.subheadline)
-                    .id(2)
+                    .id(4)
                 Spacer()
             }
             .padding(.leading, 8)
