@@ -9,11 +9,8 @@ struct MovieFeedView: View {
     
     private let columns = [
         GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16),
     ]
-    private let columnsOne = [
-        GridItem(.flexible(), spacing: 16),
-    ]
+    
     var body: some View {
         ScrollView {
             if (items.isEmpty == true) {

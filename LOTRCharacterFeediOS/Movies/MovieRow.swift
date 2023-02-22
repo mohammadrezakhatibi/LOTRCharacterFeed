@@ -5,8 +5,8 @@ struct MovieRow: View {
     private(set) var movie: MovieFeedViewModel
     
     var body: some View {
-        return VStack {
-            ZStack(alignment: .bottomLeading) {
+        return HStack(alignment: .top) {
+            ZStack(alignment: .top) {
                 Rectangle()
                     .overlay {
                         ZStack(alignment: .topLeading) {
@@ -16,36 +16,59 @@ struct MovieRow: View {
                     }
                     .cornerRadius(8)
                     .clipped()
-                    .foregroundColor(.gray.opacity(0.70))
-                
-                LinearGradient(gradient: Gradient(colors: [.black.opacity(0.75), .white.opacity(0)]), startPoint: .bottom, endPoint: .top)
-                    .cornerRadius(8)
-                    .clipped()
-                    .id(4)
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    Spacer()
-                    Text(movie.name)
-                        .id(1)
-                        .font(.title2)
-                        .fontDesign(.serif)
-                        .foregroundColor(.white)
-                        .padding(.bottom, 4)
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Image(systemName: "folder")
-                            .font(.caption)
-                            .foregroundColor(.yellow)
-                        Text(movie.score)
-                            .foregroundColor(.yellow)
-                            .font(.caption)
-                            .id(2)
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
+                    .foregroundColor(.gray.opacity(0.30))
             }
-            .frame(height: 260)
-            .padding(.top, 8)
+            .frame(width: 130,height: 190)
+            VStack(alignment: .leading, spacing: 12) {
+                Text(movie.name)
+                    .id(1)
+                    .font(.title2)
+                    .bold()
+                    .fontDesign(.serif)
+                    .foregroundColor(Color.primary)
+                    .padding(.bottom, 4)
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Image(systemName: "creditcard.fill")
+                        .font(.headline)
+                        .foregroundColor(Color.gray.opacity(0.25))
+                    Text(movie.revenue)
+                        .foregroundColor(Color.gray.opacity(0.65))
+                        .font(.headline)
+                        .id(2)
+                }
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Image(systemName: "staroflife.fill")
+                        .font(.headline)
+                        .foregroundColor(Color.gray.opacity(0.25))
+                    Text(movie.score)
+                        .foregroundColor(Color.gray.opacity(0.65))
+                        .font(.headline)
+                        .id(2)
+                }
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Image(systemName: "clock.fill")
+                        .font(.headline)
+                        .foregroundColor(Color.gray.opacity(0.25))
+                    Text(movie.runtime)
+                        .foregroundColor(Color.gray.opacity(0.65))
+                        .font(.headline)
+                        .id(2)
+                }
+            }
+            .padding(.leading, 8)
+            .padding(.trailing, 16)
+            Spacer()
+        }
+        .padding(.top, 8)
+    }
+}
+
+
+struct MovieRow_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            MovieRow(movie: MovieFeedViewModel(id: UUID().uuidString, name: "The Battle of the Five Armies", revenue: "956", score: "75", runtime: "161", posterURL: URL(string: "https://lokomond.com/lotr/movies/images/A1QbAD2iMVL.jpg")!))
+                .previewLayout(.sizeThatFits)
         }
     }
 }

@@ -28,7 +28,6 @@ public struct LOTRAsyncImage: View {
             Image(uiImage: UIImage(data: data)!)
                 .resizable()
                 .scaledToFill()
-                .frame(height: 260, alignment: .top)
                 .clipped()
         } else {
             VStack {
