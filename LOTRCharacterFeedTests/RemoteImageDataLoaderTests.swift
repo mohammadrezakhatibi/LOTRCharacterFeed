@@ -8,7 +8,7 @@
 import XCTest
 import LOTRCharacterFeed
 
-final class RemoteCharacterImageDataLoaderTests: XCTestCase {
+final class RemoteImageDataLoaderTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromURL() {
         let (_, client) = makeSUT()
@@ -86,7 +86,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         let givenURL = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSUT(url: givenURL)
         
-        var receivedResult = [CharacterImageDataLoader.Result]()
+        var receivedResult = [ImageDataLoader.Result]()
         let task = sut.loadImageData(url: givenURL) { receivedResult.append($0) }
         
         task.cancel()
@@ -101,9 +101,9 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     func test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let givenURL = URL(string: "https://a-given-url.com")!
         let client = HTTPClientSpy()
-        var sut: RemoteCharacterImageDataLoader? = RemoteCharacterImageDataLoader(client: client)
+        var sut: RemoteImageDataLoader? = RemoteImageDataLoader(client: client)
         
-        var receivedResult = [CharacterImageDataLoader.Result]()
+        var receivedResult = [ImageDataLoader.Result]()
         _ = sut?.loadImageData(url: givenURL) { receivedResult.append($0) }
         
         sut = nil
@@ -117,20 +117,20 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(url: URL = anyURL(),file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteCharacterImageDataLoader, client: HTTPClientSpy) {
+    private func makeSUT(url: URL = anyURL(),file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteImageDataLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = RemoteCharacterImageDataLoader(client: client)
+        let sut = RemoteImageDataLoader(client: client)
         trackingForMemoryLeaks(client, file: file, line: line)
         trackingForMemoryLeaks(sut, file: file, line: line)
         return (sut, client)
     }
     
-    private func expect(_ sut: RemoteCharacterImageDataLoader, toCompleteWith expectedResult: CharacterImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: RemoteImageDataLoader, toCompleteWith expectedResult: ImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
         _ = sut.loadImageData(url: anyURL()) { receivedResult in
             switch (receivedResult, expectedResult) {
                 case let (.failure(receiverError), .failure(expectedError)):
-                    XCTAssertEqual(receiverError as? RemoteCharacterImageDataLoader.Error, expectedError as? RemoteCharacterImageDataLoader.Error, file: file, line: line)
+                    XCTAssertEqual(receiverError as? RemoteImageDataLoader.Error, expectedError as? RemoteImageDataLoader.Error, file: file, line: line)
                     
                 case let (.success(receiverData), .success(expectedData)):
                     XCTAssertEqual(receiverData, expectedData, file: file, line: line)
@@ -146,7 +146,7 @@ final class RemoteCharacterImageDataLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
-    private func failure(_ error: RemoteCharacterImageDataLoader.Error) -> CharacterImageDataLoader.Result {
+    private func failure(_ error: RemoteImageDataLoader.Error) -> ImageDataLoader.Result {
         return .failure(error)
     }
 }

@@ -125,12 +125,12 @@ final class ImageCacheIntegrationTests: XCTestCase {
         return (sut, loader)
     }
     
-    private final class CharacterImageDataLoaderSpy: CharacterImageDataLoader {
+    private final class CharacterImageDataLoaderSpy: ImageDataLoader {
         
         var receivedURLs: [URL] {
             return messages.map { $0.url }
         }
-        private var messages = [(url: URL, completion: (CharacterImageDataLoader.Result) -> Void)]()
+        private var messages = [(url: URL, completion: (ImageDataLoader.Result) -> Void)]()
         
         private class Task: CharacterImageDataLoaderTask {
             func cancel() {
@@ -138,7 +138,7 @@ final class ImageCacheIntegrationTests: XCTestCase {
             }
         }
         
-        func loadImageData(url: URL, completion: @escaping (CharacterImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
+        func loadImageData(url: URL, completion: @escaping (ImageDataLoader.Result) -> Void) -> CharacterImageDataLoaderTask {
             messages.append((url, completion))
             return Task()
         }
