@@ -23,8 +23,16 @@ final class MainQueueDispatchDecorator<T> {
     }
 }
 
-extension MainQueueDispatchDecorator: ResourceLoader where T: ResourceLoader {
-    func load(completion: @escaping (ResourceLoader.Result) -> Void) {
+extension MainQueueDispatchDecorator: CharacterLoader where T: CharacterLoader {
+    func load(completion: @escaping (RemoteCharacterLoader.Result) -> Void) {
+        decoratee.load { [weak self] result in
+            self?.dispatch { completion(result) }
+        }
+    }
+}
+
+extension MainQueueDispatchDecorator: MovieLoader where T: MovieLoader {
+    func load(completion: @escaping (RemoteMovieLoader.Result) -> Void) {
         decoratee.load { [weak self] result in
             self?.dispatch { completion(result) }
         }
