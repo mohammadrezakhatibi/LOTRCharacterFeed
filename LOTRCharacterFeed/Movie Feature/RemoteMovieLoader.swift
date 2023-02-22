@@ -1,13 +1,7 @@
-//
-//  RemoteFeedLoader.swift
-//  LOTRCharacterFeed
-//
-//  Created by Mohammadreza on 12/23/22.
-//
-
 import Foundation
 
-public final class RemoteCharacterLoader: CharacterLoader {
+public final class RemoteMovieLoader: CharacterLoader {
+    
     public typealias Resource = [CharacterItem]
     public typealias Result = Swift.Result<Resource, Swift.Error>
     
@@ -29,7 +23,7 @@ public final class RemoteCharacterLoader: CharacterLoader {
         client.get(from: request) { [weak self] result in
             switch result {
                 case .failure:
-                    completion(.failure(RemoteCharacterLoader.Error.connectivity))
+                    completion(.failure(RemoteMovieLoader.Error.connectivity))
                 case let .success((data, response)):
                     guard let self = self else { return }
                     completion(self.map(data, with: response))
@@ -46,4 +40,3 @@ public final class RemoteCharacterLoader: CharacterLoader {
         }
     }
 }
-

@@ -33,6 +33,8 @@
 		E4BDB95A295A4AF300147D3D /* XCTestCase+MemoryLeaksTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F43D0429578DFC00F39D60 /* XCTestCase+MemoryLeaksTracking.swift */; };
 		E4BDB95C295A573E00147D3D /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB95B295A573E00147D3D /* URLSessionHTTPClient.swift */; };
 		E4CD2B5F296CA4C9007A0303 /* ImageFileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CD2B5E296CA4C9007A0303 /* ImageFileCache.swift */; };
+		E4D8E5FF29A6AB1400C91A32 /* RemoteMovieLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D8E5FE29A6AB1400C91A32 /* RemoteMovieLoaderTests.swift */; };
+		E4D8E60229A6AB5800C91A32 /* RemoteMovieLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D8E60129A6AB5800C91A32 /* RemoteMovieLoader.swift */; };
 		E4DE7C862962145400877E7B /* LOTRCharacterFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DE7C7E2962145400877E7B /* LOTRCharacterFeediOS.framework */; platformFilter = ios; };
 		E4DE7C8B2962145400877E7B /* LOTRCharacterFeediOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DE7C8A2962145400877E7B /* LOTRCharacterFeediOSTests.swift */; };
 		E4DE7C9A296214CE00877E7B /* CharacterFeedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DE7C99296214CE00877E7B /* CharacterFeedContainer.swift */; };
@@ -96,6 +98,8 @@
 		E4BDB952295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTRCharacterFeedAPIEndToEndTests.swift; sourceTree = "<group>"; };
 		E4BDB95B295A573E00147D3D /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		E4CD2B5E296CA4C9007A0303 /* ImageFileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileCache.swift; sourceTree = "<group>"; };
+		E4D8E5FE29A6AB1400C91A32 /* RemoteMovieLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMovieLoaderTests.swift; sourceTree = "<group>"; };
+		E4D8E60129A6AB5800C91A32 /* RemoteMovieLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMovieLoader.swift; sourceTree = "<group>"; };
 		E4DE7C7E2962145400877E7B /* LOTRCharacterFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LOTRCharacterFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4DE7C852962145400877E7B /* LOTRCharacterFeediOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LOTRCharacterFeediOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4DE7C8A2962145400877E7B /* LOTRCharacterFeediOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTRCharacterFeediOSTests.swift; sourceTree = "<group>"; };
@@ -191,6 +195,7 @@
 		E4583B9F29532D8F007A7D7F /* LOTRCharacterFeed */ = {
 			isa = PBXGroup;
 			children = (
+				E4D8E60029A6AB4500C91A32 /* Movie Feature */,
 				E40C355029684ED80096DAAC /* Cache */,
 				E4F04B2829565CBD00F49C68 /* Character Feature */,
 				E4F04B2429565BFF00F49C68 /* Character API */,
@@ -203,6 +208,7 @@
 			children = (
 				E4F43D0329578DD700F39D60 /* Helpers */,
 				E4583BBB29533ACA007A7D7F /* RemoteCharacterLoaderTests.swift */,
+				E4D8E5FE29A6AB1400C91A32 /* RemoteMovieLoaderTests.swift */,
 				E4F43D0129577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift */,
 				E463AEF4295B8D8F00F4DD2E /* URLSessionHTTPClientTests.swift */,
 				E40C355129684F0D0096DAAC /* ImageCacheIntegrationTests.swift */,
@@ -216,6 +222,14 @@
 				E4BDB952295A499200147D3D /* LOTRCharacterFeedAPIEndToEndTests.swift */,
 			);
 			path = LOTRCharacterFeedAPIEndToEndTests;
+			sourceTree = "<group>";
+		};
+		E4D8E60029A6AB4500C91A32 /* Movie Feature */ = {
+			isa = PBXGroup;
+			children = (
+				E4D8E60129A6AB5800C91A32 /* RemoteMovieLoader.swift */,
+			);
+			path = "Movie Feature";
 			sourceTree = "<group>";
 		};
 		E4DE7C7F2962145400877E7B /* LOTRCharacterFeediOS */ = {
@@ -517,6 +531,7 @@
 				E4BDB949295A368D00147D3D /* RemoteCharacterImageDataLoader.swift in Sources */,
 				E4F04B2129565B4F00F49C68 /* RemoteCharacterItem.swift in Sources */,
 				E4583BB82953390C007A7D7F /* CharacterLoader.swift in Sources */,
+				E4D8E60229A6AB5800C91A32 /* RemoteMovieLoader.swift in Sources */,
 				E4BDB94B295A395F00147D3D /* CharacterImageDataLoaderTask.swift in Sources */,
 				E4F04B2329565B7B00F49C68 /* CharacterItemMapper.swift in Sources */,
 			);
@@ -527,6 +542,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4F43D0729578E7B00F39D60 /* SharedTestHelpers.swift in Sources */,
+				E4D8E5FF29A6AB1400C91A32 /* RemoteMovieLoaderTests.swift in Sources */,
 				E490F5752960B86B0075BB0A /* MockRequest.swift in Sources */,
 				E40C355229684F0D0096DAAC /* ImageCacheIntegrationTests.swift in Sources */,
 				E463AEF5295B8D8F00F4DD2E /* URLSessionHTTPClientTests.swift in Sources */,

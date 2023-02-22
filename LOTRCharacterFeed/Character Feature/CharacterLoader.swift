@@ -8,7 +8,8 @@
 import Foundation
 
 public protocol CharacterLoader {
-    typealias Result = Swift.Result<[CharacterItem], Error>
+    associatedtype Resource
+    typealias Result = Swift.Result<Resource, Error>
     
     func load(completion: @escaping (Result) -> Void)
 }
