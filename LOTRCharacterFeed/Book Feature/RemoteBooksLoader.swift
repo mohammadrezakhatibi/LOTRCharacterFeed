@@ -1,8 +1,7 @@
 import Foundation
 
-public final class RemoteBooksLoader: MovieLoader {
-    
-    public typealias Resource = [MovieItem]
+public final class RemoteBooksLoader: BooksLoader {
+    public typealias Resource = [BookItem]
     public typealias Result = Swift.Result<Resource, Swift.Error>
     
     let request: URLRequest

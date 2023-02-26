@@ -3,25 +3,21 @@ import Foundation
 public struct BooksItemMapper {
     
     private struct Root: Codable {
-        let docs: [RemoteMovieItem]
+        let docs: [RemoteBookItem]
         let total: Int
         let limit: Int
         let offset : Int
         let page: Int
         let pages: Int
         
-        var movies: [MovieItem] {
+        var books: [BookItem] {
             docs.map {
-                MovieItem(
+                BookItem(
                     id: $0._id,
                     name: $0.name,
-                    runtime: $0.runtimeInMinutes,
-                    budget: $0.budgetInMillions,
-                    revenue: $0.boxOfficeRevenueInMillions,
-                    academyAwardNominations: $0.academyAwardNominations,
-                    academyAwardWins: $0.academyAwardWins,
-                    score: $0.rottenTomatoesScore,
-                    posterURL: $0.posterURL)
+                    publisher: $0.publisher,
+                    barcode: $0.ISBN13,
+                    coverURL: $0.coverURL)
             }
         }
     }
@@ -32,12 +28,12 @@ public struct BooksItemMapper {
         case unauthorized
     }
     
-    public static func map(_ data: Data, response: HTTPURLResponse) throws -> [MovieItem] {
+    public static func map(_ data: Data, response: HTTPURLResponse) throws -> [BookItem] {
         guard response.isOK, let root = try? JSONDecoder().decode(Root.self, from: data) else {
             throw response.isUnauthorized
             ? RemoteBooksLoader.Error.unauthorized
             : RemoteBooksLoader.Error.invalidData
         }
-        return root.movies
+        return root.books
     }
 }

@@ -82,29 +82,21 @@ final class RemoteBooksLoaderTests: XCTestCase {
     
     func test_load_deliversItemsOn200HTTPClientResponseWithValidJSON() {
         let (sut, client) = makeSUT()
-        
+                
         let item1 = makeItem(
-            id: "5cd95395de30eff6ebccde58",
-            name: "The Unexpected Journey",
-            runtime: 1.0,
-            budget: 1.0,
-            revenue: 1.0,
-            academyAwardNominations: 1,
-            academyAwardWins: 1,
-            score: 1,
-            posterURL: URL(string: "http://any-url.com")!
+            id: "5cf5805fb53e011a64671582",
+            name: "a name",
+            publisher: "a publisher",
+            barcode: "a barcode",
+            coverURL: URL(string: "http://any-url.com")!
         )
         
         let item2 = makeItem(
-            id: "5cd95395de30eff6ebccde56",
-            name: "The Lord of the Rings Series",
-            runtime: 2.0,
-            budget: 2.0,
-            revenue: 2.0,
-            academyAwardNominations: 2,
-            academyAwardWins: 2,
-            score: 2,
-            posterURL: URL(string: "http://any-url.com")!
+            id: "5cf5805fb53e011a64671582",
+            name: "another name",
+            publisher: "another publisher",
+            barcode: "another barcode",
+            coverURL: URL(string: "http://another-url.com")!
         )
         
         let items = [item1.model, item2.model]
@@ -166,36 +158,24 @@ final class RemoteBooksLoaderTests: XCTestCase {
     
     private func makeItem(id: String,
                           name: String,
-                          runtime: Double,
-                          budget: Double,
-                          revenue: Double,
-                          academyAwardNominations: Int,
-                          academyAwardWins: Int,
-                          score: Double,
-                          posterURL: URL
-    ) -> (model: MovieItem, json: [String: Any]) {
+                          publisher: String,
+                          barcode: String,
+                          coverURL: URL
+    ) -> (model: BookItem, json: [String: Any]) {
         let json = [
             "_id": id,
             "name": name,
-            "runtimeInMinutes": runtime,
-            "budgetInMillions": budget,
-            "boxOfficeRevenueInMillions": revenue,
-            "academyAwardNominations": academyAwardNominations,
-            "academyAwardWins": academyAwardWins,
-            "rottenTomatoesScore": score,
-            "posterURL": posterURL.absoluteString,
+            "publisher": publisher,
+            "ISBN13": barcode,
+            "coverURL": coverURL.absoluteString,
         ].compactMapValues { $0 }
         
-        let model = MovieItem(
-            id: id,
-            name: name,
-            runtime: runtime,
-            budget: budget,
-            revenue: revenue,
-            academyAwardNominations: academyAwardNominations,
-            academyAwardWins: academyAwardWins,
-            score: score,
-            posterURL: posterURL)
+        let model = BookItem(id: id,
+                             name: name,
+                             publisher: publisher,
+                             barcode: barcode,
+                             coverURL: coverURL
+        )
         
         return (model, json)
     }
