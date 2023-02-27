@@ -14,6 +14,18 @@
 		E40C355229684F0D0096DAAC /* ImageCacheIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40C355129684F0D0096DAAC /* ImageCacheIntegrationTests.swift */; };
 		E40C35542968CC8B0096DAAC /* ImageCacheLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40C35532968CC8B0096DAAC /* ImageCacheLoader.swift */; };
 		E40C35562968CCF90096DAAC /* LOTRAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40C35552968CCF90096DAAC /* LOTRAsyncImage.swift */; };
+		E44B91F229ABD4E900C1F925 /* RemoteBooksLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B91F129ABD4E900C1F925 /* RemoteBooksLoaderTests.swift */; };
+		E44B91F529ABD54800C1F925 /* RemoteBooksLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B91F429ABD54800C1F925 /* RemoteBooksLoader.swift */; };
+		E44B91F729ABD5C200C1F925 /* BooksItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B91F629ABD5C200C1F925 /* BooksItemMapper.swift */; };
+		E44B91F929ABD61A00C1F925 /* RemoteBookItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B91F829ABD61A00C1F925 /* RemoteBookItem.swift */; };
+		E44B91FB29ABD65400C1F925 /* BookItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B91FA29ABD65400C1F925 /* BookItem.swift */; };
+		E44B91FD29ABD71900C1F925 /* BooksLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B91FC29ABD71900C1F925 /* BooksLoader.swift */; };
+		E44B91FF29ABDC4900C1F925 /* BookFeedUIAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B91FE29ABDC4900C1F925 /* BookFeedUIAcceptanceTests.swift */; };
+		E44B920229ABDCB000C1F925 /* BooksFeedViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B920129ABDCB000C1F925 /* BooksFeedViewContainer.swift */; };
+		E44B920429ABDE6900C1F925 /* BooksFeedDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B920329ABDE6900C1F925 /* BooksFeedDataProvider.swift */; };
+		E44B920629ABDEF100C1F925 /* BookFeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B920529ABDEF100C1F925 /* BookFeedViewModel.swift */; };
+		E44B920829ABDFFD00C1F925 /* BookFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B920729ABDFFD00C1F925 /* BookFeedView.swift */; };
+		E44B920A29ABE01100C1F925 /* BookRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44B920929ABE01100C1F925 /* BookRow.swift */; };
 		E4583BA629532D8F007A7D7F /* LOTRCharacterFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */; };
 		E4583BB82953390C007A7D7F /* ResourceLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4583BB72953390C007A7D7F /* ResourceLoader.swift */; };
 		E4583BBA29533996007A7D7F /* CharacterItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4583BB929533996007A7D7F /* CharacterItem.swift */; };
@@ -90,6 +102,18 @@
 		E40C355129684F0D0096DAAC /* ImageCacheIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheIntegrationTests.swift; sourceTree = "<group>"; };
 		E40C35532968CC8B0096DAAC /* ImageCacheLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheLoader.swift; sourceTree = "<group>"; };
 		E40C35552968CCF90096DAAC /* LOTRAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTRAsyncImage.swift; sourceTree = "<group>"; };
+		E44B91F129ABD4E900C1F925 /* RemoteBooksLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteBooksLoaderTests.swift; sourceTree = "<group>"; };
+		E44B91F429ABD54800C1F925 /* RemoteBooksLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteBooksLoader.swift; sourceTree = "<group>"; };
+		E44B91F629ABD5C200C1F925 /* BooksItemMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksItemMapper.swift; sourceTree = "<group>"; };
+		E44B91F829ABD61A00C1F925 /* RemoteBookItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteBookItem.swift; sourceTree = "<group>"; };
+		E44B91FA29ABD65400C1F925 /* BookItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookItem.swift; sourceTree = "<group>"; };
+		E44B91FC29ABD71900C1F925 /* BooksLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksLoader.swift; sourceTree = "<group>"; };
+		E44B91FE29ABDC4900C1F925 /* BookFeedUIAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookFeedUIAcceptanceTests.swift; sourceTree = "<group>"; };
+		E44B920129ABDCB000C1F925 /* BooksFeedViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksFeedViewContainer.swift; sourceTree = "<group>"; };
+		E44B920329ABDE6900C1F925 /* BooksFeedDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksFeedDataProvider.swift; sourceTree = "<group>"; };
+		E44B920529ABDEF100C1F925 /* BookFeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookFeedViewModel.swift; sourceTree = "<group>"; };
+		E44B920729ABDFFD00C1F925 /* BookFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookFeedView.swift; sourceTree = "<group>"; };
+		E44B920929ABE01100C1F925 /* BookRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookRow.swift; sourceTree = "<group>"; };
 		E4583B9D29532D8F007A7D7F /* LOTRCharacterFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LOTRCharacterFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4583BA529532D8F007A7D7F /* LOTRCharacterFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LOTRCharacterFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4583BB72953390C007A7D7F /* ResourceLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoader.swift; sourceTree = "<group>"; };
@@ -187,6 +211,30 @@
 			path = Cache;
 			sourceTree = "<group>";
 		};
+		E44B91F329ABD53500C1F925 /* Book Feature */ = {
+			isa = PBXGroup;
+			children = (
+				E44B91FA29ABD65400C1F925 /* BookItem.swift */,
+				E44B91F629ABD5C200C1F925 /* BooksItemMapper.swift */,
+				E44B91FC29ABD71900C1F925 /* BooksLoader.swift */,
+				E44B91F829ABD61A00C1F925 /* RemoteBookItem.swift */,
+				E44B91F429ABD54800C1F925 /* RemoteBooksLoader.swift */,
+			);
+			path = "Book Feature";
+			sourceTree = "<group>";
+		};
+		E44B920029ABDCA400C1F925 /* Books */ = {
+			isa = PBXGroup;
+			children = (
+				E44B920129ABDCB000C1F925 /* BooksFeedViewContainer.swift */,
+				E44B920329ABDE6900C1F925 /* BooksFeedDataProvider.swift */,
+				E44B920529ABDEF100C1F925 /* BookFeedViewModel.swift */,
+				E44B920729ABDFFD00C1F925 /* BookFeedView.swift */,
+				E44B920929ABE01100C1F925 /* BookRow.swift */,
+			);
+			path = Books;
+			sourceTree = "<group>";
+		};
 		E4583B9329532D8F007A7D7F = {
 			isa = PBXGroup;
 			children = (
@@ -215,6 +263,7 @@
 		E4583B9F29532D8F007A7D7F /* LOTRCharacterFeed */ = {
 			isa = PBXGroup;
 			children = (
+				E44B91F329ABD53500C1F925 /* Book Feature */,
 				E4D8E60029A6AB4500C91A32 /* Movie Feature */,
 				E40C355029684ED80096DAAC /* Cache */,
 				E4F04B2829565CBD00F49C68 /* Character Feature */,
@@ -229,6 +278,7 @@
 				E4F43D0329578DD700F39D60 /* Helpers */,
 				E4583BBB29533ACA007A7D7F /* RemoteCharacterLoaderTests.swift */,
 				E4D8E5FE29A6AB1400C91A32 /* RemoteMovieLoaderTests.swift */,
+				E44B91F129ABD4E900C1F925 /* RemoteBooksLoaderTests.swift */,
 				E4F43D0129577F6800F39D60 /* RemoteCharacterImageDataLoaderTests.swift */,
 				E463AEF4295B8D8F00F4DD2E /* URLSessionHTTPClientTests.swift */,
 				E40C355129684F0D0096DAAC /* ImageCacheIntegrationTests.swift */,
@@ -247,11 +297,11 @@
 		E4D8E60029A6AB4500C91A32 /* Movie Feature */ = {
 			isa = PBXGroup;
 			children = (
-				E4D8E60129A6AB5800C91A32 /* RemoteMovieLoader.swift */,
-				E4D8E60929A6B45400C91A32 /* MovieLoader.swift */,
-				E4D8E60329A6ADBC00C91A32 /* MovieItemMapper.swift */,
-				E4D8E60529A6AE5800C91A32 /* RemoteMovieItem.swift */,
 				E4D8E60729A6AEE200C91A32 /* MovieItem.swift */,
+				E4D8E60329A6ADBC00C91A32 /* MovieItemMapper.swift */,
+				E4D8E60929A6B45400C91A32 /* MovieLoader.swift */,
+				E4D8E60529A6AE5800C91A32 /* RemoteMovieItem.swift */,
+				E4D8E60129A6AB5800C91A32 /* RemoteMovieLoader.swift */,
 			);
 			path = "Movie Feature";
 			sourceTree = "<group>";
@@ -271,6 +321,7 @@
 		E4DE7C7F2962145400877E7B /* LOTRCharacterFeediOS */ = {
 			isa = PBXGroup;
 			children = (
+				E44B920029ABDCA400C1F925 /* Books */,
 				E4D8E60D29A6B5CD00C91A32 /* Movies */,
 				E48A1C022963745300A3603F /* Assets.xcassets */,
 				E4DE7C99296214CE00877E7B /* CharacterFeedContainer.swift */,
@@ -289,6 +340,7 @@
 			children = (
 				E4DE7C8A2962145400877E7B /* LOTRCharacterFeediOSTests.swift */,
 				E4D8E60B29A6B4B900C91A32 /* MovieFeedUIAcceptanceTests.swift */,
+				E44B91FE29ABDC4900C1F925 /* BookFeedUIAcceptanceTests.swift */,
 			);
 			path = LOTRCharacterFeediOSTests;
 			sourceTree = "<group>";
@@ -558,12 +610,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E44B91FD29ABD71900C1F925 /* BooksLoader.swift in Sources */,
 				E4CD2B5F296CA4C9007A0303 /* ImageFileCache.swift in Sources */,
+				E44B91F929ABD61A00C1F925 /* RemoteBookItem.swift in Sources */,
 				E4583BBA29533996007A7D7F /* CharacterItem.swift in Sources */,
 				E490F5772960B9B10075BB0A /* RemoteRequest.swift in Sources */,
 				E4BDB95C295A573E00147D3D /* URLSessionHTTPClient.swift in Sources */,
+				E44B91FB29ABD65400C1F925 /* BookItem.swift in Sources */,
 				E4F04B1D29565AF000F49C68 /* RemoteCharacterLoader.swift in Sources */,
 				E4F04B2729565C6000F49C68 /* HTTPURLResponse+StatusCode.swift in Sources */,
+				E44B91F729ABD5C200C1F925 /* BooksItemMapper.swift in Sources */,
 				E4D8E60429A6ADBC00C91A32 /* MovieItemMapper.swift in Sources */,
 				E4F04B1F29565B2100F49C68 /* HTTPClient.swift in Sources */,
 				E40C35542968CC8B0096DAAC /* ImageCacheLoader.swift in Sources */,
@@ -571,6 +627,7 @@
 				E4F04B2129565B4F00F49C68 /* RemoteCharacterItem.swift in Sources */,
 				E4D8E60A29A6B45400C91A32 /* MovieLoader.swift in Sources */,
 				E4D8E60629A6AE5800C91A32 /* RemoteMovieItem.swift in Sources */,
+				E44B91F529ABD54800C1F925 /* RemoteBooksLoader.swift in Sources */,
 				E4D8E60829A6AEE200C91A32 /* MovieItem.swift in Sources */,
 				E4583BB82953390C007A7D7F /* ResourceLoader.swift in Sources */,
 				E4D8E60229A6AB5800C91A32 /* RemoteMovieLoader.swift in Sources */,
@@ -584,6 +641,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4F43D0729578E7B00F39D60 /* SharedTestHelpers.swift in Sources */,
+				E44B91F229ABD4E900C1F925 /* RemoteBooksLoaderTests.swift in Sources */,
 				E4D8E5FF29A6AB1400C91A32 /* RemoteMovieLoaderTests.swift in Sources */,
 				E490F5752960B86B0075BB0A /* MockRequest.swift in Sources */,
 				E40C355229684F0D0096DAAC /* ImageCacheIntegrationTests.swift in Sources */,
@@ -610,11 +668,16 @@
 			files = (
 				D729870F29643166006D3E92 /* CharacterFeedViewModel.swift in Sources */,
 				E4D8E61729A6B83600C91A32 /* MovieRow.swift in Sources */,
+				E44B920A29ABE01100C1F925 /* BookRow.swift in Sources */,
 				E48A1C052963748400A3603F /* CharacterRow.swift in Sources */,
 				E4D8E61529A6B7D500C91A32 /* MovieFeedView.swift in Sources */,
 				E4DE7C9A296214CE00877E7B /* CharacterFeedContainer.swift in Sources */,
+				E44B920229ABDCB000C1F925 /* BooksFeedViewContainer.swift in Sources */,
 				E4D8E61129A6B64900C91A32 /* MoviesFeedDataProvider.swift in Sources */,
+				E44B920829ABDFFD00C1F925 /* BookFeedView.swift in Sources */,
+				E44B920429ABDE6900C1F925 /* BooksFeedDataProvider.swift in Sources */,
 				E48A1C072963788900A3603F /* CharacterFeedErrorViewModel.swift in Sources */,
+				E44B920629ABDEF100C1F925 /* BookFeedViewModel.swift in Sources */,
 				D7D3EF7029657843007E6C1B /* CharacterFeedDataProvider.swift in Sources */,
 				E4D8E60F29A6B5D600C91A32 /* MoviesFeedViewContainer.swift in Sources */,
 				E40C35562968CCF90096DAAC /* LOTRAsyncImage.swift in Sources */,
@@ -628,6 +691,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4DE7C8B2962145400877E7B /* LOTRCharacterFeediOSTests.swift in Sources */,
+				E44B91FF29ABDC4900C1F925 /* BookFeedUIAcceptanceTests.swift in Sources */,
 				E4D8E60C29A6B4B900C91A32 /* MovieFeedUIAcceptanceTests.swift in Sources */,
 				E48A1C0F29638C3200A3603F /* XCTestCase+MemoryLeaksTracking.swift in Sources */,
 			);

@@ -38,3 +38,11 @@ extension MainQueueDispatchDecorator: MovieLoader where T: MovieLoader {
         }
     }
 }
+
+extension MainQueueDispatchDecorator: BooksLoader where T: BooksLoader {
+    func load(completion: @escaping (RemoteBooksLoader.Result) -> Void) {
+        decoratee.load { [weak self] result in
+            self?.dispatch { completion(result) }
+        }
+    }
+}
