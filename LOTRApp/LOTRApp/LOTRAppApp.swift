@@ -26,6 +26,12 @@ struct LOTRAppApp: App {
                 }.tabItem {
                     Label("Movies", systemImage: "film.stack.fill")
                 }
+                NavigationStack {
+                    BooksFeedView()
+                        .navigationTitle("Books")
+                }.tabItem {
+                    Label("Books", systemImage: "books.vertical.fill")
+                }
             }
         }
     }
@@ -50,6 +56,16 @@ struct LOTRAppApp: App {
         return view
     }
     
+    private func BooksFeedView() -> some View {
+        let session = URLSession(configuration: .default)
+        let client = URLSessionHTTPClient(session: session)
+        let request = BooksRequest().create()
+        let loader = RemoteBooksLoader(request: request, client: client)
+        let vm = BooksFeedDataProvider(loader: MainQueueDispatchDecorator(decoratee: loader))
+        let view = BooksFeedViewContainer(viewModel: vm)
+        return view
+    }
+    
     private struct CharacterRequest: RemoteRequest {
         var url: URL = URL(string: "https://lokomond.com/lotr/lotr_characters.json")!
         var header: [String : String]? = ["Authorization" : "Bearer 4FVcNlyhfHkLwFuqo-YP"]
@@ -64,6 +80,17 @@ struct LOTRAppApp: App {
     
     private struct MoviesRequest: RemoteRequest {
         var url: URL = URL(string: "https://lokomond.com/lotr/movies.json")!
+        
+        func create() -> URLRequest {
+            var request = URLRequest(url: url)
+            request.httpMethod = method
+            request.allHTTPHeaderFields = header
+            return request
+        }
+    }
+    
+    private struct BooksRequest: RemoteRequest {
+        var url: URL = URL(string: "https://lokomond.com/lotr/books.json")!
         
         func create() -> URLRequest {
             var request = URLRequest(url: url)

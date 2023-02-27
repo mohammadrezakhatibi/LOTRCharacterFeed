@@ -9,15 +9,15 @@ final class BookFeedUIAcceptanceTests: XCTestCase {
     
     func test_init_createsAList() throws {
         let sut = makeSUT()
-        XCTAssertNoThrow(try sut.inspect().find(MovieFeedView.self).scrollView())
+        XCTAssertNoThrow(try sut.inspect().find(BookFeedView.self).scrollView())
     }
 
-    func test_loadMovies_deliversAListOfMovies() throws {
+    func test_loadBooks_deliversAListOfBooks() throws {
         let items = makeItems()
         var sut = makeSUT(result: .success(items))
         
         let exp = sut.on(\.didAppear) { view in
-            let cells = try view.find(MovieFeedView.self).findAll(MovieRow.self)
+            let cells = try view.find(BookFeedView.self).findAll(BookRow.self)
     
             XCTAssertEqual(cells.count, items.count)
         }
@@ -26,7 +26,7 @@ final class BookFeedUIAcceptanceTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
-    func test_loadMovies_displaysMovieListOnSuccessfulLoadMovies() throws {
+    func test_loadBooks_displaysMovieListOnSuccessfulLoadBooks() throws {
         let items = makeItems()
         var sut = makeSUT(result: .success(items))
         
@@ -59,7 +59,7 @@ final class BookFeedUIAcceptanceTests: XCTestCase {
         let exp = sut.on(\.didAppear) { [weak self] view in
             guard let self else { return }
             self.renderErrorAlert(in: view, with: anyError)
-            try view.find(MovieFeedView.self).alert().actions().first?.button().tap()
+            try view.find(BookFeedView.self).alert().actions().first?.button().tap()
             self.hideErrorAlert(in: view)
         }
         
@@ -69,10 +69,10 @@ final class BookFeedUIAcceptanceTests: XCTestCase {
     
     func test_loadMovies_displaysLoadingIndicatorOnLoading() {
         let loader = BooksLoaderSpy()
-        let vm = MoviesFeedDataProvider(loader: loader)
+        let vm = BooksFeedDataProvider(loader: loader)
         let sut = BooksFeedViewContainer(viewModel: vm)
         
-        XCTAssertNoThrow(try sut.inspect().find(MovieFeedView.self).scrollView().progressView())
+        XCTAssertNoThrow(try sut.inspect().find(BookFeedView.self).scrollView().progressView())
         
         let exp = expectation(description: "Wait for load completion")
         loader.load { _ in
@@ -86,10 +86,10 @@ final class BookFeedUIAcceptanceTests: XCTestCase {
     
     // MARK: - Helper
     
-    private func makeSUT(result: RemoteMovieLoader.Result = .success([]), file: StaticString = #filePath, line: UInt = #line) -> BooksFeedViewContainer {
+    private func makeSUT(result: RemoteBooksLoader.Result = .success([]), file: StaticString = #filePath, line: UInt = #line) -> BooksFeedViewContainer {
         
         let loader = BooksLoaderStub(result: result)
-        let vm = MoviesFeedDataProvider(loader: loader)
+        let vm = BooksFeedDataProvider(loader: loader)
         let sut = BooksFeedViewContainer(viewModel: vm)
         
         trackingForMemoryLeaks(loader, file: file, line: line)
@@ -98,17 +98,17 @@ final class BookFeedUIAcceptanceTests: XCTestCase {
         return sut
     }
     
-    private func render(_ view: InspectableView<ViewType.View<BooksFeedViewContainer>>, for items: [MovieItem]) throws {
-        let row = try view.find(MovieFeedView.self).scrollView().lazyVGrid().findAll(MovieRow.self)
+    private func render(_ view: InspectableView<ViewType.View<BooksFeedViewContainer>>, for items: [BookItem]) throws {
+        let row = try view.find(BookFeedView.self).scrollView().lazyVGrid().findAll(BookRow.self)
         try? items.enumerated().forEach { index, item in
             guard row.count == items.count else {
                 XCTFail("Couldn't find any rows")
                 return
             }
             XCTAssertEqual(try row[index].find(viewWithId: 1).text().string(), item.name)
-            XCTAssertEqual(try row[index].find(viewWithId: 2).text().string(), "\(item.score)")
+            XCTAssertEqual(try row[index].find(viewWithId: 2).text().string(), "\(item.publisher)")
             XCTAssertNotNil(try row[index].find(LOTRAsyncImage.self).actualView())
-            XCTAssertEqual(try row[index].find(LOTRAsyncImage.self).actualView().url.absoluteString, item.posterURL.absoluteString)
+            XCTAssertEqual(try row[index].find(LOTRAsyncImage.self).actualView().url.absoluteString, item.coverURL.absoluteString)
             
         }
     }
@@ -124,60 +124,52 @@ final class BookFeedUIAcceptanceTests: XCTestCase {
     private func renderErrorAlert(in view: InspectableView<ViewType.View<BooksFeedViewContainer>>, with error: Error) {
         XCTAssertEqual(try view.actualView().viewModel.isErrorPresented, true)
         XCTAssertEqual(try view.actualView().viewModel.errorMessage, error.localizedDescription)
-        XCTAssertNotNil(try view.find(MovieFeedView.self).alert())
-        XCTAssertEqual((try view.find(MovieFeedView.self).alert().title().string()), "Error")
-        XCTAssertEqual((try view.find(MovieFeedView.self).alert().message().text().string()), error.localizedDescription)
+        XCTAssertNotNil(try view.find(BookFeedView.self).alert())
+        XCTAssertEqual((try view.find(BookFeedView.self).alert().title().string()), "Error")
+        XCTAssertEqual((try view.find(BookFeedView.self).alert().message().text().string()), error.localizedDescription)
     }
     
-    private func makeItems() -> [MovieItem] {
+    private func makeItems() -> [BookItem] {
         return [
-            MovieItem(
+            BookItem(
                 id: "id1",
                 name: "name",
-                runtime: 1.0,
-                budget: 1.0,
-                revenue: 1.0,
-                academyAwardNominations: 1,
-                academyAwardWins: 1,
-                score: 1.0,
-                posterURL: URL(string: "https://any-url.com")!
+                publisher: "publisher",
+                barcode: "a barcode",
+                coverURL: URL(string: "https://any-url.com")!
             ),
-            MovieItem(
+            BookItem(
                 id: "id2",
                 name: "another name",
-                runtime: 2.0,
-                budget: 2.0,
-                revenue: 2.0,
-                academyAwardNominations: 2,
-                academyAwardWins: 2,
-                score: 2.0,
-                posterURL: URL(string: "https://any-url.com")!
+                publisher: "another publisher",
+                barcode: "another barcode",
+                coverURL: URL(string: "https://any-url.com")!
             ),
         ]
     }
     
-    private final class BooksLoaderStub: MovieLoader {
+    private final class BooksLoaderStub: BooksLoader {
                 
-        private let result: RemoteMovieLoader.Result
+        private let result: RemoteBooksLoader.Result
         
-        init(result: RemoteMovieLoader.Result) {
+        init(result: RemoteBooksLoader.Result) {
             self.result = result
         }
         
-        func load(completion: @escaping (RemoteMovieLoader.Result) -> Void) {
+        func load(completion: @escaping (RemoteBooksLoader.Result) -> Void) {
             completion(result)
         }
     }
     
-    private final class BooksLoaderSpy: MovieLoader {
+    private final class BooksLoaderSpy: BooksLoader {
                 
-        private var results = [(RemoteMovieLoader.Result) -> Void]()
+        private var results = [(RemoteBooksLoader.Result) -> Void]()
         
-        func load(completion: @escaping (RemoteMovieLoader.Result) -> Void) {
+        func load(completion: @escaping (RemoteBooksLoader.Result) -> Void) {
             results.append(completion)
         }
         
-        func complete(with items: [MovieItem], at index: Int) {
+        func complete(with items: [BookItem], at index: Int) {
             results[index](.success(items))
         }
     }

@@ -4,14 +4,14 @@ import LOTRCharacterFeed
 public struct BooksFeedViewContainer: View {
     
     public var didAppear: ((Self) -> Void)?
-    @ObservedObject var viewModel: MoviesFeedDataProvider
+    @ObservedObject var viewModel: BooksFeedDataProvider
     
-    public init(viewModel: MoviesFeedDataProvider) {
+    public init(viewModel: BooksFeedDataProvider) {
         self.viewModel = viewModel
     }
     
     public var body: some View {
-        MovieFeedView(items: viewModel.items)
+        BookFeedView(items: viewModel.items)
         .onAppear {
             loadCharacters()
             didAppear?(self)
